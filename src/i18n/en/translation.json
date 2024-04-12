@@ -1,0 +1,28 @@
+{
+    "connect_wallet_button": {
+        "connected_label": "Connected",
+        "title": "Connect Wallet"
+    },
+    "connect_wallet_modal": {
+        "term_of_service_label": "By connecting a wallet, you agree to the <0>Terms of Service</0>",
+        "title": "Connect Wallet"
+    },
+    "home": {
+        "setup_agent_button": "Set up Agent",
+        "subtitle": "Let’s set up agent, so you can start using this app.",
+        "title": "Welcome to FAsset Manager!"
+    },
+    "layout": {
+        "header": {
+            "title": "FAsset Manager"
+        }
+    },
+    "select_wallet_button": {
+        "connect_label": "Connect",
+        "disconnect_label": "Disconnect",
+        "error_title": "Error",
+        "install_label": "Install",
+        "open_app_label": "Open app",
+        "try_again_label": "Try again?"
+    }
+}
