@@ -6,43 +6,48 @@ import {
     Card
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import MainLayout from "@/components/layouts/MainLayout";
-import { useWeb3 } from '@/lib/connect-wallet/hooks/useWeb3';
-import { useConnectWalletModal } from '@/lib/connect-wallet/hooks/useEthereumLogin';
-
+import { useRouter } from 'next/navigation'
+import { useWeb3 } from '@/components/elements/connect-wallet/hooks/useWeb3';
+import { useConnectWalletModal } from '@/components/elements/connect-wallet/hooks/useEthereumLogin';
+import { useEffect } from "react";
 export default function Home(): JSX.Element {
-    const { openConnectWalletModal } = useConnectWalletModal();
+    const router = useRouter();
+    const { openConnectWalletModal, modalStatus } = useConnectWalletModal();
     const { account } = useWeb3();
     const { t } = useTranslation();
 
+    useEffect((): void => {
+        if (account) {
+            router.push('/agent-configuration');
+        }
+    }, [modalStatus]);
+
     const onSetupAgentClick = () => {
         if (account) {
-
+            router.push('/agent-configuration');
         } else {
             openConnectWalletModal();
         }
     };
 
     return (
-        <MainLayout>
-            <Container
-                size="xs"
-                className="flex flex-col items-center text-center"
+        <Container
+            size="xs"
+            className="flex flex-col items-center text-center"
+        >
+            <Title order={2}>{t('home.title')}</Title>
+            <Text size="sm" color="gray">{t('home.subtitle')}</Text>
+            <Card
+                shadow="sm"
+                className="mt-8 w-full"
             >
-                <Title order={2}>{t('home.title')}</Title>
-                <Text size="sm">{t('home.subtitle')}</Text>
-                <Card
-                    shadow="sm"
-                    className="mt-8 w-full"
+                <Button
+                    variant="filled"
+                    onClick={onSetupAgentClick}
                 >
-                    <Button
-                        variant="filled"
-                        onClick={onSetupAgentClick}
-                    >
-                        {t('home.setup_agent_button')}
-                    </Button>
-                </Card>
-            </Container>
-        </MainLayout>
+                    {t('home.setup_agent_button')}
+                </Button>
+            </Card>
+        </Container>
     );
 }

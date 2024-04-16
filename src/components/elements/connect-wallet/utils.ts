@@ -1,9 +1,9 @@
-import { tokens } from '@/lib/connect-wallet/chains/tokens';
+import { tokens } from './chains/tokens';
 import { providers } from 'ethers';
-import { AllSupportedChainsType } from '@/lib/connect-wallet/chains/chains';
-import { coinbaseWallet } from '@/lib/connect-wallet/connectors/coinbaseWallet';
-import { metaMask } from '@/lib/connect-wallet/connectors/metaMask';
-import { walletConnectV2 } from '@/lib/connect-wallet/connectors/walletConnectV2';
+import { AllSupportedChainsType } from './chains/chains';
+import { coinbaseWallet } from './connectors/coinbaseWallet';
+import { metaMask } from './connectors/metaMask';
+import { walletConnectV2 } from './connectors/walletConnectV2';
 
 export const addWrappedToken = async (provider: providers.Web3Provider | undefined, chainID: AllSupportedChainsType) => {
     if (!provider || !provider.provider.request) return;

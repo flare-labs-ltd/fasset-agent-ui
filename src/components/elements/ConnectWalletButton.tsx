@@ -3,13 +3,12 @@ import {
     Text,
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useWeb3 } from '@/lib/connect-wallet/hooks/useWeb3';
-import { useConnectWalletModal } from '@/lib/connect-wallet/hooks/useEthereumLogin';
+import { useWeb3 } from '@/components/elements/connect-wallet/hooks/useWeb3';
+import { useConnectWalletModal } from '@/components/elements/connect-wallet/hooks/useEthereumLogin';
 
 export default function ConnectWalletButton(): JSX.Element {
     const { t } = useTranslation();
     const { account } = useWeb3();
-    console.log(account)
     const { openConnectWalletModal } = useConnectWalletModal();
 
     return (

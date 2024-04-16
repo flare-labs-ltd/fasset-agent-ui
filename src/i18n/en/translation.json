@@ -1,4 +1,38 @@
 {
+    "agent_configuration": {
+        "back_button": "Back to Dashboard",
+        "dashboard_button": "Go to dashboard",
+        "create_secret": {
+            "back_button": "Back to Agent settings",
+            "card": {
+                "save_button": "Save",
+                "subtitle": "Description lorem ipusm dolor sit amet",
+                "title": "Secret file .json"
+            },
+            "error_message": "Unable to create new secret file",
+            "success_message": "New secret file successfully created",
+            "title": "Edit secret file"
+        },
+        "secret_card": {
+            "create_button": "Create",
+            "drag_file_label": "Drag secret file here or click to select file",
+            "error_message": "Unable to create new secret file",
+            "file_size_label": "File should not exceed 5mb",
+            "success_message": "New secret file successfully created",
+            "subtitle": "Create new secret file from template or upload it from computer",
+            "title": "Secret file",
+            "upload_button": "Upload"
+        },
+        "title": "Agent settings",
+        "working_address_card": {
+            "change_button": "Change",
+            "not_whitelisted_title": "Not whitelisted",
+            "not_whitelisted_text": "To get your Agent (Management address) on whitelist please contact us via email agent.onboarding@flare.network and we will walk you through the process.",
+            "success_message": "Working address successfully changed",
+            "subtitle": "Working address can be changed if needed",
+            "title": "Working address"
+        }
+    },
     "connect_wallet_button": {
         "connected_label": "Connected",
         "title": "Connect Wallet"
@@ -16,6 +50,10 @@
         "header": {
             "title": "FAsset Manager"
         }
+    },
+    "notifications": {
+        "error_title": "Error",
+        "success_title": "Success"
     },
     "select_wallet_button": {
         "connect_label": "Connect",

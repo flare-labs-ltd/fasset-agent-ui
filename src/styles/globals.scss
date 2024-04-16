@@ -25,3 +25,9 @@ body {
         text-wrap: balance;
     }
 }
+
+.mantine-Paper-root {
+    &[data-with-border="true"] {
+        border-top: 4px solid var(--mantine-color-gray-3);
+    }
+}

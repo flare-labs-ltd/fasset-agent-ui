@@ -3,7 +3,7 @@ import ConnectWalletModal from '../components/modals/ConnectWalletModal';
 import React, { createContext, useContext, useState } from 'react';
 
 type ConnectWalletModalContextType = {
-    isConnectWalletModal: boolean;
+    modalStatus: boolean;
     openConnectWalletModal: () => void;
     closeConnectWalletModal: () => void;
 };
@@ -11,26 +11,33 @@ type ConnectWalletModalContextType = {
 const ConnectWalletModalContext = createContext<ConnectWalletModalContextType | null>(null);
 
 export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
-    const [isConnectWalletModal, setConnectWalletModal] = useState<boolean>(false); //! dev only, change to false
+    const [isConnectWalletModalActive, setIsConnectWalletModalActive] = useState<boolean>(false); //! dev only, change to false
 
-    function closeConnectWalletModal() {
-        setConnectWalletModal(false);
+    function closeConnectWalletModal(): void {
+        setIsConnectWalletModalActive(false);
     }
 
-    function openConnectWalletModal() {
-        setConnectWalletModal(true);
+    function openConnectWalletModal(): void {
+        setIsConnectWalletModalActive(true);
+    }
+
+    function modalStatus(): boolean {
+        return isConnectWalletModalActive;
     }
 
     return (
         <ConnectWalletModalContext.Provider
             value={{
-                isConnectWalletModal: isConnectWalletModal,
+                modalStatus: isConnectWalletModalActive,
                 closeConnectWalletModal: closeConnectWalletModal,
                 openConnectWalletModal: openConnectWalletModal,
             }}
         >
             {children}
-            <ConnectWalletModal opened={isConnectWalletModal} onClose={closeConnectWalletModal} />
+            <ConnectWalletModal
+                opened={isConnectWalletModalActive}
+                onClose={closeConnectWalletModal}
+            />
         </ConnectWalletModalContext.Provider>
     );
 };
