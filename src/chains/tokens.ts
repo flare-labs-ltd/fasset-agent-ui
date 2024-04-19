@@ -1,4 +1,4 @@
-import { getCoston2ContractAddress, getCostonContractAddress, getFlareContractAddress, getSongbirdContractAddress } from '../contracts/utils';
+import { getCoston2ContractAddress, getCostonContractAddress, getFlareContractAddress, getSongbirdContractAddress } from '@/contracts/utils';
 import { WatchAssetParameters } from '@web3-react/types';
 
 interface ITokens {

@@ -6,10 +6,11 @@ import {
     Card
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
-import { useWeb3 } from '@/components/elements/connect-wallet/hooks/useWeb3';
-import { useConnectWalletModal } from '@/components/elements/connect-wallet/hooks/useEthereumLogin';
-import { useEffect } from "react";
+import { useWeb3 } from '@/hooks/useWeb3';
+import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
+
 export default function Home(): JSX.Element {
     const router = useRouter();
     const { openConnectWalletModal, modalStatus } = useConnectWalletModal();
@@ -17,10 +18,11 @@ export default function Home(): JSX.Element {
     const { t } = useTranslation();
 
     useEffect((): void => {
-        if (account) {
+        if (account && modalStatus) {
             router.push('/agent-configuration');
         }
-    }, [modalStatus]);
+    }, [modalStatus, account, router]);
+
 
     const onSetupAgentClick = () => {
         if (account) {

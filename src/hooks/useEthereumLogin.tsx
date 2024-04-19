@@ -1,5 +1,5 @@
 
-import ConnectWalletModal from '../components/modals/ConnectWalletModal';
+import ConnectWalletModal from '@/components/modals/ConnectWalletModal';
 import React, { createContext, useContext, useState } from 'react';
 
 type ConnectWalletModalContextType = {
@@ -19,10 +19,6 @@ export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ ch
 
     function openConnectWalletModal(): void {
         setIsConnectWalletModalActive(true);
-    }
-
-    function modalStatus(): boolean {
-        return isConnectWalletModalActive;
     }
 
     return (

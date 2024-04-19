@@ -1,7 +1,6 @@
 import { useCallback, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import { useTranslation } from 'react-i18next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Box, Group, Stack, Text, UnstyledButton } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -9,12 +8,12 @@ import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { useGlobalStateChainIdWhenNotConnected } from '../../hooks/useNotConnectedChainProvider';
-import { IEnabledWallet } from '../../connectors/connectors';
-import { AllSupportedChainsType, appChainParams } from '../../chains/chains';
-import { useWeb3 } from '../../hooks/useWeb3';
-import { useConnectWalletModal } from '../../hooks/useEthereumLogin';
-import classes from '../../styles/components/elements/SelectWalletButton.module.scss';
+import { useGlobalStateChainIdWhenNotConnected } from '@/hooks/useNotConnectedChainProvider';
+import { IEnabledWallet } from '@/connectors/connectors';
+import { AllSupportedChainsType, appChainParams } from '@/chains/chains';
+import { useWeb3 } from '@/hooks/useWeb3';
+import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
+import classes from '@/styles/components/elements/SelectWalletButton.module.scss';
 
 export default function SelectWalletButton({ wallet, disabled = false }: { wallet: IEnabledWallet, disabled: boolean }): JSX.Element {
     const { connector, hooks } = wallet;
@@ -114,7 +113,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             } catch (error) {
                 try {
                     notifications.show({
-                        title: 'Error',
+                        title: t('notificiations.error_title'),
                         message: error
                     });
                     // @ts-ignore

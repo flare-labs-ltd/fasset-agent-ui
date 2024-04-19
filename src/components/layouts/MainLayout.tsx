@@ -1,9 +1,8 @@
-import { AppShell, Container, Title, LoadingOverlay } from '@mantine/core';
-import ConnectWalletButton from "@/components/elements/ConnectWalletButton";
+import { AppShell, Container, Title } from '@mantine/core';
 import Head from 'next/head';
-import { Roboto } from "next/font/google";
+import { Roboto } from 'next/font/google';
 import { useTranslation } from 'react-i18next';
-import { useIsWhitelisted } from "@/api/agent";
+import ConnectWalletButton from '@/components/elements/ConnectWalletButton';
 
 const roboto = Roboto({
     subsets: ["latin"],
@@ -15,7 +14,6 @@ export interface LayoutInputProps {
 }
 
 export default function Layout({ children, ...props }: LayoutInputProps): JSX.Element {
-    const isAgentWhitelisted = useIsWhitelisted();
     const { t } = useTranslation();
 
     return (
@@ -25,12 +23,6 @@ export default function Layout({ children, ...props }: LayoutInputProps): JSX.El
             </Head>
             <AppShell className={roboto.className}>
                 <AppShell.Main className="flex flex-col">
-                    {/*
-                    <LoadingOverlay
-                        visible={isAgentWhitelisted.isPending}
-                        zIndex={1000}
-                    />
-                    */}
                     <Container
                         fluid
                         className="flex justify-between p-4 w-full"

@@ -2,7 +2,7 @@ import {
     Container,
     Title,
     Text,
-    Textarea,
+    JsonInput,
     Paper,
     Button
 } from '@mantine/core';
@@ -19,8 +19,9 @@ const SECRET_TEMPLATE = `{
     "encryption_password": ""
   },
   "apiKey": {
-    "indexer": "",
     "native_rpc": "",
+    "xrp_rpc": "",
+    "indexer": "",
     "agent_bot": ""
   },
   "owner": {
@@ -37,26 +38,32 @@ const SECRET_TEMPLATE = `{
     }
   },
   "timeKeeper": {
-    "address": "",
-    "private_key": ""
+    "native_private_key": "0xaf7306b82f491c2ae30c14b86443cb31754b4b326a30d634a6750bebf597ad9e",
+    "native_address": "0xeCD54647Db49753372CDB90Da857156b854f7afb"
   }
 }`;
 
-export default function CreateSecretsFile(): JSX.Element {
+export default function CreateSecretFile(): JSX.Element {
     const form = useForm({
+        mode: 'uncontrolled',
         initialValues: {
             secret: SECRET_TEMPLATE
         },
     });
+
     const uploadSecret = useUploadSecret();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { t } = useTranslation();
 
-    const onSubmit = async(form) => {
+    const onSubmit = async(secret: string) => {
         try {
             setIsLoading(true);
-            const secret = JSON.parse(form.secret);
-            uploadSecret.mutateAsync(secret);
+            secret = JSON.parse(secret);
+            const response = await uploadSecret.mutateAsync(secret);
+            if (response.status === 'ERROR') {
+                form.setErrors({ secret: response.errorMessage });
+                return;
+            }
             showSucessNotification(t('agent_configuration.create_secret.success_message'));
 
         } catch (error) {
@@ -91,12 +98,12 @@ export default function CreateSecretsFile(): JSX.Element {
                 className="mt-5 p-4"
                 withBorder
             >
-                <form onSubmit={form.onSubmit(form => onSubmit(form))}>
+                <form onSubmit={form.onSubmit(form => onSubmit(form.secret))}>
                     <Title order={5}>{t('agent_configuration.create_secret.card.title')}</Title>
                     <Text size="sm" c="gray">{t('agent_configuration.create_secret.card.subtitle')}</Text>
-                    <Textarea
+                    <JsonInput
                         {...form.getInputProps('secret')}
-                        autosize
+                        autosize={true}
                         minRows={5}
                         className="mt-3"
                     />
