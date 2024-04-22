@@ -1,4 +1,8 @@
 {
+    "alerts_card": {
+        "show_all_button": "Show all",
+        "title": "Alerts"
+    },
     "agent_configuration": {
         "back_button": "Back to Dashboard",
         "dashboard_button": "Go to dashboard",
@@ -41,10 +45,16 @@
         "term_of_service_label": "By connecting a wallet, you agree to the <0>Terms of Service</0>",
         "title": "Connect Wallet"
     },
-    "home": {
-        "setup_agent_button": "Set up Agent",
-        "subtitle": "Let’s set up agent, so you can start using this app.",
-        "title": "Welcome to FAsset Manager!"
+    "dashboard": {
+        "agent_title": "Agent",
+        "configuration_button": "Configuration",
+        "notifications_card": {
+            "title": "Notifications from Flare"
+        },
+        "vaults_title": "Vaults",
+        "working_address_card": {
+            "title": "Working address"
+        }
     },
     "layout": {
         "header": {
@@ -62,5 +72,10 @@
         "install_label": "Install",
         "open_app_label": "Open app",
         "try_again_label": "Try again?"
+    },
+    "setup": {
+        "setup_agent_button": "Set up Agent",
+        "subtitle": "Let’s set up agent, so you can start using this app.",
+        "title": "Welcome to FAsset Manager!"
     }
 }

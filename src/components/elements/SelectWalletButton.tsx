@@ -15,14 +15,14 @@ import { useWeb3 } from '@/hooks/useWeb3';
 import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
 import classes from '@/styles/components/elements/SelectWalletButton.module.scss';
 
-export default function SelectWalletButton({ wallet, disabled = false }: { wallet: IEnabledWallet, disabled: boolean }): JSX.Element {
+export default function SelectWalletButton({ wallet, disabled = false }: { wallet: IEnabledWallet, disabled: boolean }) {
     const { connector, hooks } = wallet;
     const { supportedChainId } = useWeb3();
     const { useIsActive } = hooks;
     const { t } = useTranslation();
     const [error, setError] = useState<boolean>(false);
     const { notConnectedChainId, setNotConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
-    const { closeConnectWalletModal } = useConnectWalletModal();
+    const { closeConnectWalletModal, selectedWalletCallback } = useConnectWalletModal();
     const router = useRouter();
 
     const desiredChainId = notConnectedChainId || appChainParams.desiredChainID;
@@ -134,8 +134,10 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
 
         closeConnectWalletModal();
         const connectionData = window.localStorage.getItem('ACTIVE_CONNECTION');
+
         if (connectionData !== null) {
             const data = JSON.parse(connectionData);
+            if (selectedWalletCallback) selectedWalletCallback(data.wallet);
             // except from metamask, we need to hard reload page to properly work with wallet
             if (data.wallet && connector instanceof CoinbaseWallet) {
                 router.reload();
@@ -143,7 +145,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
         }
     }
 
-    const onClick = useCallback(async(): void => {
+    const onClick = useCallback(async() => {
         if (isActive) {
             await deactivateConnector();
         } else {

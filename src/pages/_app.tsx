@@ -1,5 +1,5 @@
 import { MantineProvider } from '@mantine/core';
-import type { AppProps } from "next/app";
+import type { AppProps } from 'next/app';
 import { defaultThemeOverride } from '@/config/theme';
 import { GlobalStateChainIdWhenNotConnected } from '@/hooks/useNotConnectedChainProvider';
 import { Web3Provider } from '@/hooks/useWeb3';

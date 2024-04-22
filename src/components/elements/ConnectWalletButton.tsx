@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useWeb3 } from '@/hooks/useWeb3';
 import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
 
-export default function ConnectWalletButton(): JSX.Element {
+export default function ConnectWalletButton() {
     const { t } = useTranslation();
     const { account } = useWeb3();
     const { openConnectWalletModal } = useConnectWalletModal();

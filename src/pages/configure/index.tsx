@@ -36,13 +36,13 @@ import { useSetWorkAddress } from "@/hooks/useContracts";
 
 const FILE_MAX_SIZE = 5 * 1048576; // 5mb
 
-export default function AgentConfiguration(): JSX.Element {
+export default function AgentConfiguration() {
     const secretExists = useSecretExists();
     const workAddress = useWorkAddress(secretExists.data === true);
     const isWhitelisted = useIsWhitelisted(secretExists.data === true && workAddress.data != null);
     const [secretsFile, useSecretsFile] = useState<File|null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { openConnectWalletModal } = useConnectWalletModal();
+    const { openConnectWalletModal, onCloseCallback } = useConnectWalletModal();
     const { account } = useWeb3();
     const { t } = useTranslation();
     const uploadSecret = useUploadSecret();
@@ -72,6 +72,7 @@ export default function AgentConfiguration(): JSX.Element {
             setIsLoading(true);
             if (!account) {
                 openConnectWalletModal();
+                onCloseCallback(() => console.log(123213))
                 return;
             }
 
@@ -105,7 +106,7 @@ export default function AgentConfiguration(): JSX.Element {
             {isWhitelisted.data &&
                 <Button
                     component={Link}
-                    href="/dashboard"
+                    href="/"
                     variant="transparent"
                     leftSection={<IconArrowLeft size={18} />}
                     className="p-0 mb-3"
@@ -169,7 +170,7 @@ export default function AgentConfiguration(): JSX.Element {
                 <div className="mt-3 flex">
                     <Button
                         component={Link}
-                        href="/agent-configuration/create"
+                        href="/configure/create"
                         variant="outline"
                         size="xs"
                         className="mr-2"
@@ -198,9 +199,9 @@ export default function AgentConfiguration(): JSX.Element {
                     className="mt-3"
                     rightSectionPointerEvents="all"
                     rightSection={
-                        workAddress.isPending
+                        workAddress.isFetching
                             ? <Loader size="xs" />
-                            : <IconCopy
+                            : workAddress.data && <IconCopy
                                 color="black"
                                 style={{ width: rem(20), height: rem(20) }}
                                 onClick={() => copyToClipboard(workAddress.data)}
@@ -218,17 +219,17 @@ export default function AgentConfiguration(): JSX.Element {
                 >
                     {t('agent_configuration.working_address_card.change_button')}
                 </Button>
-                {!isWhitelisted.data &&
+                {isWhitelisted.data === false &&
                     <div className="mt-3">
                         <Title order={5}>{t('agent_configuration.working_address_card.not_whitelisted_title')}</Title>
                         <Text size="sm" c="gray">{t('agent_configuration.working_address_card.not_whitelisted_text')}</Text>
                     </div>
                 }
-                {isWhitelisted.data &&
+                {isWhitelisted.data === true &&
                     <div className="flex justify-end mt-3">
                         <Button
-                            component="a"
-                            href="/dashboard"
+                            component={Link}
+                            href="/"
                         >
                             {t('agent_configuration.dashboard_button')}
                         </Button>

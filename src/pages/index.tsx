@@ -1,55 +1,59 @@
 import {
     Container,
     Title,
-    Text,
+    Paper,
     Button,
-    Card
+    Text,
+    Loader
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation'
-import { useWeb3 } from '@/hooks/useWeb3';
-import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
+import Link from 'next/link';
+import AlertsCard from '@/components/cards/AlertsCard';
+import { useCollaterals } from '@/api/agent';
+import { Collateral } from '@/types';
 
-export default function Home(): JSX.Element {
-    const router = useRouter();
-    const { openConnectWalletModal, modalStatus } = useConnectWalletModal();
-    const { account } = useWeb3();
+export default function Dashboard() {
     const { t } = useTranslation();
-
-    useEffect((): void => {
-        if (account && modalStatus) {
-            router.push('/agent-configuration');
-        }
-    }, [modalStatus, account, router]);
-
-
-    const onSetupAgentClick = () => {
-        if (account) {
-            router.push('/agent-configuration');
-        } else {
-            openConnectWalletModal();
-        }
-    };
+    const collaterals = useCollaterals();
 
     return (
         <Container
-            size="xs"
-            className="flex flex-col items-center text-center"
+            size="lg"
         >
-            <Title order={2}>{t('home.title')}</Title>
-            <Text size="sm" color="gray">{t('home.subtitle')}</Text>
-            <Card
-                shadow="sm"
-                className="mt-8 w-full"
-            >
+            <div className="flex justify-between">
+                <Title order={2}>{t('dashboard.agent_title')}</Title>
                 <Button
-                    variant="filled"
-                    onClick={onSetupAgentClick}
+                    component={Link}
+                    href="/configure"
                 >
-                    {t('home.setup_agent_button')}
+                    {t('dashboard.configuration_button')}
                 </Button>
-            </Card>
+            </div>
+
+            <Paper
+                className="mt-5 p-4 border-primary"
+                withBorder
+            >
+                <Title order={4}>{t('dashboard.working_address_card.title')}</Title>
+                    <div className="flex flex-wrap md:flex-nowrap mt-4">
+                        {collaterals.isPending && <Loader className="ml-auto mr-auto" /> }
+                        {collaterals?.data?.map((collateral: Collateral, index: number) => (
+                            <div
+                                key={index}
+                                className={`border-t-2 border-gray-300 w-full mt-4 md:mt-0 ${index < collaterals.data.length - 1 ? 'mr-5' : ''}`}
+                            >
+                                <Text c="gray">{collateral.symbol}</Text>
+                                <Text fw={700}>{collateral.balance.toLocaleString('de-DE', { minimumFractionDigits: 2 })}</Text>
+                            </div>
+                        ))}
+                    </div>
+            </Paper>
+            <div className="flex flex-wrap md:flex-nowrap mt-5">
+                <AlertsCard className="mr-0 md:mr-10" />
+                <AlertsCard className="mt-5 md:mt-0" />
+            </div>
         </Container>
     );
 }
+
+Dashboard.protected = true;

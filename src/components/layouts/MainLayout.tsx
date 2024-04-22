@@ -1,19 +1,13 @@
 import { AppShell, Container, Title } from '@mantine/core';
 import Head from 'next/head';
-import { Roboto } from 'next/font/google';
 import { useTranslation } from 'react-i18next';
 import ConnectWalletButton from '@/components/elements/ConnectWalletButton';
 
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ['100', '300', '400', '500', '700', '900']
-});
-
-export interface LayoutInputProps {
+export interface ILayout {
     children?: React.ReactNode;
 }
 
-export default function Layout({ children, ...props }: LayoutInputProps): JSX.Element {
+export default function Layout({ children, ...props }: ILayout) {
     const { t } = useTranslation();
 
     return (
@@ -21,7 +15,7 @@ export default function Layout({ children, ...props }: LayoutInputProps): JSX.El
             <Head padding="md">
                 <title>{ t('layout.header.title') }</title>
             </Head>
-            <AppShell className={roboto.className}>
+            <AppShell>
                 <AppShell.Main className="flex flex-col">
                     <Container
                         fluid

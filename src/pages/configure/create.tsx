@@ -43,7 +43,7 @@ const SECRET_TEMPLATE = `{
   }
 }`;
 
-export default function CreateSecretFile(): JSX.Element {
+export default function CreateSecretFile() {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -86,7 +86,7 @@ export default function CreateSecretFile(): JSX.Element {
         >
             <Button
                 component={Link}
-                href="/agent-configuration"
+                href="/configure/"
                 variant="transparent"
                 leftSection={<IconArrowLeft size={18} />}
                 className="p-0 mb-3"

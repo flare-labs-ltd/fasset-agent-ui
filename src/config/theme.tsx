@@ -1,8 +1,15 @@
 import { MantineThemeOverride, Paper } from '@mantine/core';
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+    subsets: ["latin"],
+    weight: ['100', '300', '400', '500', '700', '900']
+});
 
 export const defaultThemeOverride: MantineThemeOverride = {
     /** Put your mantine theme override here */
     colorScheme: 'light',
+    fontFamily: roboto.style.fontFamily,
     colors: {
         flare: [
             '#404041', 

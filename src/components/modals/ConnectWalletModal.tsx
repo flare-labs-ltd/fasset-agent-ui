@@ -14,7 +14,7 @@ interface IConnectWalletModal {
     onClose: () => void;
 }
 
-export default function ConnectWalletModal({ opened, onClose }: IConnectWalletModal): JSX.Element {
+export default function ConnectWalletModal({ opened, onClose }: IConnectWalletModal) {
     const { t } = useTranslation();
     const theme = useMantineTheme();
 

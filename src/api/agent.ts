@@ -1,16 +1,51 @@
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import apiClient from "@/api/apiClient";
+import { useQuery, useQueryClient, useMutation, TData } from '@tanstack/react-query';
+import apiClient from '@/api/apiClient';
+import { Collateral, BotAlert } from '@/types';
 
 const resource = 'agent';
 
 export function useWorkAddress(enabled: boolean = true) {
     return useQuery({
         queryKey: ['workAddress'],
-        queryFn: async(): Promise<any> => {
+        queryFn: async () => {
             const response = await apiClient.get(`${resource}/workAddress`);
             return response.data.data.length > 0 ? response.data.data : null;
         },
         enabled: enabled
+    });
+}
+
+export function useAgentInfo(fAssetSymbol: string) {
+    return useQuery({
+        queryKey: ['agentInfo'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/info/data/${fAssetSymbol}`);
+            return response.data.data;
+        }
+    });
+}
+
+export function useCollaterals() {
+    return useQuery({
+        queryKey: ['collaterals'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/collaterals`);
+            return <Collateral[]> response.data.data;
+        },
+        select: (data: TData) => {
+            const collaterals: Collateral[] = [];
+            const symbols: string[] = [];
+
+            data.forEach(item => {
+                item.collaterals.forEach((collateral) => {
+                    if (symbols.includes(collateral.symbol)) return;
+                    symbols.push(collateral.symbol);
+                    collaterals.push(collateral);
+                });
+            });
+
+            return collaterals;
+        }
     });
 }
 
@@ -94,6 +129,82 @@ export function useUploadSecret() {
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: queryKey });
+        }
+    });
+}
+
+export function useBotAlert() {
+    return useQuery({
+        queryKey: ['botAlert'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/botAlert`)<BotAlert>;
+            const foo: BotAlert[] = [
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },{
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                }
+                ,{
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                }
+                ,{
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                },
+                {
+                    "bot_type": "liquidator",
+                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
+                    "level": "info",
+                    "title": "AGENT CREATED",
+                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
+                }
+            ]
+
+            return foo;
+            return <BotAlert[]> response.data.data
         }
     });
 }
