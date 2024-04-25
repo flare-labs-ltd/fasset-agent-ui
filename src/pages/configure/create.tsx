@@ -14,7 +14,7 @@ import { IconArrowLeft } from '@tabler/icons-react';
 import { useUploadSecret } from '@/api/agent';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 
-const SECRET_TEMPLATE = `{
+const SECRETS_TEMPLATE = `{
   "wallet": {
     "encryption_password": ""
   },
@@ -47,7 +47,7 @@ export default function CreateSecretFile() {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            secret: SECRET_TEMPLATE
+            secret: SECRETS_TEMPLATE
         },
     });
 
@@ -65,10 +65,7 @@ export default function CreateSecretFile() {
                 return;
             }
             showSucessNotification(t('agent_configuration.create_secret.success_message'));
-
         } catch (error) {
-            showErrorNotification(t('agent_configuration.create_secret.error_message'));
-
             if ((error as any).message) {
                 showErrorNotification((error as any).message);
             } else {

@@ -42,7 +42,7 @@ export default function AgentConfiguration() {
     const isWhitelisted = useIsWhitelisted(secretExists.data === true && workAddress.data != null);
     const [secretsFile, useSecretsFile] = useState<File|null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { openConnectWalletModal, onCloseCallback } = useConnectWalletModal();
+    const { openConnectWalletModal } = useConnectWalletModal();
     const { account } = useWeb3();
     const { t } = useTranslation();
     const uploadSecret = useUploadSecret();
@@ -67,24 +67,35 @@ export default function AgentConfiguration() {
         }
         reader.readAsText(secretsFile);
     }
-    const onChangeWorkingAddressClick = async(): Promise<void> => {
-        try {
-            setIsLoading(true);
-            if (!account) {
-                openConnectWalletModal();
-                onCloseCallback(() => console.log(123213))
-                return;
-            }
 
-            let response = await generateWorkAddress.mutateAsync();
+    const generateAddress = async() => {
+        try {
+            const response = await generateWorkAddress.mutateAsync();
             await contractSetWorkAddress.mutateAsync(response.data.address);
             await saveWorkAddress.mutateAsync({
                 publicAddress: response.data.address,
                 privateKey: response.data.privateKey
             });
             workAddress.refetch();
-
             showSucessNotification(t('agent_configuration.working_address_card.success_message'));
+        } catch (error) {
+            showErrorNotification((error as any).message);
+        }
+    }
+    const onChangeWorkingAddressClick = async() => {
+        try {
+            setIsLoading(true);
+            if (!account) {
+                openConnectWalletModal(async(wallet) => {
+                    if (wallet) {
+                        await generateAddress();
+
+                    }
+                });
+                return;
+            }
+
+            await generateAddress();
         } catch (error) {
             showErrorNotification((error as any).message);
         } finally {
@@ -199,7 +210,7 @@ export default function AgentConfiguration() {
                     className="mt-3"
                     rightSectionPointerEvents="all"
                     rightSection={
-                        workAddress.isFetching
+                        workAddress.isPending
                             ? <Loader size="xs" />
                             : workAddress.data && <IconCopy
                                 color="black"

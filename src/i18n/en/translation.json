@@ -1,4 +1,29 @@
 {
+    "add_agent_vault": {
+        "back_button": "Back to Dashboard",
+        "confirm_modal": {
+            "cancel_button": "Cancel",
+            "confirm_button": "Confirm",
+            "content": "Save and execute is an action that will nascetur ridiculus mus. Sed posuere consectetur est at lobortis. \n\n Please confirm to Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+            "title": "Before you proceed"
+        },
+        "discard_button": "Discard and go back",
+        "save_button": "Save and execute",
+        "success_message": "Agent Vault successfully created",
+        "title": "New Agent Vault"
+    },
+    "agent_vault_details": {
+        "back_button": "Back to Agent Vault",
+        "title": "Vault details"
+    },
+    "agent_vault_operations_card": {
+        "activate_vault_button": "Activate Vault (Enter)",
+        "close_vault_button": "Close Vault (Exit)",
+        "deposit_collateral_button": "Deposit Collateral",
+        "deposit_flr_in_pool_button": "Deposit FLR in Pool",
+        "description": "Lorem ipsum....",
+        "title": "Agent Vault Operations"
+    },
     "alerts_card": {
         "show_all_button": "Show all",
         "title": "Alerts"
@@ -37,6 +62,11 @@
             "title": "Working address"
         }
     },
+    "collaterals_card": {
+        "agent_offline_label": "Agent offline",
+        "agent_online_label": "Agent online",
+        "title": "Working address"
+    },
     "connect_wallet_button": {
         "connected_label": "Connected",
         "title": "Connect Wallet"
@@ -46,14 +76,68 @@
         "title": "Connect Wallet"
     },
     "dashboard": {
-        "agent_title": "Agent",
+        "add_vault_button": "Add vault",
+        "agent_title": "Agent bot",
         "configuration_button": "Configuration",
         "notifications_card": {
             "title": "Notifications from Flare"
         },
-        "vaults_title": "Vaults",
-        "working_address_card": {
-            "title": "Working address"
+        "vaults_title": "Vaults"
+    },
+    "deposit_collateral_modal": {
+        "confirm_button": "Deposit",
+        "deposit_amount_description_label": "Deposit your Vault Collateral Token",
+        "deposit_amount_label": "Amount [???, ???]",
+        "deposit_amount_placeholder_label": "How much do you want to deposit?",
+        "error_message": "Unable to deposit collateral",
+        "need_help_label": "Need help?",
+        "success_message": "Collateral successfully deposited",
+        "title": "Deposit Collateral"
+    },
+    "edit_agent_vault": {
+        "back_button": "Back to dashboard",
+        "confirm_modal": {
+            "cancel_button": "Cancel",
+            "confirm_button": "Confirm",
+            "content": "Save and execute is an action that will nascetur ridiculus mus. Sed posuere consectetur est at lobortis. \n\n Please confirm to Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+            "title": "Before you proceed"
+        },
+        "details_button": "Details",
+        "discard_button": "Discard and go back",
+        "edit_button": "Edit",
+        "save_button": "Save and execute",
+        "success_message": "Agent Vault successfully updated",
+        "title": "Agent Vault"
+    },
+    "forms": {
+        "vault": {
+            "buy_fasset_by_agent_factor_description_label": "The factor by which FAsset can be redeemed in case of liquidation",
+            "buy_fasset_by_agent_factor_label": "Buy FAsset By Agent Factor",
+            "enter_placeholder": "Enter ...",
+            "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault",
+            "fasset_type_label": "FAsset type",
+            "fasset_type_placeholder": "Select type (FXPR, FBTC, ...)",
+            "minting_fee_description_label": "Defines the fee which is paid by  the user for minting FAsset",
+            "minting_fee_label": "Minting fee",
+            "minting_pool_collateral_ratio_description_label": "FAssets can be minted only if agents CR is above this threshold",
+            "minting_pool_collateral_ratio_label": "Minting Pool Collateral Ratio",
+            "minting_vault_collateral_ratio_description_label": "FAssets can be minted only if agent's CR is above this threshold",
+            "minting_vault_collateral_ratio_label": "Minting Vault Collateral Ratio",
+            "name_description_label": "Unique name, only for agent’s use",
+            "name_label": "Name",
+            "pool_exit_collateral_ratio_description_label": "CPTs can only be redeemed f the agent's CR is above this threshold",
+            "pool_exit_collateral_ratio_label": "Pool Exit Collateral Ratio",
+            "pool_fee_share_description_label": "Defines how much Vault owner shares with CPT owners",
+            "pool_fee_share_label": "Pool Fee Share",
+            "pool_top_up_collateral_ratio_description_label": "Below this threshold, CPTs can be bought at a discount",
+            "pool_top_up_collateral_ratio_label": "Pool Top Up Collateral Ratio",
+            "pool_top_up_token_price_factor_description_label": "The factor by which CPTs are bought in case of liquidation",
+            "pool_top_up_token_price_factor_label": "Pool Top Up Token Price Factor",
+            "pool_token_suffix_description_label": "Defines a token which servers as CPT (Collateral Pool Token)",
+            "pool_token_suffix_label": "Pool Token Suffix",
+            "vault_collateral_token_description_label": "Defines which type of collateral will be used, only one type per Vault",
+            "vault_collateral_token_label": "Vault collateral token",
+            "vault_collateral_token_placeholder": "Select your currency (USDC, USDT, ...)"
         }
     },
     "layout": {
@@ -77,5 +161,55 @@
         "setup_agent_button": "Set up Agent",
         "subtitle": "Let’s set up agent, so you can start using this app.",
         "title": "Welcome to FAsset Manager!"
+    },
+    "vault_card": {
+        "agent_cpt_label": "Agent CPTs",
+        "empty_vaults_label": "No vaults yet",
+        "fasset_type_label": "FAsset Type",
+        "free_amount_label": "Free amount",
+        "manage_button": "Manage",
+        "minted_amounts_label": "Minted amounts",
+        "minted_lots_label": "Minted lots",
+        "pool_amount_label": "Pool amount",
+        "pool_cr_label": "Pool CR",
+        "status_label": "Status",
+        "vault_amount_label": "Vault amount",
+        "vault_cr_label": "Vault CR"
+    },
+    "validation": {
+        "messages": {
+            "alpha": "The {{field}} field may only contain alphabetic characters",
+            "alpha_num": "The {{field}} field may only contain alpha-numeric characters",
+            "alpha_dash": "The {{field}} field may contain alpha-numeric characters as well as dashes and underscores",
+            "alpha_spaces": "The {{field}} field may only contain alphabetic characters as well as spaces",
+            "between": "The {{field}} field must be between 0:{min} and 1:{max}",
+            "confirmed": "The {{field}} field confirmation does not match",
+            "digits": "The {{field}} field must be numeric and exactly contain 0:{length} digits",
+            "dimensions": "The {{field}} field must be 0:{width} pixels by 1:{height} pixels",
+            "email": "The {{field}} field must be a valid email",
+            "excluded": "The {{field}} field is not a valid value",
+            "ext": "The {{field}} field is not a valid file",
+            "image": "The {{field}} field must be an image",
+            "integer": "The {{field}} field must be an integer",
+            "length": "The {{field}} field must be 0:{length} long",
+            "max_value": "The {{field}} field must be 0:{max} or less",
+            "max": "The {{field}} field may not be greater than 0:{length} characters",
+            "mimes": "The {{field}} field must have a valid file type",
+            "min_value": "The {{field}} field must be 0:{min} or more",
+            "min": "The {{field}} field must be at least 0:{length} characters",
+            "numeric": "The {{field}} field may only contain numeric characters",
+            "one_of": "The {{field}} field is not a valid value",
+            "regex": "The {{field}} field format is invalid",
+            "required_if": "The {{field}} field is required",
+            "required": "The {{field}} field is required",
+            "size": "The {{field}} field size must be less than 0:{size}KB",
+            "is_equal": "The {field1} field must match {field2}",
+            "not_equal": "The {field1} field can not be the same as {field2}",
+            "password_no_match": "Password does not match",
+            "birth_day": "The {{field}} field must be a valid date"
+        }
+    },
+    "working_address_card": {
+        "title": "Working address"
     }
 }

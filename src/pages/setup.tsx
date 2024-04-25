@@ -6,11 +6,11 @@ import {
     Card
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation'
 import { useWeb3 } from '@/hooks/useWeb3';
 import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
-import { useSecretExists, useWorkAddress } from "@/api/agent";
+import { useSecretExists, useWorkAddress } from '@/api/agent';
 
 export default function Setup() {
     const router = useRouter();

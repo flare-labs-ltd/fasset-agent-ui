@@ -15,7 +15,7 @@ export default function ConnectWalletButton() {
         <Button
             color="rgba(206, 212, 218, 1)"
             size="md"
-            onClick={openConnectWalletModal}
+            onClick={() => openConnectWalletModal()}
             className="text-black"
         >
             <Text size="sm">{account ? t('connect_wallet_button.connected_label') : t('connect_wallet_button.title')}</Text>

@@ -1,13 +1,19 @@
-import { useQuery, useQueryClient, useMutation, TData } from '@tanstack/react-query';
+import {
+    useQuery,
+    useQueries,
+    useQueryClient,
+    useMutation,
+    TData
+} from '@tanstack/react-query';
 import apiClient from '@/api/apiClient';
-import { Collateral, BotAlert } from '@/types';
+import { Collateral, BotAlert, AgentSettingsConfig, AgentVault } from '@/types';
 
 const resource = 'agent';
 
 export function useWorkAddress(enabled: boolean = true) {
     return useQuery({
         queryKey: ['workAddress'],
-        queryFn: async () => {
+        queryFn: async(): Promise<string> => {
             const response = await apiClient.get(`${resource}/workAddress`);
             return response.data.data.length > 0 ? response.data.data : null;
         },
@@ -15,22 +21,12 @@ export function useWorkAddress(enabled: boolean = true) {
     });
 }
 
-export function useAgentInfo(fAssetSymbol: string) {
-    return useQuery({
-        queryKey: ['agentInfo'],
-        queryFn: async() => {
-            const response = await apiClient.get(`${resource}/info/data/${fAssetSymbol}`);
-            return response.data.data;
-        }
-    });
-}
-
 export function useCollaterals() {
     return useQuery({
         queryKey: ['collaterals'],
-        queryFn: async() => {
+        queryFn: async(): Promise<Collateral[]> => {
             const response = await apiClient.get(`${resource}/collaterals`);
-            return <Collateral[]> response.data.data;
+            return response.data.data;
         },
         select: (data: TData) => {
             const collaterals: Collateral[] = [];
@@ -94,10 +90,10 @@ export function useSaveWorkAddress() {
 export function useSecretExists() {
     return useQuery({
         queryKey: ['secretExists'],
-        queryFn: async() => {
+        queryFn: async(): Promise<boolean> => {
             const response = await apiClient.get(`${resource}/secretsExist`);
             return response.data.data;
-        },
+        }
     });
 }
 
@@ -117,7 +113,7 @@ export function useUploadSecret() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async(secret: string): Promise<any> => {
+        mutationFn: async(secret: string) => {
             const response = await apiClient.post(`${resource}/secrets`, secret);
             return response.data;
         },
@@ -137,74 +133,100 @@ export function useBotAlert() {
     return useQuery({
         queryKey: ['botAlert'],
         queryFn: async() => {
-            const response = await apiClient.get(`${resource}/botAlert`)<BotAlert>;
-            const foo: BotAlert[] = [
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },{
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                }
-                ,{
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                }
-                ,{
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                },
-                {
-                    "bot_type": "liquidator",
-                    "address": "0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0",
-                    "level": "info",
-                    "title": "AGENT CREATED",
-                    "description": "Agent 0x7fBd0b3aB8f06A291d96EdE7B1bb5dBb84F525F0 was created."
-                }
-            ]
-
-            return foo;
+            const response = await apiClient.get(`${resource}/botAlert`);
             return <BotAlert[]> response.data.data
         }
+    });
+}
+
+export function useFAssetSymbols() {
+    return useQuery({
+        queryKey: ['fAssetSymbols'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/fassetSymbols`);
+            return response.data.data
+        }
+    });
+}
+
+export function useAgentVaultsStatus(fAssetSymbols: string[]) {
+    return useQueries({
+        queries: fAssetSymbols
+            ? fAssetSymbols.map(fAssetSymbol => {
+                return {
+                    queryKey: ['vaults', fAssetSymbol],
+                    queryFn: async() => {
+                        const response = await apiClient.get(`${resource}/info/vaults/${fAssetSymbol}`);
+                        return response.data.data === undefined ? [] : response.data.data;
+                    },
+                    select: (data: TData) => {
+                        return {
+                            vaultsStatus: data,
+                            fAssetSymbol: fAssetSymbol
+                        }
+                    }
+                }
+            })
+            : [],
+        combine: (results) => {
+            return {
+                data: results.map((result) => result.data),
+                isFetching: results.some((result) => result.isFetching),
+                isFetched: results.some((result) => result.isFetched),
+                isPending: results.some((result) => result.isPending),
+            }
+        }
+    });
+}
+
+export function useVaultCollaterals() {
+    return useQuery({
+        queryKey: ['vaultCollaterals'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/vaultCollaterals`);
+            return response.data.data
+        }
+    });
+}
+
+export function useCreateVault() {
+    const queryKey = 'createVault';
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: async({ fAssetSymbol, payload }: { fAssetSymbol: string, payload: AgentSettingsConfig }) => {
+            const response = await apiClient.post(`${resource}/create/${fAssetSymbol}`, payload);
+            return response.data;
+        },
+        onMutate: async() => {
+            await queryClient.cancelQueries({ queryKey: queryKey });
+        },
+        onError: (error) => {
+            queryClient.invalidateQueries({ queryKey: queryKey });
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: queryKey });
+        }
+    });
+}
+
+export function useBotStatus() {
+    return useQuery({
+        queryKey: ['botStatus'],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/botStatus`);
+            return response.data.data
+        }
+    });
+}
+
+export function useVaultInfo(fAssetSymbol: string, agentVaultAddress: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: ['vaultInfo', fAssetSymbol, agentVaultAddress],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/info/vault/${fAssetSymbol}/${agentVaultAddress}`);
+            return <AgentVault[]>response.data.data
+        },
+        enabled: enabled
     });
 }

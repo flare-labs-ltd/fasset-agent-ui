@@ -8,7 +8,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
     const secretExists = useSecretExists();
 
     const isAgentConfigured = ()  => {
-        if (!secretExists.data) {
+        if (secretExists.data === false) {
             setAgentConfigured(false);
             router.push('/setup');
         } else {
@@ -17,16 +17,15 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
     }
 
     useEffect(() => {
+        if (secretExists.isFetched) isAgentConfigured();
+    }, [secretExists.isFetched]);
+    useEffect(() => {
         router.events.on('routeChangeComplete', isAgentConfigured)
 
         return () => {
             router.events.off('routeChangeComplete', isAgentConfigured);
         }
     }, []);
-    useEffect(() => {
-        if (!secretExists.isFetched) return;
-        isAgentConfigured();
-    }, [secretExists.isFetched]);
 
     if (secretExists.isPending) {
         return <LoadingOverlay

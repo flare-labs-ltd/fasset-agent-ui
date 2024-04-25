@@ -7,6 +7,7 @@ import { EthereumLoginProvider } from '@/hooks/useEthereumLogin';
 import MainLayout from "@/components/layouts/MainLayout";
 import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ModalsProvider } from '@mantine/modals';
 import RouteGuard from '@/components/RouteGuard';
 import '@/i18n/config';
 import '@mantine/core/styles.css';
@@ -28,23 +29,25 @@ export default function App({ Component, pageProps }: AppProps) {
         <MantineProvider
             theme={{ ...defaultThemeOverride }}
         >
-            <Notifications />
-            <QueryClientProvider client={queryClient}>
-                <GlobalStateChainIdWhenNotConnected>
-                    <Web3Provider>
-                        <EthereumLoginProvider>
-                            <MainLayout>
-                                {Component.protected
-                                    ? <RouteGuard>
-                                        <Component {...pageProps} />
-                                    </RouteGuard>
-                                    : <Component {...pageProps} />
-                                }
-                            </MainLayout>
-                        </EthereumLoginProvider>
-                    </Web3Provider>
-                </GlobalStateChainIdWhenNotConnected>
-            </QueryClientProvider>
+            <ModalsProvider>
+                <Notifications />
+                <QueryClientProvider client={queryClient}>
+                    <GlobalStateChainIdWhenNotConnected>
+                        <Web3Provider>
+                            <EthereumLoginProvider>
+                                <MainLayout>
+                                    {Component.protected
+                                        ? <RouteGuard>
+                                            <Component {...pageProps} />
+                                        </RouteGuard>
+                                        : <Component {...pageProps} />
+                                    }
+                                </MainLayout>
+                            </EthereumLoginProvider>
+                        </Web3Provider>
+                    </GlobalStateChainIdWhenNotConnected>
+                </QueryClientProvider>
+            </ModalsProvider>
         </MantineProvider>
     );
 }

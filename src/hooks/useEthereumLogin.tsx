@@ -13,7 +13,7 @@ const ConnectWalletModalContext = createContext<ConnectWalletModalContextType | 
 export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
     const [onEnteredCallback, setOnEnteredCallback] = useState();
     const [onExitedCallback, setOnExitedCallback] = useState();
-    const [selectedWalletCallback, setSelectedWalletCallback] = useState();
+    const [selectedWalletCallback, setSelectedWalletCallback] = useState(null);
     const [isConnectWalletModalActive, setIsConnectWalletModalActive] = useState<boolean>(false); //! dev only, change to false
 
     function closeConnectWalletModal() {
@@ -37,7 +37,6 @@ export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ ch
             <ConnectWalletModal
                 opened={isConnectWalletModalActive}
                 onClose={closeConnectWalletModal}
-                selectedWalletCallback={selectedWalletCallback}
             />
         </ConnectWalletModalContext.Provider>
     );

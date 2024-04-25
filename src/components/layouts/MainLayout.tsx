@@ -16,10 +16,10 @@ export default function Layout({ children, ...props }: ILayout) {
                 <title>{ t('layout.header.title') }</title>
             </Head>
             <AppShell>
-                <AppShell.Main className="flex flex-col">
+                <AppShell.Main className="flex flex-col pb-10">
                     <Container
                         fluid
-                        className="flex justify-between p-4 w-full"
+                        className="flex justify-between p-4 w-full items-center"
                     >
                         <Title order={4}>{ t('layout.header.title') }</Title>
                         <ConnectWalletButton />
