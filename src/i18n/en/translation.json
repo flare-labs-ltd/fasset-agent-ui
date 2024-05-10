@@ -1,4 +1,11 @@
 {
+    "activate_vault_modal": {
+        "cancel_button": "Cancel",
+        "confirm_button": "Confirm",
+        "description_label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "success_message": "Vault successfully activated",
+        "title": "Activate vault"
+    },
     "add_agent_vault": {
         "back_button": "Back to Dashboard",
         "confirm_modal": {
@@ -10,7 +17,8 @@
         "discard_button": "Discard and go back",
         "save_button": "Save and execute",
         "success_message": "Agent Vault successfully created",
-        "title": "New Agent Vault"
+        "title": "New Agent Vault",
+        "xrp_min_limit_error": "ERROR"
     },
     "agent_vault_details": {
         "back_button": "Back to Agent Vault",
@@ -36,7 +44,7 @@
             "card": {
                 "save_button": "Save",
                 "subtitle": "Description lorem ipusm dolor sit amet",
-                "title": "Secret file .json"
+                "title": "Secrets file .json"
             },
             "error_message": "Unable to create new secret file",
             "success_message": "New secret file successfully created",
@@ -84,15 +92,32 @@
         },
         "vaults_title": "Vaults"
     },
+    "deactivate_vault_modal": {
+        "cancel_button": "Cancel",
+        "confirm_button": "Confirm",
+        "description_label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "success_message": "Vault successfully deactivated",
+        "title": "Deactivate vault"
+    },
     "deposit_collateral_modal": {
         "confirm_button": "Deposit",
         "deposit_amount_description_label": "Deposit your Vault Collateral Token",
-        "deposit_amount_label": "Amount [???, ???]",
+        "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
         "error_message": "Unable to deposit collateral",
         "need_help_label": "Need help?",
         "success_message": "Collateral successfully deposited",
         "title": "Deposit Collateral"
+    },
+    "deposit_flr_in_pool": {
+        "confirm_button": "Deposit",
+        "deposit_amount_description_label": "Deposit FLR",
+        "deposit_amount_label": "Amount {{vaultCollateralToken}}",
+        "deposit_amount_placeholder_label": "How much do you want to deposit?",
+        "error_message": "Unable to deposit FLR in pool",
+        "need_help_label": "Need help?",
+        "success_message": "FLR successfully deposited",
+        "title": "Deposit FLR in Pool"
     },
     "edit_agent_vault": {
         "back_button": "Back to dashboard",
@@ -111,6 +136,8 @@
     },
     "forms": {
         "vault": {
+            "address_description_label": "Address description...",
+            "address_label": "Address",
             "buy_fasset_by_agent_factor_description_label": "The factor by which FAsset can be redeemed in case of liquidation",
             "buy_fasset_by_agent_factor_label": "Buy FAsset By Agent Factor",
             "enter_placeholder": "Enter ...",
@@ -123,8 +150,6 @@
             "minting_pool_collateral_ratio_label": "Minting Pool Collateral Ratio",
             "minting_vault_collateral_ratio_description_label": "FAssets can be minted only if agent's CR is above this threshold",
             "minting_vault_collateral_ratio_label": "Minting Vault Collateral Ratio",
-            "name_description_label": "Unique name, only for agent’s use",
-            "name_label": "Name",
             "pool_exit_collateral_ratio_description_label": "CPTs can only be redeemed f the agent's CR is above this threshold",
             "pool_exit_collateral_ratio_label": "Pool Exit Collateral Ratio",
             "pool_fee_share_description_label": "Defines how much Vault owner shares with CPT owners",
@@ -170,9 +195,12 @@
         "manage_button": "Manage",
         "minted_amounts_label": "Minted amounts",
         "minted_lots_label": "Minted lots",
+        "not_listed_label": "Not listed - live",
         "pool_amount_label": "Pool amount",
         "pool_cr_label": "Pool CR",
+        "public_live_label": "Public - Live",
         "status_label": "Status",
+        "updating_label": "Updating",
         "vault_amount_label": "Vault amount",
         "vault_cr_label": "Vault CR"
     },
@@ -182,29 +210,29 @@
             "alpha_num": "The {{field}} field may only contain alpha-numeric characters",
             "alpha_dash": "The {{field}} field may contain alpha-numeric characters as well as dashes and underscores",
             "alpha_spaces": "The {{field}} field may only contain alphabetic characters as well as spaces",
-            "between": "The {{field}} field must be between 0:{min} and 1:{max}",
+            "between": "The {{field}} field must be between 0:{{min}} and 1:{{max}}",
             "confirmed": "The {{field}} field confirmation does not match",
-            "digits": "The {{field}} field must be numeric and exactly contain 0:{length} digits",
-            "dimensions": "The {{field}} field must be 0:{width} pixels by 1:{height} pixels",
+            "digits": "The {{field}} field must be numeric and exactly contain 0:{{length}} digits",
+            "dimensions": "The {{field}} field must be 0:{width} pixels by 1:{{height}} pixels",
             "email": "The {{field}} field must be a valid email",
             "excluded": "The {{field}} field is not a valid value",
             "ext": "The {{field}} field is not a valid file",
             "image": "The {{field}} field must be an image",
             "integer": "The {{field}} field must be an integer",
-            "length": "The {{field}} field must be 0:{length} long",
-            "max_value": "The {{field}} field must be 0:{max} or less",
-            "max": "The {{field}} field may not be greater than 0:{length} characters",
+            "length": "The {{field}} field must be 0:{{length}} long",
+            "max_value": "The {{field}} field must be 0:{{max}} or less",
+            "max": "The {{field}} field may not be greater than 0:{{length}} characters",
             "mimes": "The {{field}} field must have a valid file type",
-            "min_value": "The {{field}} field must be 0:{min} or more",
-            "min": "The {{field}} field must be at least 0:{length} characters",
+            "min_value": "The {{field}} field must be 0:{{min}} or more",
+            "min": "The {{field}} field must be at least 0:{{length}} characters",
             "numeric": "The {{field}} field may only contain numeric characters",
             "one_of": "The {{field}} field is not a valid value",
             "regex": "The {{field}} field format is invalid",
             "required_if": "The {{field}} field is required",
             "required": "The {{field}} field is required",
-            "size": "The {{field}} field size must be less than 0:{size}KB",
-            "is_equal": "The {field1} field must match {field2}",
-            "not_equal": "The {field1} field can not be the same as {field2}",
+            "size": "The {{field}} field size must be less than 0:{{size}}KB",
+            "is_equal": "The {{field1}} field must match {{field2}}",
+            "not_equal": "The {{field1}} field can not be the same as {field2}}",
             "password_no_match": "Password does not match",
             "birth_day": "The {{field}} field must be a valid date"
         }

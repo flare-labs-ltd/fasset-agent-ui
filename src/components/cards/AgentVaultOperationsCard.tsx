@@ -1,27 +1,37 @@
 import {
     Title,
-    Text,
     Paper,
     Button,
-    TextInput
+    LoadingOverlay,
+    Text
 } from '@mantine/core';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DepositCollateralModal from '@/components/modals/DepositCollateralModal';
-import { useState } from 'react';
+import DepositFLRModal from '@/components/modals/DepositFLRModal';
+import ActivateVaultModal from '@/components/modals/ActivateVaultModal';
+import DeactivateVaultModal from '@/components/modals/DeactivateVaultModal';
+import { AgentVault } from '@/types';
+
 
 interface IAgentVaultOperationsCard {
-    className?: string
+    className?: string;
+    agentVault: AgentVault
 }
 
-export default function AgentVaultOperationsCard({ className }: IAgentVaultOperationsCard) {
+export default function AgentVaultOperationsCard({ className, agentVault }: IAgentVaultOperationsCard) {
     const { t } = useTranslation();
     const [isDepositCollateralModalActive, setIsDepositCollateralModalActive] = useState<boolean>(false);
+    const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
+    const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
+    const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
 
     return (
         <Paper
-            className={`p-4 ${className}`}
+            className={`relative p-4 ${className}`}
             withBorder
         >
+            <LoadingOverlay visible={agentVault == null} />
             <Title order={6} className="mb-8">{t('agent_vault_operations_card.title')}</Title>
             <Button
                 onClick={() => setIsDepositCollateralModalActive(true)}
@@ -30,21 +40,42 @@ export default function AgentVaultOperationsCard({ className }: IAgentVaultOpera
                 {t('agent_vault_operations_card.deposit_collateral_button')}
             </Button>
             <Button
+                onClick={() => setIsDepositFLRModalActive(true)}
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.deposit_flr_in_pool_button')}
             </Button>
             <Button
+                onClick={() => setIsActivateVaultModalActive(true)}
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.activate_vault_button')}
             </Button>
-            <Button>
+            <Button
+                onClick={() => setIsDeactivateVaultModalActive(true)}
+            >
                 {t('agent_vault_operations_card.close_vault_button')}
             </Button>
-            <DepositCollateralModal
-                opened={isDepositCollateralModalActive}
-                onClose={() => setIsDepositCollateralModalActive(false)}
+            {agentVault &&
+                <>
+                    <DepositCollateralModal
+                        agentVault={agentVault}
+                        opened={isDepositCollateralModalActive}
+                        onClose={() => setIsDepositCollateralModalActive(false)}
+                    />
+                    <DepositFLRModal
+                        opened={isDepositFLRModalActive}
+                        onClose={() => setIsDepositFLRModalActive(false)}
+                    />
+                </>
+            }
+            <ActivateVaultModal
+                opened={isActivateVaultModalActive}
+                onClose={() => setIsActivateVaultModalActive(false)}
+            />
+            <DeactivateVaultModal
+                opened={isDeactivateVaultModalActive}
+                onClose={() => setIsDeactivateVaultModalActive(false)}
             />
         </Paper>
     );

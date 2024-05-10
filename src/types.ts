@@ -1,29 +1,34 @@
 export interface Collateral {
-    symbol: string,
-    balance: string,
+    symbol: string;
+    balance: string;
     wrapped?: string
 }
 
 export interface BotAlert {
-    bot_type: string,
-    address: string,
-    level: string,
-    title: string,
+    bot_type: string;
+    address: string;
+    level: string;
+    title: string;
     description: string
 }
 
-export interface AgentVaultStatus {
-    vaultAddress: string;
-    poolCollateralRatioBIPS: string;
-    vaultCollateralRatioBIPS: string;
-    agentSettingUpdateValidAtFeeBIPS: string;
-    agentSettingUpdateValidAtPoolFeeShareBIPS: string;
-    agentSettingUpdateValidAtMintingVaultCrBIPS: string;
-    agentSettingUpdateValidAtMintingPoolCrBIPS: string;
-    agentSettingUpdateValidAtBuyFAssetByAgentFactorBIPS: string;
-    agentSettingUpdateValidAtPoolExitCrBIPS: string;
-    agentSettingUpdateValidAtPoolTopupCrBIPS: string;
-    agentSettingUpdateValidAtPoolTopupTokenPriceFactorBIPS: string;
+export interface AgentVaultInformation {
+    address: string;
+    freeLots: number;
+    mintedAmount: number;
+    mintedlots: number;
+    poolAmount: number;
+    poolCR: number;
+    status: boolean;
+    updating: boolean;
+    vaultAmount: number;
+    vaultCR: number;
+    agentCPTs: number;
+}
+
+export interface AgentSettingsDTO {
+    name: string;
+    value: string;
 }
 
 export interface AgentSettingsConfig {
@@ -80,4 +85,5 @@ export interface AgentVault {
     poolExitCollateralRatioBIPS: string;
     poolTopupCollateralRatioBIPS: string;
     poolTopupTokenPriceFactorBIPS: string;
+    poolSuffix: string;
 }

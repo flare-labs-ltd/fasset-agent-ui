@@ -1,14 +1,14 @@
 import {
     useMutation,
 } from '@tanstack/react-query';
-import apiClient from '@/api/apiClient';
+import apiClient from "@/api/apiClient";
 
-const resource = 'agentVault';
+const resource = 'pool';
 
-export function useDepositCollateral() {
+export function useDepositFLRInPool() {
     return useMutation({
         mutationFn: async({ fAssetSymbol, agentVaultAddress, amount }: { fAssetSymbol: string, agentVaultAddress: string, amount: number}) => {
-            const response = await apiClient.post(`${resource}/collateral/deposit/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
+            const response = await apiClient.post(`${resource}/collateral/buy/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
             return response.data;
         }
     });

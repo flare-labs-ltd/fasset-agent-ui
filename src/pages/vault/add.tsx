@@ -12,16 +12,20 @@ import { useRouter } from 'next/navigation'
 import { modals } from '@mantine/modals';
 import { useState, useRef } from 'react';
 import VaultForm from '@/components/forms/VaultForm';
-import { useCreateVault } from '@/api/agent';
-import { showErrorNotification, showSucessNotification } from "@/hooks/useNotifications";
+import { useCreateVault, useGetUnderlyingAssetBalance } from '@/api/agent';
+import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import { AgentSettingsConfig } from '@/types';
+
+const MIN_XRP_LIMIT = 50;
 
 export default function AddVault() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [fAssetSymbol, setFAssetType] = useState<string|null>(null);
     const { t } = useTranslation();
     const router = useRouter();
     const formRef = useRef();
     const createVault = useCreateVault();
+    const underlyingAssetBalance = useGetUnderlyingAssetBalance(fAssetSymbol, false);
 
     const confirmModal = () => {
         const form = formRef.current.form();
@@ -49,17 +53,20 @@ export default function AddVault() {
             setIsLoading(true);
             const form = formRef.current.form();
             const data = form.getValues();
-            if (!data.mintingFee.includes('%')) {
-                data.mintingFee = `${data.mintingFee}%`;
-            }
-            if (!data.poolFeeShare.includes('%')) {
-                data.poolFeeShare = `${data.poolFeeShare}%`;
+            data.fee = `${data.fee}%`;
+            data.poolFeeShare = `${data.poolFeeShare}%`;
+            await setFAssetType(data.fAssetType);
+
+            await underlyingAssetBalance.refetch();
+            if (underlyingAssetBalance.data < MIN_XRP_LIMIT) {
+                showErrorNotification(t('add_agent_vault.xrp_min_limit_error'));
+                return;
             }
 
             const payload: AgentSettingsConfig = {
-                poolTokenSuffix: data.poolTokenSuffix,
+                poolTokenSuffix: data.poolTokenSuffix.toUpperCase(),
                 vaultCollateralFtsoSymbol: data.vaultCollateralToken,
-                fee: data.mintingFee,
+                fee: data.fee,
                 poolFeeShare: data.poolFeeShare,
                 mintingVaultCollateralRatio: data.mintingVaultCollateralRatio,
                 mintingPoolCollateralRatio: data.mintingPoolCollateralRatio,
@@ -68,19 +75,16 @@ export default function AddVault() {
                 poolTopupCollateralRatio: data.poolTopUpCollateralRatio,
                 poolTopupTokenPriceFactor: data.poolTopUpTokenPriceFactor
             }
-            const response = await createVault.mutateAsync({
+            await createVault.mutateAsync({
                 fAssetSymbol: data.fAssetType,
                 payload: payload
             });
 
-            if (response.status === 'ERROR') {
-                showErrorNotification(response.errorMessage);
-                return;
-            }
-
             showSucessNotification(t('add_agent_vault.success_message'));
+            router.push('/');
         } catch (error) {
-            showErrorNotification((error as any).message);
+            console.log(error);
+            showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
         }

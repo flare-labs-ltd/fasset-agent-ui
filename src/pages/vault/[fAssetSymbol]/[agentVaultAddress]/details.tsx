@@ -16,8 +16,8 @@ export default function VaultDetails() {
     const [details, setDetails] = useState<string>('');
     const { t } = useTranslation();
     const router = useRouter();
-    const { symbol, vaultId } = router.query;
-    const vaultInfo = useVaultInfo(symbol, vaultId, symbol != null && vaultId != null);
+    const { fAssetSymbol, agentVaultAddress } = router.query;
+    const vaultInfo = useVaultInfo(fAssetSymbol, agentVaultAddress, fAssetSymbol != null && agentVaultAddress != null);
 
     useEffect(() => {
         if (!vaultInfo.isFetched) return;
@@ -36,7 +36,7 @@ export default function VaultDetails() {
             <LoadingOverlay visible={vaultInfo.isPending} />
             <Button
                 component={Link}
-                href={`/vault/${symbol}/${vaultId}`}
+                href={`/vault/${fAssetSymbol}/${agentVaultAddress}`}
                 variant="transparent"
                 leftSection={<IconArrowLeft size={18} />}
                 className="p-0 mb-3"

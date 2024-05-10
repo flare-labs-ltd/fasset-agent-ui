@@ -4,56 +4,36 @@ import {
     Text,
     JsonInput,
     Paper,
-    Button
+    Button,
+    LoadingOverlay
 } from '@mantine/core';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import { IconArrowLeft } from '@tabler/icons-react';
-import { useUploadSecret } from '@/api/agent';
+import { useUploadSecret, useSecretsTemplate } from '@/api/agent';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
-
-const SECRETS_TEMPLATE = `{
-  "wallet": {
-    "encryption_password": ""
-  },
-  "apiKey": {
-    "native_rpc": "",
-    "xrp_rpc": "",
-    "indexer": "",
-    "agent_bot": ""
-  },
-  "owner": {
-    "management": {
-      "address": ""
-    },
-    "native": {
-      "address": "",
-      "private_key": ""
-    },
-    "testXRP": {
-      "address": "",
-      "private_key": ""
-    }
-  },
-  "timeKeeper": {
-    "native_private_key": "0xaf7306b82f491c2ae30c14b86443cb31754b4b326a30d634a6750bebf597ad9e",
-    "native_address": "0xeCD54647Db49753372CDB90Da857156b854f7afb"
-  }
-}`;
 
 export default function CreateSecretFile() {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            secret: SECRETS_TEMPLATE
+            secret: null
         },
     });
 
     const uploadSecret = useUploadSecret();
+    const secretsTemplate = useSecretsTemplate();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { t } = useTranslation();
+
+    useEffect(() => {
+        if (secretsTemplate.isPending) return;
+        form.setValues({
+            secret: JSON.stringify(secretsTemplate.data, null, 2)
+        })
+    }, [secretsTemplate.isPending]);
 
     const onSubmit = async(secret: string) => {
         try {
@@ -98,19 +78,22 @@ export default function CreateSecretFile() {
                 <form onSubmit={form.onSubmit(form => onSubmit(form.secret))}>
                     <Title order={5}>{t('agent_configuration.create_secret.card.title')}</Title>
                     <Text size="sm" c="gray">{t('agent_configuration.create_secret.card.subtitle')}</Text>
-                    <JsonInput
-                        {...form.getInputProps('secret')}
-                        autosize={true}
-                        minRows={5}
-                        className="mt-3"
-                    />
-                    <div className="flex justify-end mt-3">
-                        <Button
-                            type="submit"
-                            loading={isLoading}
-                        >
-                            {t('agent_configuration.create_secret.card.save_button')}
-                        </Button>
+                    <div>
+                        <LoadingOverlay visible={secretsTemplate.isPending} />
+                        <JsonInput
+                            {...form.getInputProps('secret')}
+                            autosize={true}
+                            minRows={5}
+                            className="mt-3"
+                        />
+                        <div className="flex justify-end mt-3">
+                            <Button
+                                type="submit"
+                                loading={isLoading}
+                            >
+                                {t('agent_configuration.create_secret.card.save_button')}
+                            </Button>
+                        </div>
                     </div>
                 </form>
             </Paper>

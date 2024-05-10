@@ -1,13 +1,11 @@
 import {
     TextInput,
+    NumberInput,
     Divider,
     Select,
     Loader,
-    LoadingOverlay,
-    rem
 } from '@mantine/core';
 import { useForm, Form } from '@mantine/form';
-import { IconPercentage } from '@tabler/icons-react';
 import {
     forwardRef,
     useEffect,
@@ -19,30 +17,44 @@ import { yupResolver } from 'mantine-form-yup-resolver';
 import * as yup from 'yup';
 import { useVaultCollaterals } from '@/api/agent';
 import { AgentVault } from '@/types';
+import { useRouter } from 'next/router';
 
 interface IForm {
-    loading?: boolean,
-    disabled?: boolean,
-    vault?: AgentVault
+    disabled?: boolean;
+    vault?: AgentVault;
+}
+interface ICollateralTemplate {
+    fee: string;
+    poolFeeShare: string;
+    mintingVaultCollateralRatio: number;
+    mintingPoolCollateralRatio: number;
+    poolExitCollateralRatio: number;
+    poolTopupCollateralRatio: number;
+    poolTopupTokenPriceFactor: number;
+    buyFAssetByAgentFactor: number;
 }
 type FormRef = {
     form: () => Form;
 }
 
-const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IForm, ref) => {
-    const [isDisabled, setIsDisabled] = useState<boolean>(true);
+const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) => {
+    const [isHiddenInputDisabled, setIsHiddenInputDisabled] = useState<boolean>(true);
+    const [isHidden, setIsHidden] = useState<boolean>(true);
     const [fAssetTypes, SetfAssetTypes] = useState<string[]>([]);
     const [vaultCollateralTokens, setVaultCollateralTokens] = useState<string[]>([]);
+    const [collateralTemplate, setCollateralTemplate] = useState<ICollateralTemplate|null>();
     const { t } = useTranslation();
     const vaultCollaterals = useVaultCollaterals();
 
+    const router = useRouter();
+    const { fAssetSymbol, agentVaultAddress } = router.query;
+
     const schema = yup.object().shape({
-        name: yup.string().required(t('validation.messages.required', { field: t('forms.vault.name_label') })),
         fAssetType: yup.string().required(t('validation.messages.required', { field: t('forms.vault.fasset_type_label') })),
         vaultCollateralToken: yup.string().required(t('validation.messages.required', { field: t('forms.vault.vault_collateral_token_label') })),
         poolTokenSuffix: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_token_suffix_label') })),
-        mintingFee: yup.number().required(t('validation.messages.required', { field: t('forms.vault.minting_fee_label') })),
-        poolFeeShare: yup.number().required(t('validation.messages.required', { field: t('forms.vault.pool_fee_share_label') })),
+        fee: yup.string().required(t('validation.messages.required', { field: t('forms.vault.minting_fee_label') })),
+        poolFeeShare: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_fee_share_label') })),
         mintingVaultCollateralRatio: yup.number().required(t('validation.messages.required', { field: t('forms.vault.minting_vault_collateral_ratio_label') })),
         mintingPoolCollateralRatio: yup.number().required(t('validation.messages.required', { field: t('forms.vault.minting_pool_collateral_ratio_label') })),
         poolExitCollateralRatio: yup.number().required(t('validation.messages.required', { field: t('forms.vault.pool_exit_collateral_ratio_label') })),
@@ -57,7 +69,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
             fAssetType: null,
             vaultCollateralToken: null,
             poolTokenSuffix: null,
-            mintingFee: null,
+            fee: null,
             poolFeeShare: null,
             mintingVaultCollateralRatio: null,
             mintingPoolCollateralRatio: null,
@@ -68,7 +80,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
         },
         validate: yupResolver(schema),
         onValuesChange: (values) => {
-            setIsDisabled( values.name === null || values.fAssetType === null || values.vaultCollateralToken === null);
+            setIsHiddenInputDisabled(values.vaultCollateralToken === null);
         }
     });
 
@@ -76,18 +88,37 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
         const fAssetTypes = vaultCollaterals?.data?.map(item => item.fassetSymbol);
         if (fAssetTypes) {
             SetfAssetTypes(fAssetTypes);
-        }
 
+            if (fAssetSymbol) {
+                form.setFieldValue('fAssetType', fAssetSymbol);
+            }
+            if (agentVaultAddress) {
+                const item = vaultCollaterals?.data?.find(item => item.fassetSymbol === fAssetSymbol);
+                if (!item) return;
+                setVaultCollateralTokens(item.collaterals.map(collateral => collateral.symbol));
+                setIsHidden(false);
+                if (vault) {
+                    form.setValues({
+                        vaultCollateralToken: vault.vaultCollateralToken
+                    });
+                }
+            }
+        }
     }, [vaultCollaterals.data]);
+    useEffect(() => {
+        if (!vault || vaultCollateralTokens.length === 0) return;
+        form.setValues({
+            vaultCollateralToken: vault.vaultCollateralToken
+        });
+    }, [vaultCollateralTokens]);
     useEffect(() => {
         if (!vault) return;
 
         form.setValues({
-            name: null,
-            fAssetType: null,
-            vaultCollateralToken: null,
-            poolTokenSuffix: null,
-            mintingFee: Number(vault.feeBIPS) / 100,
+            name: agentVaultAddress,
+            poolTokenSuffix: vault.poolSuffix,
+            vaultCollateralToken: vault.vaultCollateralToken,
+            fee: Number(vault.feeBIPS) / 100,
             poolFeeShare: Number(vault.poolFeeShareBIPS) / 100,
             mintingVaultCollateralRatio: Number(vault.mintingVaultCollateralRatioBIPS) / 10000,
             mintingPoolCollateralRatio: Number(vault.mintingPoolCollateralRatioBIPS) / 10000,
@@ -97,6 +128,19 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
             poolTopUpTokenPriceFactor: Number(vault.poolTopupTokenPriceFactorBIPS) / 10000,
         });
     }, [vault]);
+    useEffect(() => {
+        if (vault || !collateralTemplate) return;
+        form.setValues({
+            fee: Number(collateralTemplate.fee.replace('%', '')),
+            poolFeeShare: Number(collateralTemplate.poolFeeShare.replace('%', '')),
+            mintingPoolCollateralRatio: Number(collateralTemplate.mintingPoolCollateralRatio),
+            mintingVaultCollateralRatio: Number(collateralTemplate.mintingVaultCollateralRatio),
+            poolExitCollateralRatio: Number(collateralTemplate.poolExitCollateralRatio),
+            poolTopUpCollateralRatio: Number(collateralTemplate.poolTopupCollateralRatio),
+            poolTopUpTokenPriceFactor: Number(collateralTemplate.poolTopupTokenPriceFactor),
+            buyFAssetByAgentFactor: Number(collateralTemplate.buyFAssetByAgentFactor),
+        });
+    }, [collateralTemplate]);
     useImperativeHandle(ref, () => ({
         form: () => {
             return form;
@@ -109,21 +153,35 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
         });
         const vault = vaultCollaterals.data?.find(item => item.fassetSymbol === value);
         if (vault) {
-            setVaultCollateralTokens(vault.collaterals);
+            setIsHidden(false);
+            setVaultCollateralTokens(vault.collaterals.map(collateral => collateral.symbol));
+        }
+    }
+    const onVaultCollateralTokenChange = (value: string, option: any) => {
+        form.setValues({
+            vaultCollateralToken: value
+        });
+
+        const item = vaultCollaterals.data?.find(item => item.fassetSymbol === form.getValues()['fAssetType']);
+        if (item) {
+            const collateral = item.collaterals.find(collateral => collateral.symbol === value);
+            if (collateral) {
+                setCollateralTemplate(JSON.parse(collateral.template));
+            }
         }
     }
 
     return (
-        <form className="w-full md:w-10/12 relative">
-            <LoadingOverlay visible={loading} />
-            <TextInput
-                {...form.getInputProps('name')}
-                label={t('forms.vault.name_label')}
-                description={t('forms.vault.name_description_label')}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                disabled={disabled || vault != null}
-            />
+        <form className="w-full md:w-10/12">
+            {agentVaultAddress &&
+                <TextInput
+                    {...form.getInputProps('name')}
+                    label={t('forms.vault.address_label')}
+                    description={t('forms.vault.address_description_label')}
+                    placeholder={t('forms.vault.enter_placeholder')}
+                    disabled={true}
+                />
+            }
             <Select
                 {...form.getInputProps('fAssetType')}
                 data={fAssetTypes}
@@ -143,6 +201,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
             <Select
                 {...form.getInputProps('vaultCollateralToken')}
                 data={vaultCollateralTokens}
+                onChange={(value, option) => onVaultCollateralTokenChange(value, option)}
                 label={t('forms.vault.vault_collateral_token_label')}
                 description={t('forms.vault.vault_collateral_token_description_label')}
                 placeholder={t('forms.vault.vault_collateral_token_placeholder')}
@@ -155,93 +214,111 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, loading, disabled }: IFor
                 className="mt-4"
                 disabled={disabled || vault != null}
             />
-            <Divider
-                my="xl"
-            />
-            <TextInput
-                {...form.getInputProps('poolTokenSuffix')}
-                label={t('forms.vault.pool_token_suffix_label')}
-                description={t('forms.vault.pool_token_suffix_description_label')}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                disabled={isDisabled || vault != null}
-            />
-            <TextInput
-                {...form.getInputProps('mintingFee')}
-                label={t('forms.vault.minting_fee_label')}
-                description={t('forms.vault.minting_fee_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                rightSectionPointerEvents="none"
-                rightSection={<IconPercentage style={{ width: rem(20), height: rem(20) }} />}
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('poolFeeShare')}
-                label={t('forms.vault.pool_fee_share_label')}
-                description={t('forms.vault.pool_fee_share_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                rightSectionPointerEvents="none"
-                rightSection={<IconPercentage style={{ width: rem(20), height: rem(20) }} />}
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('mintingVaultCollateralRatio')}
-                label={t('forms.vault.minting_vault_collateral_ratio_label')}
-                description={t('forms.vault.minting_vault_collateral_ratio_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('mintingPoolCollateralRatio')}
-                label={t('forms.vault.minting_pool_collateral_ratio_label')}
-                description={t('forms.vault.minting_pool_collateral_ratio_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('poolExitCollateralRatio')}
-                label={t('forms.vault.pool_exit_collateral_ratio_label')}
-                description={t('forms.vault.pool_exit_collateral_ratio_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('buyFAssetByAgentFactor')}
-                label={t('forms.vault.buy_fasset_by_agent_factor_label')}
-                description={t('forms.vault.buy_fasset_by_agent_factor_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('poolTopUpCollateralRatio')}
-                label={t('forms.vault.pool_top_up_collateral_ratio_label')}
-                description={t('forms.vault.pool_top_up_collateral_ratio_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
-            <TextInput
-                {...form.getInputProps('poolTopUpTokenPriceFactor')}
-                label={t('forms.vault.pool_top_up_token_price_factor_label')}
-                description={t('forms.vault.pool_top_up_token_price_factor_description_label')}
-                disabled={isDisabled}
-                placeholder={t('forms.vault.enter_placeholder')}
-                withAsterisk
-                className="mt-4"
-            />
+            {!isHidden &&
+                <>
+                    <Divider
+                        my="xl"
+                    />
+                    <TextInput
+                        {...form.getInputProps('poolTokenSuffix')}
+                        label={t('forms.vault.pool_token_suffix_label')}
+                        description={t('forms.vault.pool_token_suffix_description_label')}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        disabled={isHiddenInputDisabled || vault != null}
+                    />
+                    <NumberInput
+                        {...form.getInputProps('fee')}
+                        label={t('forms.vault.minting_fee_label')}
+                        description={t('forms.vault.minting_fee_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        suffix="%"
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('poolFeeShare')}
+                        label={t('forms.vault.pool_fee_share_label')}
+                        description={t('forms.vault.pool_fee_share_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={1}
+                        suffix="%"
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('mintingVaultCollateralRatio')}
+                        label={t('forms.vault.minting_vault_collateral_ratio_label')}
+                        description={t('forms.vault.minting_vault_collateral_ratio_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.01}
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('mintingPoolCollateralRatio')}
+                        label={t('forms.vault.minting_pool_collateral_ratio_label')}
+                        description={t('forms.vault.minting_pool_collateral_ratio_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('poolExitCollateralRatio')}
+                        label={t('forms.vault.pool_exit_collateral_ratio_label')}
+                        description={t('forms.vault.pool_exit_collateral_ratio_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('buyFAssetByAgentFactor')}
+                        label={t('forms.vault.buy_fasset_by_agent_factor_label')}
+                        description={t('forms.vault.buy_fasset_by_agent_factor_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('poolTopUpCollateralRatio')}
+                        label={t('forms.vault.pool_top_up_collateral_ratio_label')}
+                        description={t('forms.vault.pool_top_up_collateral_ratio_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        className="mt-4"
+                    />
+                    <NumberInput
+                        {...form.getInputProps('poolTopUpTokenPriceFactor')}
+                        label={t('forms.vault.pool_top_up_token_price_factor_label')}
+                        description={t('forms.vault.pool_top_up_token_price_factor_description_label')}
+                        disabled={isHiddenInputDisabled || disabled}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        withAsterisk
+                        allowNegative={false}
+                        step={0.1}
+                        className="mt-4"
+                    />
+                </>
+            }
         </form>
     )
 });
