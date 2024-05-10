@@ -43,7 +43,13 @@ export default function ActivateVaultModal({ opened, onClose }: IActivateVaultMo
             centered
         >
             <Text>{t('activate_vault_modal.description_label')}</Text>
-            <div className="flex">
+            <Text
+                size="xs"
+                className="mt-3"
+            >
+                {t('activate_vault_modal.minimal_collateral_for_minting_label')}
+            </Text>
+            <div className="flex mt-5">
                 <Button
                     variant="default"
                     onClick={onClose}

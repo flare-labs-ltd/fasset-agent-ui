@@ -55,11 +55,11 @@ export default function Vault() {
             const payload: AgentSettingsDTO[] = [
                 {
                     name: 'feeBIPS',
-                    value: data.fee * 10000
+                    value: data.fee * 1000
                 },
                 {
                     name: 'poolFeeShareBIPS',
-                    value: data.poolFeeShare * 10000
+                    value: data.poolFeeShare * 1000
                 },
                 {
                     name: 'mintingVaultCollateralRatioBIPS',

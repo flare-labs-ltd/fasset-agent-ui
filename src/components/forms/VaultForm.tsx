@@ -81,6 +81,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         validate: yupResolver(schema),
         onValuesChange: (values) => {
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
+            setIsHidden(values.fAssetType === null || values.vaultCollateralToken === null);
         }
     });
 
@@ -153,7 +154,6 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         });
         const vault = vaultCollaterals.data?.find(item => item.fassetSymbol === value);
         if (vault) {
-            setIsHidden(false);
             setVaultCollateralTokens(vault.collaterals.map(collateral => collateral.symbol));
         }
     }

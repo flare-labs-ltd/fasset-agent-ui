@@ -2,7 +2,8 @@
     "activate_vault_modal": {
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
-        "description_label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "description_label": "Are you sure you want to activate vault?",
+        "minimal_collateral_for_minting_label": "Agent must have at least 1 lot of collateral for minting",
         "success_message": "Vault successfully activated",
         "title": "Activate vault"
     },
@@ -95,7 +96,7 @@
     "deactivate_vault_modal": {
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
-        "description_label": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "description_label": "Are you sure you want to deactivate vault",
         "success_message": "Vault successfully deactivated",
         "title": "Deactivate vault"
     },
