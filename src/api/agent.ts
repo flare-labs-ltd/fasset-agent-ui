@@ -26,7 +26,8 @@ const AGENT_KEY = {
     BOT_STATUS: 'agentBotStatus',
     VAULT_INFO: 'agentVaultInfo',
     SECRETS_TEMPLATE: 'agentSecretsTemplate',
-    UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance'
+    UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance',
+    NOTIFICATIONS: 'notifications'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -258,6 +259,17 @@ export function useBotAlert() {
     return useQuery({
         queryKey: [AGENT_KEY.BOT_ALERT],
         queryFn: async() => {
+            const response = await apiClient.get(`${resource}/botAlert`);
+            return <BotAlert[]> response.data.data
+        }
+    });
+}
+
+export function useNotifications() {
+    return useQuery({
+        queryKey: [AGENT_KEY.NOTIFICATIONS],
+        queryFn: async() => {
+            //TODO: REPLACE WITH NOTIFICATIONS REQUEST
             const response = await apiClient.get(`${resource}/botAlert`);
             return <BotAlert[]> response.data.data
         }

@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import AlertsCard from '@/components/cards/AlertsCard';
 import CollateralsCard from '@/components/cards/CollateralsCard';
+import NotificationsCard from '@/components/cards/NotificationsCard';
 import VaultsCard from '@/components/cards/VaultsCard';
 
 export default function Dashboard() {
@@ -31,7 +32,7 @@ export default function Dashboard() {
             <CollateralsCard className="mt-5 border-primary" />
             <div className="flex flex-wrap md:flex-nowrap mt-5">
                 <AlertsCard className="mr-0 md:mr-10" />
-                <AlertsCard className="mt-5 md:mt-0" />
+                <NotificationsCard className=" md:mt-0" />
             </div>
             <div className="mt-10">
                 <div className="flex items-center w-full">

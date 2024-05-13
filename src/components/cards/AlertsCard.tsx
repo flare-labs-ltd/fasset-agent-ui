@@ -18,7 +18,7 @@ interface IAlertCard {
     className?: string
 }
 
-const ALERT_REFETCH_INTERVAL = 30000;
+const ALERTS_REFETCH_INTERVAL = 30000;
 const SHOW_ALL_BUTTON_LIMIT = 5;
 
 export default function AlertsCard({ className }: IAlertCard) {
@@ -30,7 +30,7 @@ export default function AlertsCard({ className }: IAlertCard) {
     useEffect(() => {
         const botFetchInterval = setInterval(() => {
             botAlerts.refetch();
-        }, ALERT_REFETCH_INTERVAL);
+        }, ALERTS_REFETCH_INTERVAL);
 
         return () => clearInterval(botFetchInterval);
     }, []);
@@ -44,7 +44,7 @@ export default function AlertsCard({ className }: IAlertCard) {
                 withBorder
                 className="flex flex-col p-4"
             >
-                <Title order={4} className="mb-8">{t('alerts_card.title')}</Title>
+                <Title order={4} className="mb-4">{t('alerts_card.title')}</Title>
                 {botAlerts.isPending && <Loader className="ml-auto mr-auto" /> }
                 {botAlerts?.data
                     ?.slice(0, showAll ? botAlerts?.data.length : 5)
@@ -63,6 +63,9 @@ export default function AlertsCard({ className }: IAlertCard) {
                             </div>
                         </div>
                 ))}
+                {botAlerts?.data?.length === 0 &&
+                    <Text>{t('alerts_card.no_alerts_label')}</Text>
+                }
             </Paper>
             {isShowAllButtonVisible &&
                 <Button

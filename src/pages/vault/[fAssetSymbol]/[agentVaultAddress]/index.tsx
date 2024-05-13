@@ -135,7 +135,7 @@ export default function Vault() {
                             }
                         </div>
                     </div>
-                    <div className="mt-5 md:mt-0 w-full md:w-4/12" />
+                    <div className="mt-5 md:mt-0 w-full md:w-1/4" />
                 </div>
             </div>
             <div className="flex flex-wrap md:flex-nowrap mt-5">
@@ -171,7 +171,7 @@ export default function Vault() {
                 {!isEditing &&
                     <AgentVaultOperationsCard
                         agentVault={vaultInfo.data}
-                        className="mt-8 md:mt-0 border-primary w-full md:w-4/12 self-start"
+                        className="mt-8 md:mt-0 border-primary w-full md:w-1/4 self-start"
                     />
                 }
             </div>

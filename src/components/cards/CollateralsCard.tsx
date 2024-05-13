@@ -28,7 +28,10 @@ export default function CollateralsCard({ className }: ICollateralsCard) {
                 {botStatus.isFetched &&
                     <Badge
                         size="lg"
-                        color={botStatus.data ? 'primary' : 'red'}
+                        color={botStatus.data ? 'rgba(237, 242, 255, 1)' : 'red'}
+                        styles={{
+                            label: { color: botStatus.data ? 'var(--mantine-color-primary-6)' : 'white' }
+                        }}
                     >
                         {t(botStatus.data ? 'collaterals_card.agent_online_label' : 'collaterals_card.agent_offline_label')}
                     </Badge>

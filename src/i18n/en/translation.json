@@ -12,7 +12,7 @@
         "confirm_modal": {
             "cancel_button": "Cancel",
             "confirm_button": "Confirm",
-            "content": "Save and execute is an action that will nascetur ridiculus mus. Sed posuere consectetur est at lobortis. \n\n Please confirm to Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+            "content": "This process can take up to 5 minutes.",
             "title": "Before you proceed"
         },
         "discard_button": "Discard and go back",
@@ -34,6 +34,7 @@
         "title": "Agent Vault Operations"
     },
     "alerts_card": {
+        "no_alerts_label": "No new alerts available",
         "show_all_button": "Show all",
         "title": "Alerts"
     },
@@ -88,9 +89,6 @@
         "add_vault_button": "Add vault",
         "agent_title": "Agent bot",
         "configuration_button": "Configuration",
-        "notifications_card": {
-            "title": "Notifications from Flare"
-        },
         "vaults_title": "Vaults"
     },
     "deactivate_vault_modal": {
@@ -125,7 +123,7 @@
         "confirm_modal": {
             "cancel_button": "Cancel",
             "confirm_button": "Confirm",
-            "content": "Save and execute is an action that will nascetur ridiculus mus. Sed posuere consectetur est at lobortis. \n\n Please confirm to Cras justo odio, dapibus ac facilisis in, egestas eget quam.",
+            "content": "This process can take up to 5 minutes.",
             "title": "Before you proceed"
         },
         "details_button": "Details",
@@ -171,6 +169,11 @@
             "title": "FAsset Manager"
         }
     },
+    "notifications_card": {
+        "no_notifications_label": "No new notifications available",
+        "show_all_button": "Show all",
+        "title": "Notifications from Flare"
+    },
     "notifications": {
         "error_title": "Error",
         "success_title": "Success"
@@ -192,7 +195,7 @@
         "agent_cpt_label": "Agent CPTs",
         "empty_vaults_label": "No vaults yet",
         "fasset_type_label": "FAsset Type",
-        "free_amount_label": "Free amount",
+        "free_amount_label": "Free lots",
         "manage_button": "Manage",
         "minted_amounts_label": "Minted amounts",
         "minted_lots_label": "Minted lots",

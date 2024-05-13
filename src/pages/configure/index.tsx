@@ -87,10 +87,8 @@ export default function AgentConfiguration() {
             setIsLoading(true);
             if (!account) {
                 openConnectWalletModal(async(wallet) => {
-                    if (wallet) {
-                        await generateAddress();
-
-                    }
+                    if (!wallet) return;
+                    await generateAddress();
                 });
                 return;
             }
@@ -111,7 +109,7 @@ export default function AgentConfiguration() {
             size="sm"
         >
             <LoadingOverlay
-                visible={isLoading}
+                visible={isLoading || isWhitelisted.isPending}
                 zIndex={1000}
             />
             {isWhitelisted.data &&

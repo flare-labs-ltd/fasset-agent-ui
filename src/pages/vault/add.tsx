@@ -53,10 +53,8 @@ export default function AddVault() {
             setIsLoading(true);
             const form = formRef.current.form();
             const data = form.getValues();
-            data.fee = `${data.fee}%`;
-            data.poolFeeShare = `${data.poolFeeShare}%`;
+            
             await setFAssetType(data.fAssetType);
-
             await underlyingAssetBalance.refetch();
             if (underlyingAssetBalance.data < MIN_XRP_LIMIT) {
                 showErrorNotification(t('add_agent_vault.xrp_min_limit_error'));
@@ -66,8 +64,8 @@ export default function AddVault() {
             const payload: AgentSettingsConfig = {
                 poolTokenSuffix: data.poolTokenSuffix.toUpperCase(),
                 vaultCollateralFtsoSymbol: data.vaultCollateralToken,
-                fee: data.fee,
-                poolFeeShare: data.poolFeeShare,
+                fee: `${data.fee}%`,
+                poolFeeShare: `${data.poolFeeShare}%`,
                 mintingVaultCollateralRatio: data.mintingVaultCollateralRatio,
                 mintingPoolCollateralRatio: data.mintingPoolCollateralRatio,
                 poolExitCollateralRatio: data.poolExitCollateralRatio,
@@ -75,6 +73,7 @@ export default function AddVault() {
                 poolTopupCollateralRatio: data.poolTopUpCollateralRatio,
                 poolTopupTokenPriceFactor: data.poolTopUpTokenPriceFactor
             }
+
             await createVault.mutateAsync({
                 fAssetSymbol: data.fAssetType,
                 payload: payload
