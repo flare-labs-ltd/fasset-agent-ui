@@ -104,12 +104,13 @@ export default function AgentConfiguration() {
         navigator.clipboard.writeText(text)
     }
 
+    console.log(workAddress)
     return (
         <Container
             size="sm"
         >
             <LoadingOverlay
-                visible={isLoading || isWhitelisted.isPending}
+                visible={isLoading || secretExists.isPending || (isWhitelisted.isStale && isWhitelisted.isPending)}
                 zIndex={1000}
             />
             {isWhitelisted.data &&
@@ -208,7 +209,7 @@ export default function AgentConfiguration() {
                     className="mt-3"
                     rightSectionPointerEvents="all"
                     rightSection={
-                        workAddress.isPending
+                        (!workAddress.isPending ? workAddress.isRefetching : false)
                             ? <Loader size="xs" />
                             : workAddress.data && <IconCopy
                                 color="black"
