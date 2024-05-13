@@ -104,7 +104,6 @@ export default function AgentConfiguration() {
         navigator.clipboard.writeText(text)
     }
 
-    console.log(workAddress)
     return (
         <Container
             size="sm"
