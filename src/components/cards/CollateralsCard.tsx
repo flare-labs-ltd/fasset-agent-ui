@@ -45,7 +45,7 @@ export default function CollateralsCard({ className }: ICollateralsCard) {
                         className={`border-t-2 border-gray-300 w-full mt-4 md:mt-0 ${index < collaterals.data.length - 1 ? 'mr-5' : ''}`}
                     >
                         <Text c="gray">{collateral.symbol}</Text>
-                        <Text fw={700}>{Number(collateral.balance).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</Text>
+                        <Text fw={700}>{collateral.balance}</Text>
                     </div>
                 ))}
             </div>

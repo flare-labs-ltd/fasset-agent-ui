@@ -19,7 +19,7 @@ export default function CreateSecretFile() {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            secret: null
+            secret: ''
         },
     });
 
@@ -77,7 +77,6 @@ export default function CreateSecretFile() {
             >
                 <form onSubmit={form.onSubmit(form => onSubmit(form.secret))}>
                     <Title order={5}>{t('agent_configuration.create_secret.card.title')}</Title>
-                    <Text size="sm" c="gray">{t('agent_configuration.create_secret.card.subtitle')}</Text>
                     <div>
                         <LoadingOverlay visible={secretsTemplate.isPending} />
                         <JsonInput

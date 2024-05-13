@@ -45,7 +45,6 @@
             "back_button": "Back to Agent settings",
             "card": {
                 "save_button": "Save",
-                "subtitle": "Description lorem ipusm dolor sit amet",
                 "title": "Secrets file .json"
             },
             "error_message": "Unable to create new secret file",
