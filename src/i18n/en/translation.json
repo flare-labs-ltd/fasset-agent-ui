@@ -48,6 +48,7 @@
                 "title": "Secrets file .json"
             },
             "error_message": "Unable to create new secret file",
+            "secrets_label": "Secrets",
             "success_message": "New secret file successfully created",
             "title": "Edit secret file"
         },

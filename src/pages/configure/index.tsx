@@ -55,11 +55,20 @@ export default function AgentConfiguration() {
         reader.onload = async(event) => {
             try {
                 setIsLoading(true);
-                const secret = JSON.parse(event.target.result);
-                uploadSecret.mutateAsync(secret);
+                const secrets = JSON.parse(event.target.result);
+                if (secrets?.owner?.native?.address) {
+                    await contractSetWorkAddress.mutateAsync(secrets.owner.native.address);
+                }
+                uploadSecret.mutateAsync(secrets);
                 showSucessNotification(t('agent_configuration.secret_card.success_message'));
             } catch (error) {
-                showErrorNotification(t('agent_configuration.secret_card.error_message'));
+                if ((error as any)?.response?.data?.message) {
+                    showErrorNotification((error as any).response.data.message);
+                } else if ((error as any).message) {
+                    showErrorNotification((error as any).message);
+                } else {
+                    showErrorNotification(t('agent_configuration.secret_card.error_message'));
+                }
             } finally {
                 setIsLoading(false);
             }
