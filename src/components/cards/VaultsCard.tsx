@@ -102,7 +102,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                     </Text>
                                     <Text c="gray" className="px-2">{t('vault_card.pool_amount_label')}</Text>
                                     <Text className="border-b-2 px-2 pb-3">
-                                        {Number(vault.poolAmount).toLocaleString('de-DE', { minimumFractionDigits: 2 })}
+                                        {vault.poolAmount}
                                     </Text>
                                     <Text c="gray" className="px-2">{t('vault_card.agent_cpt_label')}</Text>
                                     <Text className="border-b-2 px-2 pb-3">{vault.agentCPTs}</Text>

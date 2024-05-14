@@ -50,7 +50,7 @@ export default function AgentConfiguration() {
     const saveWorkAddress = useSaveWorkAddress();
     const contractSetWorkAddress = useSetWorkAddress();
 
-    const onClickUploadSecret = async(): Promise<void> => {
+    const onClickUploadSecret = async() => {
         const reader = new FileReader();
         reader.onload = async(event) => {
             try {
