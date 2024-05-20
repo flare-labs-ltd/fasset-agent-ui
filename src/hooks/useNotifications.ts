@@ -1,5 +1,5 @@
 import { notifications } from '@mantine/notifications';
-import i18next  from '@/i18n/config';
+import i18next  from '@/config/i18n';
 
 export function showSucessNotification(message: string) {
     notifications.show({

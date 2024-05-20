@@ -30,7 +30,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
     const isMetamaskAndNotInstalled = connector instanceof MetaMask && !window.ethereum;
     const isMetamaskAndOnMobile = connector instanceof MetaMask && isMobile && !window.ethereum;
 
-    const deactivateConnector = async(): Promise<void> => {
+    const deactivateConnector = async() => {
         connector?.deactivate
             ? await connector.deactivate()
             : await connector.resetState();
@@ -46,7 +46,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             .forEach((item) => localStorage.removeItem(item));
         setNotConnectedChainId(supportedChainId as AllSupportedChainsType);
     };
-    const activateConnector = async(): Promise<void> => {
+    const activateConnector = async() => {
         // handle if MetaMask on mobile
         if (isMetamaskAndOnMobile) {
             const origin = typeof window !== 'undefined' && window.location.origin ? window.location.origin : '';

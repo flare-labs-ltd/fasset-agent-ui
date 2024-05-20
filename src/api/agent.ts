@@ -33,7 +33,7 @@ const AGENT_KEY = {
 export function useWorkAddress(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.WORK_ADDRESS],
-        queryFn: async(): Promise<string> => {
+        queryFn: async() => {
             const response = await apiClient.get(`${resource}/workAddress`);
             return response.data.data.length > 0 ? response.data.data : null;
         },

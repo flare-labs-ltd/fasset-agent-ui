@@ -23,12 +23,12 @@ export default function VaultsCard({ className }: IVaultsCard) {
             {agentVaultsInformation.isPending &&
                 <Loader className="mt-5 ml-auto mr-auto" />
             }
-            {!agentVaultsInformation.isPending && agentVaultsInformation.data.length == 0 &&
+            {!agentVaultsInformation.isPending && agentVaultsInformation?.data?.length == 0 &&
                 <div className="w-full mt-5 flex items-center justify-center">
                     <Text size="lg" color="red">{t('vault_card.empty_vaults_label')}</Text>
                 </div>
             }
-            {!agentVaultsInformation.isPending && agentVaultsInformation.data.length > 0 &&
+            {!agentVaultsInformation.isPending && agentVaultsInformation?.data?.length > 0 &&
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {agentVaultsInformation?.data?.map(agentVaultInformation => (
                         agentVaultInformation.vaults.map((vault: AgentVaultInformation, index: number) => (

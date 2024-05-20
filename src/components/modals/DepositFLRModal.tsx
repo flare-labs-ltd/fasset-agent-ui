@@ -12,7 +12,6 @@ import * as yup from 'yup';
 import { useDepositFLRInPool } from '@/api/poolCollateral';
 import { useRouter } from 'next/router';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
-import { AgentVault } from '@/types';
 
 interface IDepositFLRModal {
     opened: boolean;

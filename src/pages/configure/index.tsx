@@ -133,78 +133,80 @@ export default function AgentConfiguration() {
                 </Button>
             }
             <Title order={2}>{t('agent_configuration.title')}</Title>
-            <Paper
-                className="mt-5 p-4"
-                withBorder
-            >
-                <Title order={5}>{t('agent_configuration.secret_card.title')}</Title>
-                <Text size="sm" c="gray">{t('agent_configuration.secret_card.subtitle')}</Text>
-                <Dropzone
-                    onDrop={(files) => useSecretsFile(files[0])}
-                    maxSize={FILE_MAX_SIZE}
-                    multiple={false}
-                    accept={['application/json']}
-                    className="mt-5 flex justify-center"
+            {!secretExists?.data &&
+                <Paper
+                    className="mt-5 p-4"
+                    withBorder
                 >
-                    <Group className="flex-nowrap pointer-events-none">
-                        <Dropzone.Accept>
-                            <IconUpload
-                                style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-blue-6)' }}
-                                stroke={1.5}
-                            />
-                        </Dropzone.Accept>
-                        <Dropzone.Reject>
-                            <IconX
-                                style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-red-6)' }}
-                                stroke={1.5}
-                            />
-                        </Dropzone.Reject>
-                        <Dropzone.Idle>
-                            <IconPhoto
-                                style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-black-6)' }}
-                                stroke={1.5}
-                            />
-                        </Dropzone.Idle>
-                        {secretsFile !== null
-                            ? <Text>{secretsFile.name}</Text>
-                            : <div>
-                                <Text
-                                    size="lg"
-                                    inline
-                                >
-                                    {t('agent_configuration.secret_card.drag_file_label')}
-                                </Text>
-                                <Text
-                                    size="sm"
-                                    c="gray"
-                                    className="mt-1"
-                                >
-                                    {t('agent_configuration.secret_card.file_size_label')}
-                                </Text>
-                            </div>
-                        }
-                    </Group>
-                </Dropzone>
-                <div className="mt-3 flex">
-                    <Button
-                        component={Link}
-                        href="/configure/create"
-                        variant="outline"
-                        size="xs"
-                        className="mr-2"
+                    <Title order={5}>{t('agent_configuration.secret_card.title')}</Title>
+                    <Text size="sm" c="gray">{t('agent_configuration.secret_card.subtitle')}</Text>
+                    <Dropzone
+                        onDrop={(files) => useSecretsFile(files[0])}
+                        maxSize={FILE_MAX_SIZE}
+                        multiple={false}
+                        accept={['application/json']}
+                        className="mt-5 flex justify-center"
                     >
-                        {t('agent_configuration.secret_card.create_button')}
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="xs"
-                        disabled={secretsFile === null}
-                        onClick={onClickUploadSecret}
-                    >
-                        {t('agent_configuration.secret_card.upload_button')}
-                    </Button>
-                </div>
-            </Paper>
+                        <Group className="flex-nowrap pointer-events-none">
+                            <Dropzone.Accept>
+                                <IconUpload
+                                    style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-blue-6)' }}
+                                    stroke={1.5}
+                                />
+                            </Dropzone.Accept>
+                            <Dropzone.Reject>
+                                <IconX
+                                    style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-red-6)' }}
+                                    stroke={1.5}
+                                />
+                            </Dropzone.Reject>
+                            <Dropzone.Idle>
+                                <IconPhoto
+                                    style={{ width: rem(52), height: rem(52), color: 'var(--mantine-color-black-6)' }}
+                                    stroke={1.5}
+                                />
+                            </Dropzone.Idle>
+                            {secretsFile !== null
+                                ? <Text>{secretsFile.name}</Text>
+                                : <div>
+                                    <Text
+                                        size="lg"
+                                        inline
+                                    >
+                                        {t('agent_configuration.secret_card.drag_file_label')}
+                                    </Text>
+                                    <Text
+                                        size="sm"
+                                        c="gray"
+                                        className="mt-1"
+                                    >
+                                        {t('agent_configuration.secret_card.file_size_label')}
+                                    </Text>
+                                </div>
+                            }
+                        </Group>
+                    </Dropzone>
+                    <div className="mt-3 flex">
+                        <Button
+                            component={Link}
+                            href="/configure/create"
+                            variant="outline"
+                            size="xs"
+                            className="mr-2"
+                        >
+                            {t('agent_configuration.secret_card.create_button')}
+                        </Button>
+                        <Button
+                            variant="outline"
+                            size="xs"
+                            disabled={secretsFile === null}
+                            onClick={onClickUploadSecret}
+                        >
+                            {t('agent_configuration.secret_card.upload_button')}
+                        </Button>
+                    </div>
+                </Paper>
+            }
             <Paper
                 className="mt-5 p-4"
                 withBorder

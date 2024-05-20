@@ -1,4 +1,4 @@
-import { MantineThemeOverride, Paper } from '@mantine/core';
+import { MantineThemeOverride } from '@mantine/core';
 import { Roboto } from 'next/font/google';
 
 const roboto = Roboto({

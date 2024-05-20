@@ -94,7 +94,7 @@
     "deactivate_vault_modal": {
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
-        "description_label": "Are you sure you want to deactivate vault",
+        "description_label": "Are you sure you want to deactivate vault? \n Vault will be deactivated by agent-bot after some time.",
         "success_message": "Vault successfully deactivated",
         "title": "Deactivate vault"
     },

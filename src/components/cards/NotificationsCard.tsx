@@ -36,6 +36,20 @@ export default function NotificationsCard({ className }: INotificationsCard) {
         setIsShowAllButtonVisible(notifications.data?.length > SHOW_ALL_BUTTON_LIMIT);
     }, [notifications.isFetched]);
 
+
+    //TODO: REMOVE
+    return (
+        <div className={`flex flex-col flex-nowrap w-full ${className}`}>
+            <Paper
+                withBorder
+                className="flex flex-col p-4"
+            >
+                <Title order={4} className="mb-4">{t('notifications_card.title')}</Title>
+                <Text>{t('notifications_card.no_notifications_label')}</Text>
+            </Paper>
+        </div>
+    );
+
     return (
         <div className={`flex flex-col flex-nowrap w-full ${className}`}>
             <Paper

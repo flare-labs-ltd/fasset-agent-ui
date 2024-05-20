@@ -9,7 +9,7 @@ import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ModalsProvider } from '@mantine/modals';
 import RouteGuard from '@/components/RouteGuard';
-import '@/i18n/config';
+import '@/config/i18n';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dropzone/styles.css';

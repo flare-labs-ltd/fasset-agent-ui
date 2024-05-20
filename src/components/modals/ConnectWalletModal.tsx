@@ -7,7 +7,7 @@ import {
 } from '@mantine/core';
 import { useTranslation, Trans } from 'react-i18next';
 import { enabledWallets } from '@/connectors/connectors';
-import SelectWalletButton from "@/components/elements/SelectWalletButton";
+import SelectWalletButton from '@/components/elements/SelectWalletButton';
 
 interface IConnectWalletModal {
     opened: boolean;

@@ -2,8 +2,7 @@ import {
     Title,
     Paper,
     Button,
-    LoadingOverlay,
-    Text
+    LoadingOverlay
 } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';

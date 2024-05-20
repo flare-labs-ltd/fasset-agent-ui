@@ -42,8 +42,8 @@ export default function DeactivateVaultModal({ opened, onClose }: IDeactivateVau
             closeOnEscape={!deactivateVault.isPending}
             centered
         >
-            <Text>{t('deactivate_vault_modal.description_label')}</Text>
-            <div className="flex">
+            <Text className="whitespace-pre-line">{t('deactivate_vault_modal.description_label')}</Text>
+            <div className="flex mt-5">
                 <Button
                     variant="default"
                     onClick={onClose}
