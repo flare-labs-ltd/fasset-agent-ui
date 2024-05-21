@@ -3,7 +3,8 @@ import {
     Group,
     Button,
     Anchor,
-    TextInput
+    TextInput,
+    Text
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +12,8 @@ import { yupResolver } from 'mantine-form-yup-resolver';
 import * as yup from 'yup';
 import { useDepositFLRInPool } from '@/api/poolCollateral';
 import { useRouter } from 'next/router';
-import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
+import { modals } from '@mantine/modals';
+import { useState } from 'react';
 
 interface IDepositFLRModal {
     opened: boolean;
@@ -19,6 +21,7 @@ interface IDepositFLRModal {
 }
 
 export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
     const depositFLR = useDepositFLRInPool();
     const { t } = useTranslation();
     const router = useRouter();
@@ -35,6 +38,47 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
         validate: yupResolver(schema)
     });
 
+    const openSuccessModal = () => {
+        onClose();
+        modals.open({
+            title: t('deposit_flr_in_pool.title'),
+            children: (
+                <>
+                    <Text>
+                        {t('deposit_flr_in_pool.success_message')}
+                    </Text>
+                    <div className="flex justify-end mt-4">
+                        <Button onClick={() => modals.closeAll()}>
+                            { t('deposit_flr_in_pool.close_button')}
+                        </Button>
+                    </div>
+                </>
+            ),
+            centered: true
+        });
+    }
+
+    const openErrorModal = (errorMessage: string) => {
+        setIsModalVisible(false);
+        modals.open({
+            title: t('deposit_flr_in_pool.title'),
+            children: (
+                <>
+                    <Text>
+                        {errorMessage}
+                    </Text>
+                    <div className="flex justify-end mt-4">
+                        <Button onClick={() => modals.closeAll()}>
+                            { t('deposit_flr_in_pool.close_button')}
+                        </Button>
+                    </div>
+                </>
+            ),
+            centered: true,
+            onClose: () => setIsModalVisible(true)
+        });
+    }
+
     const onDepositCollateralSubmit = async(amount: number) => {
         const status = form.validate();
         if (status.hasErrors) return;
@@ -45,19 +89,19 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                 agentVaultAddress: agentVaultAddress,
                 amount: amount
             });
-            showSucessNotification(t('deposit_flr_in_pool.success_message'));
+            openSuccessModal();
         } catch (error) {
             if ((error as any).message) {
-                showErrorNotification((error as any).response.data.message);
+                openErrorModal((error as any).response.data.message);
             } else {
-                showErrorNotification(t('deposit_flr_in_pool.error_message'));
+                openErrorModal(t('deposit_flr_in_pool.error_message'));
             }
         }
     }
 
     return (
         <Modal
-            opened={opened}
+            opened={isModalVisible && opened}
             onClose={onClose}
             title={t('deposit_flr_in_pool.title')}
             closeOnClickOutside={!depositFLR.isPending}
@@ -74,7 +118,7 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor
-                        href="#"
+                        href="https://docs.flare.network/tech/fassets"
                         target="_blank"
                         size="sm"
                         c="gray"

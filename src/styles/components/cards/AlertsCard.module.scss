@@ -2,3 +2,10 @@
     word-break: break-word;
     flex-grow: 1;
 }
+.alertsContainer {
+    max-height: 800px;
+}
+.pill {
+    background-color: var(--mantine-color-primary-6);
+    color: white
+}

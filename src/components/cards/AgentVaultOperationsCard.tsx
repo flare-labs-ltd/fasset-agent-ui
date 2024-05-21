@@ -47,6 +47,7 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
             <Button
                 onClick={() => setIsActivateVaultModalActive(true)}
                 className="block mb-3"
+                disabled={agentVault?.publiclyAvailable}
             >
                 {t('agent_vault_operations_card.activate_vault_button')}
             </Button>

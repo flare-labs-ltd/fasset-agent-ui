@@ -6,7 +6,7 @@ import {
     Text
 } from '@mantine/core';
 import { IconArrowLeft } from '@tabler/icons-react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import { modals } from '@mantine/modals';
@@ -107,6 +107,28 @@ export default function AddVault() {
                 withBorder
             >
                 <VaultForm ref={formRef} />
+                <Trans
+                    i18nKey="add_agent_vault.min_amount_description_label"
+                    parent={Text}
+                    size="xs"
+                    className="whitespace-pre-line mt-4"
+                    components={[
+                        <Text
+                            size="xs"
+                            component="a"
+                            target="_blank"
+                            href="https://test.bithomp.com/faucet"
+                            c="primary"
+                        />,
+                        <Text
+                            size="xs"
+                            component="a"
+                            target="_blank"
+                            href="https://faucet.flare.network"
+                            c="primary"
+                        />
+                    ]}
+                />
                 <div className="flex justify-end mt-5">
                     <Button
                         variant="outline"

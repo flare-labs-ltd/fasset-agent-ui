@@ -10,13 +10,25 @@ import { useAgentVaultsInformation } from '@/api/agent';
 import { AgentVaultInformation } from '@/types';
 import Link from 'next/link';
 import classes from '@/styles/components/cards/VaultsCard.module.scss';
+import { useEffect } from 'react';
+
 interface IVaultsCard {
     className?: string
 }
 
+const VAULTS_REFETCH_INTERVAL = 60000;
+
 export default function VaultsCard({ className }: IVaultsCard) {
     const { t } = useTranslation();
     const agentVaultsInformation = useAgentVaultsInformation();
+
+    useEffect(() => {
+        const agentVaultsInformationFetchInterval = setInterval(() => {
+            agentVaultsInformation.refetch();
+        }, VAULTS_REFETCH_INTERVAL);
+
+        return () => clearInterval(agentVaultsInformationFetchInterval);
+    }, []);
 
     return (
         <div className="flex flex-col">
@@ -87,23 +99,15 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                     <Text c="gray" className="px-2">{t('vault_card.fasset_type_label')}</Text>
                                     <Text className="border-b-2 px-2 pb-3">{agentVaultInformation.fassetSymbol}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.minted_amounts_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{Number(vault.mintedAmount).toLocaleString('de-DE', { minimumFractionDigits: 2 })}</Text>
+                                    <Text className="border-b-2 px-2 pb-3">{vault.mintedAmount}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.minted_lots_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">
-                                        {Number(vault.mintedlots).toLocaleString('de-DE', { minimumFractionDigits: 2 })}
-                                    </Text>
+                                    <Text className="border-b-2 px-2 pb-3">{vault.mintedlots}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.free_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">
-                                        {Number(vault.freeLots).toLocaleString('de-DE', { minimumFractionDigits: 2 })}
-                                    </Text>
+                                    <Text className="border-b-2 px-2 pb-3">{vault.freeLots}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.vault_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">
-                                        {Number(vault.vaultAmount).toLocaleString('de-DE', { minimumFractionDigits: 2 })}
-                                    </Text>
+                                    <Text className="border-b-2 px-2 pb-3">{vault.vaultAmount}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.pool_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">
-                                        {vault.poolAmount}
-                                    </Text>
+                                    <Text className="border-b-2 px-2 pb-3">{vault.poolAmount}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.agent_cpt_label')}</Text>
                                     <Text className="border-b-2 px-2 pb-3">{vault.agentCPTs}</Text>
                                     <Text c="gray" className="px-2">{t('vault_card.vault_cr_label')}</Text>

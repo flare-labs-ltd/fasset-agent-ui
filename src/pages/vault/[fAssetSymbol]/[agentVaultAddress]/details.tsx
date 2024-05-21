@@ -29,6 +29,11 @@ export default function VaultDetails() {
         setDetails(text);
     }, [vaultInfo.isFetched]);
 
+    const copyToClipboard = (text: string) => {
+        console.log(text)
+        navigator.clipboard.writeText(text)
+    }
+
     return (
         <Container
             size="sm"
@@ -43,7 +48,15 @@ export default function VaultDetails() {
             >
                 {t('agent_vault_details.back_button')}
             </Button>
-            <Title order={2}>{t('agent_vault_details.title')}</Title>
+            <div className="flex justify-between items-center">
+                <Title order={2} className="mr-3">{t('agent_vault_details.title')}</Title>
+                <Button
+                    size="xs"
+                    onClick={() => copyToClipboard(details)}
+                >
+                    {t('agent_vault_details.copy_button')}
+                </Button>
+            </div>
             <Paper
                 className="mt-5 p-4"
                 withBorder

@@ -8,15 +8,26 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Collateral } from '@/types';
 import { useBotStatus, useCollaterals } from '@/api/agent';
+import { useEffect } from "react";
 
 interface ICollateralsCard {
     className?: string
 }
 
+const COLLATERALS_REFETCH_INTERVAL = 60000;
+
 export default function CollateralsCard({ className }: ICollateralsCard) {
     const { t } = useTranslation();
     const collaterals = useCollaterals();
     const botStatus = useBotStatus();
+
+    useEffect(() => {
+        const collateralsFetchInterval = setInterval(() => {
+            collaterals.refetch();
+        }, COLLATERALS_REFETCH_INTERVAL);
+
+        return () => clearInterval(collateralsFetchInterval);
+    }, []);
 
     return (
         <Paper

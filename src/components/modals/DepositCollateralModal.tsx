@@ -3,16 +3,18 @@ import {
     Group,
     Button,
     Anchor,
-    TextInput
+    TextInput,
+    Text
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
 import { yupResolver } from 'mantine-form-yup-resolver';
+import { modals } from '@mantine/modals';
 import * as yup from 'yup';
 import { useDepositCollateral } from '@/api/agentVault';
 import { useRouter } from 'next/router';
-import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import { AgentVault } from '@/types';
+import { useState } from 'react';
 
 interface IDepositCollateralModal {
     opened: boolean;
@@ -21,6 +23,7 @@ interface IDepositCollateralModal {
 }
 
 export default function DepositCollateralModal({ opened, agentVault, onClose }: IDepositCollateralModal) {
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
     const depositCollateral = useDepositCollateral();
     const { t } = useTranslation();
     const router = useRouter();
@@ -37,6 +40,47 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
         validate: yupResolver(schema)
     });
 
+    const openSuccessModal = () => {
+        onClose();
+        modals.open({
+            title: t('deposit_collateral_modal.title'),
+            children: (
+                <>
+                    <Text>
+                        {t('deposit_collateral_modal.success_message')}
+                    </Text>
+                    <div className="flex justify-end mt-4">
+                        <Button onClick={() => modals.closeAll()}>
+                            { t('deposit_collateral_modal.close_button')}
+                        </Button>
+                    </div>
+                </>
+            ),
+            centered: true
+        });
+    }
+
+    const openErrorModal = (errorMessage: string) => {
+        setIsModalVisible(false);
+        modals.open({
+            title: t('deposit_collateral_modal.title'),
+            children: (
+                <>
+                    <Text>
+                        {errorMessage}
+                    </Text>
+                    <div className="flex justify-end mt-4">
+                        <Button onClick={() => modals.closeAll()}>
+                            { t('deposit_collateral_modal.close_button')}
+                        </Button>
+                    </div>
+                </>
+            ),
+            centered: true,
+            onClose: () => setIsModalVisible(true)
+        });
+    }
+
     const onDepositCollateralSubmit = async(amount: number) => {
         const status = form.validate();
         if (status.hasErrors) return;
@@ -47,20 +91,19 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
                 agentVaultAddress: agentVaultAddress,
                 amount: amount
             });
-            showSucessNotification(t('deposit_collateral_modal.success_message'));
-            onClose();
+            openSuccessModal();
         } catch (error) {
             if ((error as any).message) {
-                showErrorNotification((error as any).response.data.message);
+                openErrorModal((error as any).response.data.message);
             } else {
-                showErrorNotification(t('deposit_collateral_modal.error_message'));
+                openErrorModal(t('deposit_collateral_modal.error_message'));
             }
         }
     }
 
     return (
         <Modal
-            opened={opened}
+            opened={isModalVisible && opened}
             onClose={onClose}
             title={t('deposit_collateral_modal.title')}
             closeOnClickOutside={!depositCollateral.isPending}
@@ -77,7 +120,7 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor
-                        href="#"
+                        href="https://docs.flare.network/tech/fassets"
                         target="_blank"
                         size="sm"
                         c="gray"

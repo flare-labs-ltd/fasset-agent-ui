@@ -261,6 +261,9 @@ export function useBotAlert() {
         queryFn: async() => {
             const response = await apiClient.get(`${resource}/botAlert`);
             return <BotAlert[]> response.data.data
+        },
+        select: (data: TData) => {
+            return data.reverse();
         }
     });
 }

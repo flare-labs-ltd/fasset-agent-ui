@@ -16,13 +16,15 @@
             "title": "Before you proceed"
         },
         "discard_button": "Discard and go back",
+        "min_amount_description_label": "You need to have at least 50 XRP on your owner underlying address (faucet: <0>https://test.bithomp.com/faucet</0>). \n Your work address needs to have a CFLR for gas and funding the agent-vault (faucet:  <1>https://faucet.flare.network</1>)",
         "save_button": "Save and execute",
         "success_message": "Agent Vault successfully created",
         "title": "New Agent Vault",
-        "xrp_min_limit_error": "ERROR"
+        "xrp_min_limit_error": "You need to have at least 50 XRP on your owner underlying address"
     },
     "agent_vault_details": {
         "back_button": "Back to Agent Vault",
+        "copy_button": "Copy",
         "title": "Vault details"
     },
     "agent_vault_operations_card": {
@@ -34,8 +36,13 @@
         "title": "Agent Vault Operations"
     },
     "alerts_card": {
+        "critical_label": "Critical",
+        "danger_label": "Danger",
+        "filter_placeholder": "Click to add filter",
+        "info_label": "Info",
         "no_alerts_label": "No new alerts available",
         "show_all_button": "Show all",
+        "show_less_button": "Show less",
         "title": "Alerts"
     },
     "agent_configuration": {
@@ -99,6 +106,7 @@
         "title": "Deactivate vault"
     },
     "deposit_collateral_modal": {
+        "close_button": "Close",
         "confirm_button": "Deposit",
         "deposit_amount_description_label": "Deposit your Vault Collateral Token",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
@@ -109,6 +117,7 @@
         "title": "Deposit Collateral"
     },
     "deposit_flr_in_pool": {
+        "close_button": "Close",
         "confirm_button": "Deposit",
         "deposit_amount_description_label": "Deposit FLR",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",

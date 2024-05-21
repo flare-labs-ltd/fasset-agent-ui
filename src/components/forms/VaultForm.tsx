@@ -37,12 +37,15 @@ type FormRef = {
     form: () => Form;
 }
 
+const POOL_TOKEN_SUFFIX_MAX_LENGTH = 20;
+
 const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) => {
     const [isHiddenInputDisabled, setIsHiddenInputDisabled] = useState<boolean>(true);
     const [isHidden, setIsHidden] = useState<boolean>(true);
     const [fAssetTypes, SetfAssetTypes] = useState<string[]>([]);
     const [vaultCollateralTokens, setVaultCollateralTokens] = useState<string[]>([]);
     const [collateralTemplate, setCollateralTemplate] = useState<ICollateralTemplate|null>();
+    const [poolTokenSuffixCharCount, setPoolTokenSuffixCharCount] = useState<number>(0);
     const { t } = useTranslation();
     const vaultCollaterals = useVaultCollaterals();
 
@@ -82,6 +85,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         onValuesChange: (values) => {
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
             setIsHidden(values.fAssetType === null || values.vaultCollateralToken === null);
+            setPoolTokenSuffixCharCount(values.poolTokenSuffix ? values.poolTokenSuffix.length : 0);
         }
     });
 
@@ -219,14 +223,18 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                     <Divider
                         my="xl"
                     />
-                    <TextInput
-                        {...form.getInputProps('poolTokenSuffix')}
-                        label={t('forms.vault.pool_token_suffix_label')}
-                        description={t('forms.vault.pool_token_suffix_description_label')}
-                        placeholder={t('forms.vault.enter_placeholder')}
-                        withAsterisk
-                        disabled={isHiddenInputDisabled || vault != null}
-                    />
+                    <div>
+                        <TextInput
+                            {...form.getInputProps('poolTokenSuffix')}
+                            label={t('forms.vault.pool_token_suffix_label')}
+                            description={t('forms.vault.pool_token_suffix_description_label')}
+                            placeholder={t('forms.vault.enter_placeholder')}
+                            maxLength={20}
+                            withAsterisk
+                            disabled={isHiddenInputDisabled || vault != null}
+                        />
+                        <div className="text-xs mt-1">{poolTokenSuffixCharCount}/{POOL_TOKEN_SUFFIX_MAX_LENGTH}</div>
+                    </div>
                     <NumberInput
                         {...form.getInputProps('fee')}
                         label={t('forms.vault.minting_fee_label')}

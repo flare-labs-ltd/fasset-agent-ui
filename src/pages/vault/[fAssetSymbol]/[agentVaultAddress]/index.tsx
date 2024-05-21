@@ -115,25 +115,25 @@ export default function Vault() {
                 <div className="flex w-full">
                     <div className={`flex justify-between w-full md:w-9/12 mr-0 md:mr-10 shrink-0 ${!isEditing ? 'md:shrink' : ''}`}>
                         <Title order={2}>{t('edit_agent_vault.title')}</Title>
-                        <div className="ml-3">
-                            <Button
-                                component={Link}
-                                href={`/vault/${fAssetSymbol}/${agentVaultAddress}/details`}
-                                variant="outline"
-                                className={!isEditing ? 'mr-3' : ''}
-                                size="xs"
-                            >
-                                {t('edit_agent_vault.details_button')}
-                            </Button>
-                            {!isEditing &&
+                        {!isEditing &&
+                            <div className="ml-3">
+                                <Button
+                                    component={Link}
+                                    href={`/vault/${fAssetSymbol}/${agentVaultAddress}/details`}
+                                    variant="outline"
+                                    className="mr-3"
+                                    size="xs"
+                                >
+                                    {t('edit_agent_vault.details_button')}
+                                </Button>
                                 <Button
                                     size="xs"
                                     onClick={() => setIsEditing(!isEditing)}
                                 >
                                     {t('edit_agent_vault.edit_button')}
                                 </Button>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                     <div className="mt-5 md:mt-0 w-full md:w-1/4" />
                 </div>
