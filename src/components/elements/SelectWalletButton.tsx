@@ -113,7 +113,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             } catch (error) {
                 try {
                     notifications.show({
-                        title: t('notificiations.error_title'),
+                        title: t('notifications.error_title'),
                         message: error
                     });
                     // @ts-ignore

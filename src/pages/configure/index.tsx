@@ -217,6 +217,7 @@ export default function AgentConfiguration() {
                     value={workAddress.data || ''}
                     disabled={true}
                     className="mt-3"
+                    variant="filled"
                     rightSectionPointerEvents="all"
                     rightSection={
                         (!workAddress.isPending ? workAddress.isRefetching : false)
@@ -228,7 +229,7 @@ export default function AgentConfiguration() {
                             />
                     }
                     styles={{
-                        section: { cursor: 'pointer' }
+                        input: { color: 'var(--mantine-color-dark-text)', opacity: 1 }
                     }}
                 />
                 <Button

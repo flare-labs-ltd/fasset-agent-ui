@@ -3,39 +3,75 @@ import {
     Paper,
     Text,
     Loader,
-    Badge
+    Badge,
+    rem,
+    Input
 } from '@mantine/core';
+import { IconCopy } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { Collateral } from '@/types';
-import { useBotStatus, useCollaterals } from '@/api/agent';
+import { useBotStatus, useCollaterals, useWorkAddress } from '@/api/agent';
 import { useEffect } from "react";
 
 interface ICollateralsCard {
     className?: string
 }
 
-const COLLATERALS_REFETCH_INTERVAL = 60000;
+const COLLATERALS_FETCH_INTERVAL = 60000;
 
 export default function CollateralsCard({ className }: ICollateralsCard) {
     const { t } = useTranslation();
     const collaterals = useCollaterals();
     const botStatus = useBotStatus();
+    const workAddress = useWorkAddress();
 
     useEffect(() => {
         const collateralsFetchInterval = setInterval(() => {
             collaterals.refetch();
-        }, COLLATERALS_REFETCH_INTERVAL);
+        }, COLLATERALS_FETCH_INTERVAL);
 
         return () => clearInterval(collateralsFetchInterval);
     }, []);
+
+    const copyToClipboard = (text: string) => {
+        navigator.clipboard.writeText(text)
+    }
 
     return (
         <Paper
             className={`p-4 ${className}`}
             withBorder
         >
-            <div className="flex justify-between items-center">
-                <Title order={4}>{t('collaterals_card.title')}</Title>
+            <div className="flex justify-between items-center mb-5">
+                <div className="flex items-baseline">
+                    <Title
+                        order={4}
+                        className="mr-2 flex-shrink-0"
+                    >
+                        {t('collaterals_card.title')}:
+                    </Title>
+                    <Input
+                        value={workAddress.data || ''}
+                        disabled={true}
+                        variant="filled"
+                        className="min-w-full"
+                        rightSectionPointerEvents="all"
+                        rightSection={
+                            (!workAddress.isPending ? workAddress.isRefetching : false)
+                                ? <Loader size="xs" />
+                                : workAddress.data && <IconCopy
+                                color="black"
+                                style={{ width: rem(20), height: rem(20) }}
+                                onClick={() => copyToClipboard(workAddress.data)}
+                            />
+                        }
+                        styles={{
+                            section: { cursor: 'pointer' },
+                            input: { marginRight: '2rem', color: 'var(--mantine-color-dark-text)', opacity: 1 }
+                        }}
+                    />
+                </div>
+
                 {botStatus.isFetched &&
                     <Badge
                         size="lg"

@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { useQueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { agentOwnerRegistryAbi } from '@/abi';
 
 export function useSetWorkAddress() {
