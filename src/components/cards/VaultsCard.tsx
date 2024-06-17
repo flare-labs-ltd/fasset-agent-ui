@@ -7,7 +7,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { IconChecklist, IconUrgent } from '@tabler/icons-react';
 import { useAgentVaultsInformation } from '@/api/agent';
-import { AgentVaultInformation } from '@/types';
 import Link from 'next/link';
 import classes from '@/styles/components/cards/VaultsCard.module.scss';
 import { useEffect } from 'react';
@@ -40,10 +39,10 @@ export default function VaultsCard({ className }: IVaultsCard) {
                     <Text size="lg" color="red">{t('vault_card.empty_vaults_label')}</Text>
                 </div>
             }
-            {!agentVaultsInformation.isPending && agentVaultsInformation?.data?.length > 0 &&
+            {!agentVaultsInformation.isPending && agentVaultsInformation?.data && agentVaultsInformation?.data?.length > 0 &&
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {agentVaultsInformation?.data?.map(agentVaultInformation => (
-                        agentVaultInformation.vaults.map((vault: AgentVaultInformation, index: number) => (
+                        agentVaultInformation.vaults.map((vault, index) => (
                             <Paper
                                 className={`p-4 ${className}`}
                                 withBorder
@@ -61,7 +60,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                             component={Link}
                                             href={`/vault/${agentVaultInformation.fassetSymbol}/${vault.address}`}
                                             size="xs"
-                                            variant="outline"
+                                            variant="gradient"
                                             className="ml-3 shrink-0"
                                         >
                                             {t('vault_card.manage_button')}

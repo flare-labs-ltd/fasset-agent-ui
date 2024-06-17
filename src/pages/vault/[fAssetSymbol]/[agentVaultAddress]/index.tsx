@@ -6,31 +6,33 @@ import {
     Text,
     LoadingOverlay
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { modals } from '@mantine/modals';
 import { useVaultInfo, useUpdateVault } from '@/api/agent';
-import VaultForm from '@/components/forms/VaultForm';
+import VaultForm, { FormRef } from '@/components/forms/VaultForm';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import AgentVaultOperationsCard from '@/components/cards/AgentVaultOperationsCard';
-import { AgentSettingsDTO } from '@/types';
+import { IAgentSettingsDTO } from '@/types';
+import BackButton from "@/components/elements/BackButton";
 
 export default function Vault() {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const { t } = useTranslation();
     const router = useRouter();
-    const { fAssetSymbol, agentVaultAddress } = router.query;
+    let { fAssetSymbol, agentVaultAddress } = router.query;
+    fAssetSymbol = fAssetSymbol as string;
+    agentVaultAddress = agentVaultAddress as string;
     const vaultInfo = useVaultInfo(fAssetSymbol, agentVaultAddress, fAssetSymbol != null && agentVaultAddress != null);
     const updateVault = useUpdateVault();
-    const formRef = useRef();
+    const formRef = useRef<FormRef>(null);
 
     const confirmModal = () => {
-        const form = formRef.current.form();
-        const status = form.validate();
-        if (status.hasErrors) return;
+        const form = formRef?.current?.form();
+        const status = form?.validate();
+        if (status?.hasErrors || !form) return;
 
         modals.openConfirmModal({
             title: t('edit_agent_vault.confirm_modal.title'),
@@ -49,41 +51,41 @@ export default function Vault() {
     }
     const onSubmit = async() => {
         try {
-            const form = formRef.current.form();
-            const data = form.getValues();
+            const form = formRef?.current?.form();
+            const data = form?.getValues();
 
-            const payload: AgentSettingsDTO[] = [
+            const payload: IAgentSettingsDTO[] = [
                 {
                     name: 'feeBIPS',
-                    value: data.fee * 100
+                    value: (data.fee * 100).toString()
                 },
                 {
                     name: 'poolFeeShareBIPS',
-                    value: data.poolFeeShare * 100
+                    value: (data.poolFeeShare * 100).toString()
                 },
                 {
                     name: 'mintingVaultCollateralRatioBIPS',
-                    value: data.mintingVaultCollateralRatio * 10000
+                    value: (data.mintingVaultCollateralRatio * 10000).toString()
                 },
                 {
                     name: 'mintingPoolCollateralRatioBIPS',
-                    value: data.mintingPoolCollateralRatio * 10000
+                    value: (data.mintingPoolCollateralRatio * 10000).toString()
                 },
                 {
                     name: 'buyFAssetByAgentFactorBIPS',
-                    value: data.buyFAssetByAgentFactor * 10000
+                    value: (data.buyFAssetByAgentFactor * 10000).toString()
                 },
                 {
                     name: 'poolExitCollateralRatioBIPS',
-                    value: data.poolExitCollateralRatio * 10000
+                    value: (data.poolExitCollateralRatio * 10000).toString()
                 },
                 {
                     name: 'poolTopupCollateralRatioBIPS',
-                    value: data.poolTopUpCollateralRatio * 10000
+                    value: (data.poolTopUpCollateralRatio * 10000).toString()
                 },
                 {
                     name: 'poolTopupTokenPriceFactorBIPS',
-                    value: data.poolTopUpTokenPriceFactor * 10000
+                    value: (data.poolTopUpTokenPriceFactor * 10000).toString()
                 }
             ];
 
@@ -102,15 +104,10 @@ export default function Vault() {
         <Container
             size="xl"
         >
-            <Button
-                component={Link}
+            <BackButton
                 href="/"
-                variant="transparent"
-                leftSection={<IconArrowLeft size={18} />}
-                className="p-0 mb-3"
-            >
-                {t('edit_agent_vault.back_button')}
-            </Button>
+                text={t('edit_agent_vault.back_button')}
+            />
             <div >
                 <div className="flex w-full">
                     <div className={`flex justify-between w-full md:w-9/12 mr-0 md:mr-10 shrink-0 ${!isEditing ? 'md:shrink' : ''}`}>
@@ -120,7 +117,7 @@ export default function Vault() {
                                 <Button
                                     component={Link}
                                     href={`/vault/${fAssetSymbol}/${agentVaultAddress}/details`}
-                                    variant="outline"
+                                    variant="gradient"
                                     className="mr-3"
                                     size="xs"
                                 >

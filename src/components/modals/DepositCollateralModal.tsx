@@ -4,7 +4,8 @@ import {
     Button,
     Anchor,
     TextInput,
-    Text
+    Text,
+    Divider
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
@@ -13,13 +14,17 @@ import { modals } from '@mantine/modals';
 import * as yup from 'yup';
 import { useDepositCollateral } from '@/api/agentVault';
 import { useRouter } from 'next/router';
-import { AgentVault } from '@/types';
+import { IAgentVault } from '@/types';
 import { useState } from 'react';
 
 interface IDepositCollateralModal {
     opened: boolean;
-    agentVault: AgentVault
+    agentVault: IAgentVault
     onClose: () => void;
+}
+
+interface IFormValues {
+    amount: number|undefined;
 }
 
 export default function DepositCollateralModal({ opened, agentVault, onClose }: IDepositCollateralModal) {
@@ -32,11 +37,12 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
     const schema = yup.object().shape({
         amount: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: agentVault.vaultCollateralToken }) }))
     });
-    const form = useForm({
+    const form = useForm<IFormValues>({
         mode: 'uncontrolled',
         initialValues: {
-            amount: null,
+            amount: undefined,
         },
+        //@ts-ignore
         validate: yupResolver(schema)
     });
 
@@ -87,8 +93,8 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
 
         try {
             await depositCollateral.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress,
+                fAssetSymbol: fAssetSymbol as string,
+                agentVaultAddress: agentVaultAddress as string,
                 amount: amount
             });
             openSuccessModal();
@@ -110,13 +116,22 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
             closeOnEscape={!depositCollateral.isPending}
             centered
         >
-            <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount))}>
+            <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
                 <TextInput
                     {...form.getInputProps('amount')}
                     label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: agentVault.vaultCollateralToken })}
                     description={t('deposit_collateral_modal.deposit_amount_description_label')}
                     placeholder={t('deposit_collateral_modal.deposit_amount_placeholder_label')}
                     withAsterisk
+                />
+                <Divider
+                    className="my-8"
+                    styles={{
+                        root: {
+                            marginLeft: '-2rem',
+                            marginRight: '-2rem'
+                        }
+                    }}
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor

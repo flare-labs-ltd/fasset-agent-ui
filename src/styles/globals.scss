@@ -6,6 +6,7 @@
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
+    --input-bg: 0, 0, 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,13 +26,33 @@ body {
         text-wrap: balance;
     }
 }
-
-.mantine-Paper-root {
-    &[data-with-border="true"] {
-        border-top: 4px solid var(--mantine-color-gray-3);
-
-        &.border-primary {
-            border-top: 4px solid var(--mantine-color-primary-6);
-        }
+// Input
+.mantine-Input-input {
+    &:disabled {
+        background-color: transparent !important;
+        color: var(--mantine-color-gray-6) !important;
     }
+}
+// Button
+.mantine-Button-root {
+    &[data-variant="gradient"] {
+        background: linear-gradient(45deg, var(--mantine-color-white) 0%, #EAEAEA 100%);
+        color: var(--mantine-color-black);
+        border: 0.5px solid var(--mantine-color-black);
+    }
+}
+// Modal
+.mantine-Modal-header {
+    border-bottom: 1px solid var(--mantine-color-gray-3);
+    padding: 2rem;
+    margin-bottom: 2rem;
+
+    .mantine-CloseButton-root {
+        transform: scale(1.25);
+    }
+}
+.mantine-Modal-body {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
 }

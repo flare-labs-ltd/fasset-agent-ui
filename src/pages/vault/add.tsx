@@ -5,16 +5,15 @@ import {
     Button,
     Text
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { useTranslation, Trans } from 'react-i18next';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation'
 import { modals } from '@mantine/modals';
 import { useState, useRef } from 'react';
-import VaultForm from '@/components/forms/VaultForm';
+import VaultForm, { FormRef } from '@/components/forms/VaultForm';
 import { useCreateVault, useGetUnderlyingAssetBalance } from '@/api/agent';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
-import { AgentSettingsConfig } from '@/types';
+import { IAgentSettingsConfig } from '@/types';
+import BackButton from "@/components/elements/BackButton";
 
 const MIN_XRP_LIMIT = 50;
 
@@ -23,14 +22,14 @@ export default function AddVault() {
     const [fAssetSymbol, setFAssetType] = useState<string|null>(null);
     const { t } = useTranslation();
     const router = useRouter();
-    const formRef = useRef();
+    const formRef = useRef<FormRef>(null);
     const createVault = useCreateVault();
     const underlyingAssetBalance = useGetUnderlyingAssetBalance(fAssetSymbol, false);
 
     const confirmModal = () => {
-        const form = formRef.current.form();
-        const status = form.validate();
-        if (status.hasErrors) return;
+        const form = formRef?.current?.form();
+        const status = form?.validate();
+        if (status?.hasErrors || !form) return;
 
         modals.openConfirmModal({
             title: t('add_agent_vault.confirm_modal.title'),
@@ -44,6 +43,7 @@ export default function AddVault() {
                 cancel: t('add_agent_vault.confirm_modal.cancel_button')
             },
             confirmProps: { color: 'red' },
+            centered: true,
             onConfirm: () => onSubmit(),
         });
     }
@@ -51,8 +51,8 @@ export default function AddVault() {
     const onSubmit = async() => {
         try {
             setIsLoading(true);
-            const form = formRef.current.form();
-            const data = form.getValues();
+            const form = formRef?.current?.form();
+            const data = form?.getValues();
             
             await setFAssetType(data.fAssetType);
             await underlyingAssetBalance.refetch();
@@ -61,7 +61,7 @@ export default function AddVault() {
                 return;
             }
 
-            const payload: AgentSettingsConfig = {
+            const payload: IAgentSettingsConfig = {
                 poolTokenSuffix: data.poolTokenSuffix.toUpperCase(),
                 vaultCollateralFtsoSymbol: data.vaultCollateralToken,
                 fee: `${data.fee}%`,
@@ -92,19 +92,13 @@ export default function AddVault() {
         <Container
             size="sm"
         >
-            <Button
-                component={Link}
+            <BackButton
                 href="/"
-                variant="transparent"
-                leftSection={<IconArrowLeft size={18} />}
-                className="p-0 mb-3"
-            >
-                {t('add_agent_vault.back_button')}
-            </Button>
-            <Title order={2}>{t('add_agent_vault.title')}</Title>
+                text={t('add_agent_vault.back_button')}
+            />
+            <Title order={2} fw={300}>{t('add_agent_vault.title')}</Title>
             <Paper
                 className="mt-5 p-4"
-                withBorder
             >
                 <VaultForm ref={formRef} />
                 <Trans
@@ -119,6 +113,7 @@ export default function AddVault() {
                             target="_blank"
                             href="https://test.bithomp.com/faucet"
                             c="primary"
+                            key="https://test.bithomp.com/faucet"
                         />,
                         <Text
                             size="xs"
@@ -126,6 +121,7 @@ export default function AddVault() {
                             target="_blank"
                             href="https://faucet.flare.network"
                             c="primary"
+                            key="https://faucet.flare.network"
                         />
                     ]}
                 />

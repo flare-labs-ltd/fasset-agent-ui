@@ -52,7 +52,7 @@ export const enabledWallets: { [wallet in SupportedWallets]: IEnabledWallet; } =
     }
 }
 
-const connectors: [MetaMask][] = [
+const connectors: [MetaMask | WalletConnectV2 | CoinbaseWallet | Network, Web3ReactHooks][] = [
     [metaMask, metaMaskHooks],
     [walletConnectV2, walletConnectV2Hooks],
     [coinbaseWallet, coinbaseWalletHooks],

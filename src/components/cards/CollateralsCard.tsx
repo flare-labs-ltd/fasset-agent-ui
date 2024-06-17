@@ -9,7 +9,6 @@ import {
 } from '@mantine/core';
 import { IconCopy } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { Collateral } from '@/types';
 import { useBotStatus, useCollaterals, useWorkAddress } from '@/api/agent';
 import { useEffect } from "react";
 
@@ -86,7 +85,7 @@ export default function CollateralsCard({ className }: ICollateralsCard) {
             </div>
             <div className="flex flex-wrap md:flex-nowrap mt-4">
                 {collaterals.isPending && <Loader className="ml-auto mr-auto" /> }
-                {!collaterals.isPending && collaterals?.data?.map((collateral: Collateral, index: number) => (
+                {!collaterals.isPending && collaterals?.data?.map((collateral, index) => (
                     <div
                         key={index}
                         className={`border-t-2 border-gray-300 w-full mt-4 md:mt-0 ${index < collaterals.data.length - 1 ? 'mr-5' : ''}`}

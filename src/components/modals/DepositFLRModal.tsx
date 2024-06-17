@@ -4,7 +4,8 @@ import {
     Button,
     Anchor,
     TextInput,
-    Text
+    Text,
+    Divider
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +20,9 @@ interface IDepositFLRModal {
     opened: boolean;
     onClose: () => void;
 }
+interface IFormValues {
+    amount: number|undefined;
+}
 
 export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
@@ -30,11 +34,12 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
     const schema = yup.object().shape({
         amount: yup.number().required(t('validation.messages.required', { field: t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' }) }))
     });
-    const form = useForm({
+    const form = useForm<IFormValues>({
         mode: 'uncontrolled',
         initialValues: {
-            amount: null,
+            amount: undefined,
         },
+        //@ts-ignore
         validate: yupResolver(schema)
     });
 
@@ -85,8 +90,8 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
 
         try {
             await depositFLR.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress,
+                fAssetSymbol: fAssetSymbol as string,
+                agentVaultAddress: agentVaultAddress as string,
                 amount: amount
             });
             openSuccessModal();
@@ -108,13 +113,22 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
             closeOnEscape={!depositFLR.isPending}
             centered
         >
-            <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount))}>
+            <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
                 <TextInput
                     {...form.getInputProps('amount')}
                     label={t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' })}
                     description={t('deposit_flr_in_pool.deposit_amount_description_label')}
                     placeholder={t('deposit_flr_in_pool.deposit_amount_placeholder_label')}
                     withAsterisk
+                />
+                <Divider
+                    className="my-8"
+                    styles={{
+                        root: {
+                            marginLeft: '-2rem',
+                            marginRight: '-2rem'
+                        }
+                    }}
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor

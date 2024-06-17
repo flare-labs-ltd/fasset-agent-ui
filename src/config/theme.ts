@@ -1,39 +1,109 @@
-import { MantineThemeOverride } from '@mantine/core';
-import { Roboto } from 'next/font/google';
+import {
+    MantineThemeOverride,
+    Button,
+    Input,
+    TextInput,
+    Select,
+    NumberInput,
+    Title
+} from '@mantine/core';
+import localFont from "next/font/local";
 
-const roboto = Roboto({
-    subsets: ["latin"],
-    weight: ['100', '300', '400', '500', '700', '900']
-});
+const abcMonumentGrotesk = localFont({
+    src: [
+        {
+            path: '../assets/fonts/ABCMonumentGrotesk-Light.otf',
+            weight: '300',
+            style: 'normal'
+        },
+        {
+            path: '../assets/fonts/ABCMonumentGrotesk-Regular.otf',
+            weight: '400',
+            style: 'normal'
+        },
+        {
+            path: '../assets/fonts/ABCMonumentGrotesk-Bold-Trial.otf',
+            weight: '700',
+            style: 'normal'
+        }
+    ]
+})
 
 export const defaultThemeOverride: MantineThemeOverride = {
-    /** Put your mantine theme override here */
-    colorScheme: 'light',
-    fontFamily: roboto.style.fontFamily,
+    fontFamily: abcMonumentGrotesk.style.fontFamily,
     colors: {
         flare: [
-            '#404041', 
-            '#3B3B3B', 
-            '#353536', 
-            '#303031', 
-            '#2C2C2D', 
-            '#282829', 
-            '#242425', 
-            '#202021', 
+            '#404041',
+            '#3B3B3B',
+            '#353536',
+            '#303031',
+            '#2C2C2D',
+            '#282829',
+            '#242425',
+            '#202021',
             '#1D1D1E',
             '#1A1A1B'
-        ],
-        primary: [
-            '#e5f6ff',
-            '#d0eafe',
-            '#a5d0f6',
-            '#74b6ef',
-            '#4da0ea',
-            '#3392e7',
-            '#228be6',
-            '#1078cd',
-            '#006ab9',
-            '#005ca4'
         ]
+    },
+    components: {
+        Button: Button.extend({
+            defaultProps: {
+                color: 'black',
+                radius: 'xl'
+            },
+        }),
+        Input: Input.extend({
+            defaultProps: {
+                variant: 'filled',
+            },
+            styles: {
+                input: {
+                    backgroundColor: '#FAFAFA',
+                    borderBottom: '1px solid #777777',
+
+                }
+            },
+        }),
+        InputWrapper: Input.Wrapper.extend({
+            defaultProps: {
+                inputWrapperOrder: ['label', 'input', 'error', 'description']
+            },
+            classNames: {
+                label: 'font-normal uppercase',
+                description: 'font-normal'
+            },
+        }),
+        TextInput: TextInput.extend({
+            defaultProps: {
+                inputWrapperOrder: ['label', 'input', 'error', 'description']
+            },
+            classNames: {
+                label: 'font-normal uppercase',
+                description: 'font-normal'
+            },
+        }),
+        Select: Select.extend({
+            defaultProps: {
+                inputWrapperOrder: ['label', 'input', 'error', 'description']
+            },
+            classNames: {
+                label: 'font-normal uppercase',
+                description: 'font-normal'
+            }
+        }),
+        NumberInput: NumberInput.extend({
+            defaultProps: {
+                inputWrapperOrder: ['label', 'input', 'error', 'description']
+            },
+            classNames: {
+                label: 'font-normal uppercase',
+                description: 'font-normal'
+            }
+        }),
+        Title: Title.extend({
+            defaultProps: {
+                fw: 300
+            }
+        })
     }
 }

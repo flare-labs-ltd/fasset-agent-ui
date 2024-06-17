@@ -6,23 +6,23 @@ import {
     Title,
     LoadingOverlay
 } from '@mantine/core';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-import Link from "next/link";
 import { useVaultInfo } from '@/api/agent';
 import { useEffect, useState } from 'react';
+import BackButton from "@/components/elements/BackButton";
 export default function VaultDetails() {
     const [details, setDetails] = useState<string>('');
     const { t } = useTranslation();
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
-    const vaultInfo = useVaultInfo(fAssetSymbol, agentVaultAddress, fAssetSymbol != null && agentVaultAddress != null);
+    const vaultInfo = useVaultInfo(fAssetSymbol as string, agentVaultAddress as string, fAssetSymbol != null && agentVaultAddress != null);
 
     useEffect(() => {
         if (!vaultInfo.isFetched) return;
 
         let text = '';
+        //@ts-ignore
         for (const [key, value] of Object.entries(vaultInfo.data)) {
             text += `${key}: ${value}\n`;
         }
@@ -39,15 +39,10 @@ export default function VaultDetails() {
             size="sm"
         >
             <LoadingOverlay visible={vaultInfo.isPending} />
-            <Button
-                component={Link}
+            <BackButton
                 href={`/vault/${fAssetSymbol}/${agentVaultAddress}`}
-                variant="transparent"
-                leftSection={<IconArrowLeft size={18} />}
-                className="p-0 mb-3"
-            >
-                {t('agent_vault_details.back_button')}
-            </Button>
+                text={t('agent_vault_details.back_button')}
+            />
             <div className="flex justify-between items-center">
                 <Title order={2} className="mr-3">{t('agent_vault_details.title')}</Title>
                 <Button

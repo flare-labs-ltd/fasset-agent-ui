@@ -14,7 +14,11 @@ import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/dropzone/styles.css';
 import "@/styles/globals.scss";
+import type { NextComponentType } from "next";
 
+type CustomAppProps = AppProps & {
+    Component: NextComponentType & { protected?: boolean }
+}
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -24,7 +28,7 @@ const queryClient = new QueryClient({
     },
 });
 
-export default function App({ Component, pageProps }: AppProps) {
+export default function App({ Component, pageProps }: CustomAppProps) {
     return (
         <MantineProvider
             theme={{ ...defaultThemeOverride }}

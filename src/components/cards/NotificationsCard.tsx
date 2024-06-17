@@ -9,8 +9,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useNotifications } from '@/api/agent';
 import { useTranslation } from 'react-i18next';
-import {BotAlert} from "@/types";
-import classes from "@/styles/components/cards/AlertsCard.module.scss";
 
 interface INotificationsCard {
     className?: string
@@ -33,7 +31,7 @@ export default function NotificationsCard({ className }: INotificationsCard) {
         return () => clearInterval(botFetchInterval);
     }, []);
     useEffect(() => {
-        setIsShowAllButtonVisible(notifications.data?.length > SHOW_ALL_BUTTON_LIMIT);
+        setIsShowAllButtonVisible(notifications.data !== undefined && notifications?.data?.length > SHOW_ALL_BUTTON_LIMIT);
     }, [notifications.isFetched]);
 
 
@@ -49,7 +47,7 @@ export default function NotificationsCard({ className }: INotificationsCard) {
             </Paper>
         </div>
     );
-
+    /*
     return (
         <div className={`flex flex-col flex-nowrap w-full ${className}`}>
             <Paper
@@ -59,8 +57,8 @@ export default function NotificationsCard({ className }: INotificationsCard) {
                 <Title order={4} className="mb-4">{t('notifications_card.title')}</Title>
                 {notifications.isPending && <Loader className="ml-auto mr-auto" /> }
                 {notifications?.data
-                    ?.slice(0, showAll ? botAlerts?.data.length : 5)
-                    ?.map((botAlert: BotAlert, index: number) => (
+                    ?.slice(0, showAll ? botAlerts?.data?.length : 5)
+                    ?.map((botAlert, index) => (
                         <div key={index} className="mt-4">
                             <div className="flex justify-between">
                                 <Text c="gray">20.2.2024 10:42</Text>
@@ -92,4 +90,5 @@ export default function NotificationsCard({ className }: INotificationsCard) {
             }
         </div>
     );
+     */
 }

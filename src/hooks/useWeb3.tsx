@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useWeb3React, Web3ContextType as Web3ReactContextType, Web3ReactProvider } from '@web3-react/core';
-import { providers } from 'ethers';
+import type { Web3Provider as BaseWeb3Provider } from '@ethersproject/providers';
 import { AllSupportedChainsType } from '@/chains/chains';
 import { isChainSupported } from '@/chains/utils';
 import connectors from '@/connectors/connectors';
@@ -11,12 +11,12 @@ import { connectEagerlyOnRefreshLocalStorage } from '@/utils';
  */
 type Web3ContextType = {
     supportedChainId: false | AllSupportedChainsType;
-} & Web3ReactContextType<providers.Web3Provider>;
+} & Web3ReactContextType<BaseWeb3Provider>;
 
 const Web3Context = createContext<Web3ContextType | null>(null);
 
 export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
-    const web3React = useWeb3React<providers.Web3Provider>();
+    const web3React = useWeb3React<BaseWeb3Provider>();
     const { chainId } = web3React;
 
     const supportedChainId = isChainSupported(chainId);

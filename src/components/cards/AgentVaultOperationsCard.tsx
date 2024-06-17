@@ -10,12 +10,12 @@ import DepositCollateralModal from '@/components/modals/DepositCollateralModal';
 import DepositFLRModal from '@/components/modals/DepositFLRModal';
 import ActivateVaultModal from '@/components/modals/ActivateVaultModal';
 import DeactivateVaultModal from '@/components/modals/DeactivateVaultModal';
-import { AgentVault } from '@/types';
+import { IAgentVault } from '@/types';
 
 
 interface IAgentVaultOperationsCard {
     className?: string;
-    agentVault: AgentVault
+    agentVault: IAgentVault|undefined;
 }
 
 export default function AgentVaultOperationsCard({ className, agentVault }: IAgentVaultOperationsCard) {
@@ -31,20 +31,23 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
             withBorder
         >
             <LoadingOverlay visible={agentVault == null} />
-            <Title order={6} className="mb-8">{t('agent_vault_operations_card.title')}</Title>
+            <Title order={5} className="mb-8">{t('agent_vault_operations_card.title')}</Title>
             <Button
+                variant="gradient"
                 onClick={() => setIsDepositCollateralModalActive(true)}
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.deposit_collateral_button')}
             </Button>
             <Button
+                variant="gradient"
                 onClick={() => setIsDepositFLRModalActive(true)}
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.deposit_flr_in_pool_button')}
             </Button>
             <Button
+                variant="gradient"
                 onClick={() => setIsActivateVaultModalActive(true)}
                 className="block mb-3"
                 disabled={agentVault?.publiclyAvailable}
@@ -52,6 +55,7 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
                 {t('agent_vault_operations_card.activate_vault_button')}
             </Button>
             <Button
+                variant="gradient"
                 onClick={() => setIsDeactivateVaultModalActive(true)}
             >
                 {t('agent_vault_operations_card.close_vault_button')}

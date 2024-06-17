@@ -1,10 +1,43 @@
-export interface Collateral {
-    symbol: string;
-    balance: string;
-    wrapped?: string
+export interface ISecretsTemplate {
+    apiKey: {
+        agent_bot: string;
+        indexer: string;
+        native_rpc: string;
+        xrp_rpc: string;
+    },
+    owner: {
+        management: {
+            address: string;
+        },
+        native: {
+            address: string;
+            private_key: string;
+        },
+        testXRP: {
+            address: string;
+            private_key: string;
+        },
+        wallet: {
+            encryption_password: string;
+        }
+    }
 }
 
-export interface BotAlert {
+export interface IVaultCollateral {
+    collaterals: { symbol: string, template: string}[],
+    fassetSymbol: string;
+}
+
+export interface ICollateral {
+    fassetSymbol: string;
+    collaterals: {
+        symbol: string;
+        balance: string;
+        wrapped?: string;
+    }[]
+}
+
+export interface IBotAlert {
     bot_type: string;
     address: string;
     level: string;
@@ -12,26 +45,29 @@ export interface BotAlert {
     description: string
 }
 
-export interface AgentVaultInformation {
-    address: string;
-    freeLots: number;
-    mintedAmount: number;
-    mintedlots: number;
-    poolAmount: number;
-    poolCR: number;
-    status: boolean;
-    updating: boolean;
-    vaultAmount: number;
-    vaultCR: number;
-    agentCPTs: number;
+export interface IAgentVaultInformation {
+    fassetSymbol: string;
+    vaults: {
+        address: string;
+        freeLots: number;
+        mintedAmount: number;
+        mintedlots: number;
+        poolAmount: number;
+        poolCR: number;
+        status: boolean;
+        updating: boolean;
+        vaultAmount: number;
+        vaultCR: number;
+        agentCPTs: number;
+    }[]
 }
 
-export interface AgentSettingsDTO {
+export interface IAgentSettingsDTO {
     name: string;
     value: string;
 }
 
-export interface AgentSettingsConfig {
+export interface IAgentSettingsConfig {
     poolTokenSuffix: string;
     vaultCollateralFtsoSymbol: string;
     fee: string;
@@ -44,7 +80,7 @@ export interface AgentSettingsConfig {
     poolTopupTokenPriceFactor: string;
 }
 
-export interface AgentVault {
+export interface IAgentVault {
     status: string;
     ownerManagementAddress: string;
     ownerWorkAddress: string;

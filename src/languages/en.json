@@ -175,7 +175,8 @@
     },
     "layout": {
         "header": {
-            "title": "FAsset Manager"
+            "beta_label": "beta",
+            "title": "FAssets Agent"
         }
     },
     "notifications_card": {

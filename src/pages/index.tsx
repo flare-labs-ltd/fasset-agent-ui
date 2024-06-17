@@ -29,7 +29,7 @@ export default function Dashboard() {
                     </Button>
                 </div>
             </div>
-            <CollateralsCard className="mt-5 border-primary" />
+            <CollateralsCard className="mt-5" />
             <div className="flex flex-wrap md:flex-nowrap mt-5">
                 <AlertsCard className="mr-0 md:mr-10" />
                 <NotificationsCard className=" md:mt-0" />

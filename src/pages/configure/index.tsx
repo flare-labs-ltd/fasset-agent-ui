@@ -15,9 +15,8 @@ import {
     IconPhoto,
     IconX,
     IconCopy,
-    IconArrowLeft
 } from '@tabler/icons-react';
-import { Dropzone } from '@mantine/dropzone';
+import {Dropzone, FileWithPath} from '@mantine/dropzone';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
@@ -33,6 +32,7 @@ import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifi
 import { useConnectWalletModal } from "@/hooks/useEthereumLogin";
 import { useWeb3 } from "@/hooks/useWeb3";
 import { useSetWorkAddress } from "@/hooks/useContracts";
+import BackButton from "@/components/elements/BackButton";
 
 const FILE_MAX_SIZE = 5 * 1048576; // 5mb
 
@@ -40,7 +40,7 @@ export default function AgentConfiguration() {
     const secretExists = useSecretExists();
     const workAddress = useWorkAddress(secretExists.data === true);
     const isWhitelisted = useIsWhitelisted(secretExists.data === true && workAddress.data != null);
-    const [secretsFile, useSecretsFile] = useState<File|null>(null);
+    const [secretsFile, setSecretsFile] = useState<File>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { openConnectWalletModal } = useConnectWalletModal();
     const { account } = useWeb3();
@@ -55,12 +55,13 @@ export default function AgentConfiguration() {
         reader.onload = async(event) => {
             try {
                 setIsLoading(true);
-                const secrets = JSON.parse(event.target.result);
+                const secrets = JSON.parse(event?.target?.result as string);
                 if (secrets?.owner?.native?.address) {
                     await contractSetWorkAddress.mutateAsync(secrets.owner.native.address);
                 }
-                uploadSecret.mutateAsync(secrets);
+                await uploadSecret.mutateAsync(secrets);
                 showSucessNotification(t('agent_configuration.secret_card.success_message'));
+                secretExists.refetch();
             } catch (error) {
                 if ((error as any)?.response?.data?.message) {
                     showErrorNotification((error as any).response.data.message);
@@ -74,7 +75,10 @@ export default function AgentConfiguration() {
             }
 
         }
-        reader.readAsText(secretsFile);
+
+        if (secretsFile) {
+            reader.readAsText(secretsFile);
+        }
     }
 
     const generateAddress = async() => {
@@ -113,6 +117,10 @@ export default function AgentConfiguration() {
         navigator.clipboard.writeText(text)
     }
 
+    const onFileDrop = (files: FileWithPath[]) => {
+        setSecretsFile(files[0]);
+    }
+
     return (
         <Container
             size="sm"
@@ -122,15 +130,10 @@ export default function AgentConfiguration() {
                 zIndex={1000}
             />
             {isWhitelisted.data &&
-                <Button
-                    component={Link}
+                <BackButton
                     href="/"
-                    variant="transparent"
-                    leftSection={<IconArrowLeft size={18} />}
-                    className="p-0 mb-3"
-                >
-                    {t('agent_configuration.back_button')}
-                </Button>
+                    text={t('agent_configuration.back_button')}
+                />
             }
             <Title order={2}>{t('agent_configuration.title')}</Title>
             {!secretExists?.data &&
@@ -141,7 +144,7 @@ export default function AgentConfiguration() {
                     <Title order={5}>{t('agent_configuration.secret_card.title')}</Title>
                     <Text size="sm" c="gray">{t('agent_configuration.secret_card.subtitle')}</Text>
                     <Dropzone
-                        onDrop={(files) => useSecretsFile(files[0])}
+                        onDrop={onFileDrop}
                         maxSize={FILE_MAX_SIZE}
                         multiple={false}
                         accept={['application/json']}
@@ -166,7 +169,7 @@ export default function AgentConfiguration() {
                                     stroke={1.5}
                                 />
                             </Dropzone.Idle>
-                            {secretsFile !== null
+                            {secretsFile !== undefined
                                 ? <Text>{secretsFile.name}</Text>
                                 : <div>
                                     <Text
@@ -211,29 +214,33 @@ export default function AgentConfiguration() {
                 className="mt-5 p-4"
                 withBorder
             >
-                <Title order={5}>{t('agent_configuration.working_address_card.title')}</Title>
-                <Text size="sm" c="gray">{t('agent_configuration.working_address_card.subtitle')}</Text>
-                <Input
-                    value={workAddress.data || ''}
-                    disabled={true}
-                    className="mt-3"
-                    variant="filled"
-                    rightSectionPointerEvents="all"
-                    rightSection={
-                        (!workAddress.isPending ? workAddress.isRefetching : false)
-                            ? <Loader size="xs" />
-                            : workAddress.data && <IconCopy
+                <Input.Wrapper
+                    label={t('agent_configuration.working_address_card.title')}
+                    description={t('agent_configuration.working_address_card.subtitle')}
+                >
+                    <Input
+                        value={workAddress.data || ''}
+                        disabled={true}
+                        className="mt-3"
+                        variant="filled"
+                        rightSectionPointerEvents="all"
+                        rightSection={
+                            (!workAddress.isPending ? workAddress.isRefetching : false)
+                                ? <Loader size="xs" />
+                                : workAddress.data && <IconCopy
                                 color="black"
                                 style={{ width: rem(20), height: rem(20) }}
                                 onClick={() => copyToClipboard(workAddress.data)}
                             />
-                    }
-                    styles={{
-                        input: { color: 'var(--mantine-color-dark-text)', opacity: 1 }
-                    }}
-                />
+                        }
+                        styles={{
+                            section: { cursor: 'pointer' },
+                            input: { color: 'var(--mantine-color-dark-text)', opacity: 1 }
+                        }}
+                    />
+                </Input.Wrapper>
                 <Button
-                    variant="outline"
+                    variant="gradient"
                     size="xs"
                     className="mt-3"
                     onClick={onChangeWorkingAddressClick}

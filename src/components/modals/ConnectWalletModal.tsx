@@ -60,6 +60,7 @@ export default function ConnectWalletModal({ opened, onClose }: IConnectWalletMo
                                 href="https://flare.xyz/privacy-policy/"
                                 c="#E62058"
                                 aria-label="Terms of Service"
+                                key="https://flare.xyz/privacy-policy/"
                             />
                         ]}
                     />

@@ -2,16 +2,17 @@ import {
     useQuery,
     useQueryClient,
     useMutation,
-    TData
 } from '@tanstack/react-query';
 import apiClient from '@/api/apiClient';
 import {
-    Collateral,
-    BotAlert,
-    AgentSettingsConfig,
-    AgentVault,
-    AgentVaultInformation,
-    AgentSettingsDTO
+    ICollateral,
+    IBotAlert,
+    IAgentSettingsConfig,
+    IAgentVault,
+    IAgentVaultInformation,
+    IAgentSettingsDTO,
+    ISecretsTemplate,
+    IVaultCollateral
 } from '@/types';
 
 const resource = 'agent';
@@ -33,9 +34,9 @@ const AGENT_KEY = {
 export function useWorkAddress(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.WORK_ADDRESS],
-        queryFn: async() => {
+        queryFn: async(): Promise<string> => {
             const response = await apiClient.get(`${resource}/workAddress`);
-            return response.data.data.length > 0 ? response.data.data : null;
+            return response.data.data;
         },
         enabled: enabled
     });
@@ -50,13 +51,13 @@ export function useGenerateWorkAddress() {
             return response.data;
         },
         onMutate: async() => {
-            await queryClient.cancelQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            await queryClient.cancelQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         },
         onError: (error) => {
-            queryClient.invalidateQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            queryClient.invalidateQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            queryClient.invalidateQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         }
     });
 }
@@ -70,13 +71,13 @@ export function useSaveWorkAddress() {
             return response.data;
         },
         onMutate: async() => {
-            await queryClient.cancelQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            await queryClient.cancelQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         },
         onError: (error) => {
-            queryClient.invalidateQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            queryClient.invalidateQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: AGENT_KEY.WORK_ADDRESS });
+            queryClient.invalidateQueries({ queryKey: [AGENT_KEY.WORK_ADDRESS] });
         }
     });
 }
@@ -84,12 +85,16 @@ export function useSaveWorkAddress() {
 export function useCollaterals() {
     return useQuery({
         queryKey: [AGENT_KEY.COLLATERALS],
-        queryFn: async(): Promise<Collateral[]> => {
+        queryFn: async(): Promise<ICollateral[]> => {
             const response = await apiClient.get(`${resource}/collaterals`);
             return response.data.data;
         },
-        select: (data: TData) => {
-            const collaterals: Collateral[] = [];
+        select: (data: ICollateral[]) => {
+            const collaterals: {
+                symbol: string;
+                balance: string;
+                wrapped?: string;
+            }[] = [];
             const symbols: string[] = [];
 
             data.forEach(item => {
@@ -108,9 +113,9 @@ export function useCollaterals() {
 export function useVaultCollaterals() {
     return useQuery({
         queryKey: [AGENT_KEY.VAULT_COLLATERALS],
-        queryFn: async() => {
+        queryFn: async(): Promise<IVaultCollateral[]> => {
             const response = await apiClient.get(`${resource}/vaultCollaterals`);
-            return response.data.data
+            return response.data.data;
         }
     });
 }
@@ -127,7 +132,7 @@ export function useSecretExists() {
 
 export function useUploadSecret() {
     return useMutation({
-        mutationFn: async(secret: string) => {
+        mutationFn: async(secret: ISecretsTemplate) => {
             const response = await apiClient.post(`${resource}/secrets`, secret);
             return response.data;
         },
@@ -137,9 +142,9 @@ export function useUploadSecret() {
 export function useSecretsTemplate() {
     return useQuery({
         queryKey: [AGENT_KEY.SECRETS_TEMPLATE],
-        queryFn: async() => {
+        queryFn: async(): Promise<ISecretsTemplate> => {
             const response = await apiClient.get(`${resource}/secretsTemplate`);
-            return response.data.data
+            return response.data.data;
         }
     });
 }
@@ -165,9 +170,9 @@ export function useDeactivateVault() {
 export function useAgentVaultsInformation() {
     return useQuery({
         queryKey: [AGENT_KEY.VAULTS],
-        queryFn: async() => {
+        queryFn: async(): Promise<IAgentVaultInformation[]> => {
             const response = await apiClient.get(`${resource}/vaults`);
-            return <AgentVaultInformation[]> response.data.data
+            return response.data.data;
         }
     });
 }
@@ -176,7 +181,7 @@ export function useCreateVault() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async({ fAssetSymbol, payload }: { fAssetSymbol: string, payload: AgentSettingsConfig }) => {
+        mutationFn: async({ fAssetSymbol, payload }: { fAssetSymbol: string, payload: IAgentSettingsConfig }) => {
             const response = await apiClient.post(`${resource}/create/${fAssetSymbol}`, payload);
             return response.data;
         },
@@ -205,9 +210,9 @@ export function useBotStatus() {
 export function useVaultInfo(fAssetSymbol: string, agentVaultAddress: string, enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.VAULT_INFO, fAssetSymbol, agentVaultAddress],
-        queryFn: async() => {
+        queryFn: async(): Promise<IAgentVault> => {
             const response = await apiClient.get(`${resource}/info/vault/${fAssetSymbol}/${agentVaultAddress}`);
-            return <AgentVault[]>response.data.data
+            return response.data.data;
         },
         enabled: enabled
     });
@@ -217,7 +222,7 @@ export function useUpdateVault() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async({ fAssetSymbol, agentVaultAddress, payload }: { fAssetSymbol: string, agentVaultAddress: string, payload: AgentSettingsDTO[] }) => {
+        mutationFn: async({ fAssetSymbol, agentVaultAddress, payload }: { fAssetSymbol: string, agentVaultAddress: string, payload: IAgentSettingsDTO[] }) => {
             const response = await apiClient.post(`${resource}/settings/update/${fAssetSymbol}/${agentVaultAddress}`, payload);
             return response.data;
         },
@@ -258,11 +263,11 @@ export function useIsWhitelisted(enabled: boolean = true) {
 export function useBotAlert() {
     return useQuery({
         queryKey: [AGENT_KEY.BOT_ALERT],
-        queryFn: async() => {
+        queryFn: async(): Promise<IBotAlert[]> => {
             const response = await apiClient.get(`${resource}/botAlert`);
-            return <BotAlert[]> response.data.data
+            return response.data.data
         },
-        select: (data: TData) => {
+        select: (data: IBotAlert[]) => {
             return data.reverse();
         }
     });
@@ -271,10 +276,10 @@ export function useBotAlert() {
 export function useNotifications() {
     return useQuery({
         queryKey: [AGENT_KEY.NOTIFICATIONS],
-        queryFn: async() => {
+        queryFn: async(): Promise<IBotAlert[]> => {
             //TODO: REPLACE WITH NOTIFICATIONS REQUEST
             const response = await apiClient.get(`${resource}/botAlert`);
-            return <BotAlert[]> response.data.data
+            return response.data.data
         }
     });
 }

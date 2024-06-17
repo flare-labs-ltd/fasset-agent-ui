@@ -1,7 +1,8 @@
 import {
     Modal,
     Button,
-    Text
+    Text,
+    Divider
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
@@ -23,8 +24,8 @@ export default function ActivateVaultModal({ opened, onClose }: IActivateVaultMo
     const onActivateVaultClick = async() => {
         try {
             await activateVault.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress
+                fAssetSymbol: fAssetSymbol as string,
+                agentVaultAddress: agentVaultAddress as string
             })
             showSucessNotification(t('activate_vault_modal.success_message'));
             onClose();
@@ -49,6 +50,15 @@ export default function ActivateVaultModal({ opened, onClose }: IActivateVaultMo
             >
                 {t('activate_vault_modal.minimal_collateral_for_minting_label')}
             </Text>
+            <Divider
+                className="my-8"
+                styles={{
+                    root: {
+                        marginLeft: '-2rem',
+                        marginRight: '-2rem'
+                    }
+                }}
+            />
             <div className="flex mt-5">
                 <Button
                     variant="default"

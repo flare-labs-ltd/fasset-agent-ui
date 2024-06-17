@@ -1,21 +1,21 @@
 import {
     Container,
     Title,
-    JsonInput,
     Paper,
     Button,
-    LoadingOverlay
+    LoadingOverlay,
+    JsonInput
 } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { IconArrowLeft } from '@tabler/icons-react';
 import { yupResolver } from 'mantine-form-yup-resolver';
 import * as yup from 'yup';
 import { useUploadSecret, useSecretsTemplate } from '@/api/agent';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import { useSetWorkAddress } from '@/hooks/useContracts';
+import {ISecretsTemplate} from "@/types";
+import BackButton from "@/components/elements/BackButton";
 
 export default function CreateSecretFile() {
     const uploadSecret = useUploadSecret();
@@ -39,20 +39,20 @@ export default function CreateSecretFile() {
     useEffect(() => {
         if (secretsTemplate.isPending) return;
         form.setValues({
-            secrets: JSON.stringify(secretsTemplate.data, null, 2)
-        })
+            secrets: JSON.stringify(secretsTemplate.data, null, 4)
+        });
     }, [secretsTemplate.isPending]);
 
     const onSubmit = async(secrets: string) => {
         try {
             setIsLoading(true);
-            secrets = JSON.parse(secrets);
+            const secretsJson: ISecretsTemplate = JSON.parse(secrets);
 
-            if (secrets?.owner?.native?.address) {
-                await contractSetWorkAddress.mutateAsync(secrets.owner.native.address);
+            if (secretsJson?.owner?.native?.address) {
+                await contractSetWorkAddress.mutateAsync(secretsJson.owner.native.address);
             }
 
-            await uploadSecret.mutateAsync(secrets);
+            await uploadSecret.mutateAsync(secretsJson);
             showSucessNotification(t('agent_configuration.create_secret.success_message'));
         } catch (error) {
             if ((error as any)?.response?.data?.message) {
@@ -72,19 +72,13 @@ export default function CreateSecretFile() {
         <Container
             size="sm"
         >
-            <Button
-                component={Link}
+            <BackButton
                 href="/configure/"
-                variant="transparent"
-                leftSection={<IconArrowLeft size={18} />}
-                className="p-0 mb-3"
-            >
-                {t('agent_configuration.create_secret.back_button')}
-            </Button>
+                text={t('agent_configuration.create_secret.back_button')}
+            />
             <Title order={2}>{t('agent_configuration.create_secret.title')}</Title>
             <Paper
                 className="mt-5 p-4"
-                withBorder
             >
                 <form onSubmit={form.onSubmit(form => onSubmit(form.secrets))}>
                     <Title order={5}>{t('agent_configuration.create_secret.card.title')}</Title>
@@ -92,6 +86,8 @@ export default function CreateSecretFile() {
                         <LoadingOverlay visible={secretsTemplate.isPending} />
                         <JsonInput
                             {...form.getInputProps('secrets')}
+                            //@ts-ignore
+                            key={form.key('secrets')}
                             autosize={true}
                             minRows={5}
                             className="mt-3"

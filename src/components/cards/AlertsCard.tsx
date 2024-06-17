@@ -12,7 +12,7 @@ import {
     IconBell
 } from '@tabler/icons-react';
 import { useBotAlert } from '@/api/agent';
-import { BotAlert } from '@/types';
+import { IBotAlert } from '@/types';
 import classes from '@/styles/components/cards/AlertsCard.module.scss';
 import { useRouter } from 'next/router';
 
@@ -27,14 +27,15 @@ export default function AlertsCard({ className }: IAlertCard) {
     const { t } = useTranslation();
     const [isShowAllButtonVisible, setIsShowAllButtonVisible] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
-    const [alerts, setAlerts] = useState<BotAlert[]>([]);
+    const [alerts, setAlerts] = useState<IBotAlert[]>([]);
     const [showAll, setShowAll] = useState<boolean>(false);
     const botAlerts = useBotAlert();
     const router = useRouter();
 
     useEffect(() => {
         if (!router.isReady || !('level' in router.query)) return;
-        setSelectedFilter(router.query.level.split(','));
+        const level = router?.query?.level as string;
+        setSelectedFilter(level.split(','));
     }, [router?.isReady]);
     useEffect(() => {
         const botFetchInterval = setInterval(() => {
@@ -44,13 +45,13 @@ export default function AlertsCard({ className }: IAlertCard) {
         return () => clearInterval(botFetchInterval);
     }, []);
     useEffect(() => {
-        if (botAlerts?.data?.length > 0) {
+        if (botAlerts.data && botAlerts?.data?.length > 0) {
             setAlerts(selectedFilter?.length
-                ? botAlerts?.data?.filter((alert: BotAlert) => selectedFilter.includes(alert.level))
+                ? botAlerts?.data?.filter(alert => selectedFilter.includes(alert.level))
                 : botAlerts.data
             )
         }
-        setIsShowAllButtonVisible(botAlerts.data?.length > SHOW_ALL_BUTTON_LIMIT);
+        setIsShowAllButtonVisible(botAlerts.data !== undefined && botAlerts?.data?.length > SHOW_ALL_BUTTON_LIMIT);
     }, [botAlerts.data]);
     useEffect(() => {
         if (selectedFilter?.length > 0) {
@@ -77,8 +78,8 @@ export default function AlertsCard({ className }: IAlertCard) {
             );
         }
 
-        if (selectedFilter?.length > 0 && botAlerts?.data?.length > 0) {
-            setAlerts(botAlerts?.data?.filter((alert: BotAlert) => selectedFilter.includes(alert.level)))
+        if (selectedFilter?.length > 0 && botAlerts.data && botAlerts?.data?.length > 0) {
+            setAlerts(botAlerts?.data?.filter(alert => selectedFilter.includes(alert.level)))
             return;
         }
 
@@ -111,8 +112,8 @@ export default function AlertsCard({ className }: IAlertCard) {
                 />
                 {botAlerts.isPending && <Loader className="ml-auto mr-auto" /> }
                 {alerts
-                    ?.slice(0, showAll ? botAlerts?.data.length : 5)
-                    ?.map((botAlert: BotAlert, index: number) => (
+                    ?.slice(0, showAll && botAlerts.data ? botAlerts?.data.length : 5)
+                    ?.map((botAlert, index) => (
                         <div key={index} className="mt-4">
                             <Text fw={500} size="md">{botAlert.title}</Text>
                             <div className="flex">
@@ -133,7 +134,7 @@ export default function AlertsCard({ className }: IAlertCard) {
             </Paper>
             {isShowAllButtonVisible &&
                 <Button
-                    variant="outline"
+                    variant="gradient"
                     className="ml-auto mt-4"
                     onClick={() => setShowAll(!showAll)}
                 >

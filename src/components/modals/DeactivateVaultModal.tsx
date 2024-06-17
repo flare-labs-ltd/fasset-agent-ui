@@ -1,7 +1,8 @@
 import {
     Modal,
     Button,
-    Text
+    Text,
+    Divider
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
@@ -23,8 +24,8 @@ export default function DeactivateVaultModal({ opened, onClose }: IDeactivateVau
     const onDeactivateVaultClick = async() => {
         try {
             await deactivateVault.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress
+                fAssetSymbol: fAssetSymbol as string,
+                agentVaultAddress: agentVaultAddress as string
             })
             showSucessNotification(t('deactivate_vault_modal.success_message'));
             onClose();
@@ -43,6 +44,15 @@ export default function DeactivateVaultModal({ opened, onClose }: IDeactivateVau
             centered
         >
             <Text className="whitespace-pre-line">{t('deactivate_vault_modal.description_label')}</Text>
+            <Divider
+                className="my-8"
+                styles={{
+                    root: {
+                        marginLeft: '-2rem',
+                        marginRight: '-2rem'
+                    }
+                }}
+            />
             <div className="flex mt-5">
                 <Button
                     variant="default"

@@ -30,7 +30,7 @@ export default function Setup() {
         if (account) {
             router.push('/configure');
         } else {
-            openConnectWalletModal((wallet) => {
+            openConnectWalletModal((wallet: string) => {
                 if (wallet) router.push('/configure');
             });
         }
@@ -42,7 +42,7 @@ export default function Setup() {
             className="flex flex-col items-center text-center"
         >
             <Title order={2}>{t('setup.title')}</Title>
-            <Text size="sm" color="gray">{t('setup.subtitle')}</Text>
+            <Text size="sm" c="gray">{t('setup.subtitle')}</Text>
             <Card
                 shadow="sm"
                 className="mt-8 w-full"

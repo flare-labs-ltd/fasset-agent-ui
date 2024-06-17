@@ -3,23 +3,24 @@ import ConnectWalletModal from '@/components/modals/ConnectWalletModal';
 import React, { createContext, useContext, useState } from 'react';
 
 type ConnectWalletModalContextType = {
-    openConnectWalletModal: (onSelectedWalletCallback?: () => void) => void;
-    closeConnectWalletModal: () => void;
-    selectedWalletCallback?: (wallet: string) => void
+    openConnectWalletModal: (callback?: (wallet: string) => void) => void;
+    closeConnectWalletModal: (callback?: () => void) => void;
+    openConnectWalletModalCallback?: (wallet: string) => void;
 };
 
 const ConnectWalletModalContext = createContext<ConnectWalletModalContextType | null>(null);
 
 export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
-    const [selectedWalletCallback, setSelectedWalletCallback] = useState(null);
+    const [openConnectWalletModalCallback, setOpenConnectWalletModalCallback] = useState<() => void>();
     const [isConnectWalletModalActive, setIsConnectWalletModalActive] = useState<boolean>(false); //! dev only, change to false
 
-    function closeConnectWalletModal() {
+    function closeConnectWalletModal(callback?: () => void) {
         setIsConnectWalletModalActive(false);
+        if (callback) callback();
     }
 
-    function openConnectWalletModal(callback?: () => void) {
-        if (callback) setSelectedWalletCallback(() => callback);
+    function openConnectWalletModal(callback?: (wallet: string) => void) {
+        if (callback) setOpenConnectWalletModalCallback(() => callback);
         setIsConnectWalletModalActive(true);
     }
 
@@ -28,7 +29,7 @@ export const EthereumLoginProvider = ({ children }: React.PropsWithChildren<{ ch
             value={{
                 closeConnectWalletModal: closeConnectWalletModal,
                 openConnectWalletModal: openConnectWalletModal,
-                selectedWalletCallback: selectedWalletCallback
+                openConnectWalletModalCallback: openConnectWalletModalCallback
             }}
         >
             {children}
