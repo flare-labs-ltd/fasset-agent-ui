@@ -45,7 +45,10 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             .filter((item) => item.startsWith('wc@'))
             .forEach((item) => localStorage.removeItem(item));
         setNotConnectedChainId(supportedChainId as AllSupportedChainsType);
+        closeConnectWalletModal();
+        router.push('/connect');
     };
+
     const activateConnector = async() => {
         // handle if MetaMask on mobile
         if (isMetamaskAndOnMobile) {

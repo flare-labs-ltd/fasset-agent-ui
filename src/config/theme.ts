@@ -5,7 +5,9 @@ import {
     TextInput,
     Select,
     NumberInput,
-    Title
+    Title,
+    Table,
+    Modal
 } from '@mantine/core';
 import localFont from "next/font/local";
 
@@ -70,7 +72,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
             },
             classNames: {
                 label: 'font-normal uppercase',
-                description: 'font-normal'
+                description: 'font-normal mt-2'
             },
         }),
         TextInput: TextInput.extend({
@@ -79,7 +81,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
             },
             classNames: {
                 label: 'font-normal uppercase',
-                description: 'font-normal'
+                description: 'font-normal mt-2'
             },
         }),
         Select: Select.extend({
@@ -88,7 +90,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
             },
             classNames: {
                 label: 'font-normal uppercase',
-                description: 'font-normal'
+                description: 'font-normal mt-2'
             }
         }),
         NumberInput: NumberInput.extend({
@@ -97,12 +99,41 @@ export const defaultThemeOverride: MantineThemeOverride = {
             },
             classNames: {
                 label: 'font-normal uppercase',
-                description: 'font-normal'
+                description: 'font-normal mt-2'
             }
         }),
         Title: Title.extend({
             defaultProps: {
                 fw: 300
+            }
+        }),
+        Table: Table.extend({
+            classNames: {
+                th: 'font-normal text-xs',
+                tr: 'pt-5',
+                td: 'text-sm'
+            },
+            styles: {
+                th: {
+                    color: 'rgba(119, 119, 119, 1)',
+                    paddingTop: '1.5rem',
+                    backgroundColor: 'rgba(251, 251, 251, 1)'
+                },
+                table: {
+                    borderCollapse: 'separate',
+                    borderSpacing: 0
+                }
+            }
+        }),
+        Modal: Modal.extend({
+            styles: {
+                title: {
+                    fontSize: '1.5rem'
+                },
+                close: {
+                    width: '30px',
+                    height: '30px',
+                },
             }
         })
     }

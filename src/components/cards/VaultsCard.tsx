@@ -1,15 +1,29 @@
 import {
-    Button,
+    Table,
     Paper,
-    Text,
-    Loader
+    Loader,
+    rem,
+    Badge,
+    Menu,
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { IconChecklist, IconUrgent } from '@tabler/icons-react';
+import {
+    IconCopy,
+    IconDots,
+    IconBook2,
+    IconBookUpload,
+    IconDashboard,
+    IconDashboardOff
+} from '@tabler/icons-react';
 import { useAgentVaultsInformation } from '@/api/agent';
-import Link from 'next/link';
-import classes from '@/styles/components/cards/VaultsCard.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { truncateString, copyToClipboard } from "@/utils";
+import Link from "next/link";
+import DepositCollateralModal from "@/components/modals/DepositCollateralModal";
+import DepositFLRModal from "@/components/modals/DepositFLRModal";
+import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
+import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
+import classes from "@/styles/components/cards/VaultsCard.module.scss";
 
 interface IVaultsCard {
     className?: string
@@ -18,6 +32,12 @@ interface IVaultsCard {
 const VAULTS_REFETCH_INTERVAL = 60000;
 
 export default function VaultsCard({ className }: IVaultsCard) {
+    const [selectedAgentVault, setSelectedAgentVault] = useState<any>();
+    const [isDepositCollateralModalActive, setIsDepositCollateralModalActive] = useState<boolean>(false);
+    const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
+    const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
+    const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
+
     const { t } = useTranslation();
     const agentVaultsInformation = useAgentVaultsInformation();
 
@@ -29,96 +49,173 @@ export default function VaultsCard({ className }: IVaultsCard) {
         return () => clearInterval(agentVaultsInformationFetchInterval);
     }, []);
 
+    const onDepositCollateralClick = (vault: any) => {
+        setIsDepositCollateralModalActive(true);
+        setSelectedAgentVault(vault);
+    }
+
     return (
-        <div className="flex flex-col">
-            {agentVaultsInformation.isPending &&
-                <Loader className="mt-5 ml-auto mr-auto" />
-            }
-            {!agentVaultsInformation.isPending && agentVaultsInformation?.data?.length == 0 &&
-                <div className="w-full mt-5 flex items-center justify-center">
-                    <Text size="lg" color="red">{t('vault_card.empty_vaults_label')}</Text>
-                </div>
-            }
-            {!agentVaultsInformation.isPending && agentVaultsInformation?.data && agentVaultsInformation?.data?.length > 0 &&
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                    {agentVaultsInformation?.data?.map(agentVaultInformation => (
-                        agentVaultInformation.vaults.map((vault, index) => (
-                            <Paper
-                                className={`p-4 ${className}`}
-                                withBorder
-                                key={index}
+        <Paper
+            className={`p-4 ${className}`}
+            withBorder
+        >
+            <Table.ScrollContainer minWidth={900}>
+                <Table
+                    withTableBorder
+                    verticalSpacing="md"
+                >
+                    <Table.Thead>
+                        <Table.Tr>
+                            <Table.Th className="uppercase">{t('vaults_card.table.vault_address_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.agent_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.status_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.type_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.minted_amounts_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.minted_lots_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.free_lots_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.vault_amount_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.pool_amount_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.vault_cr_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.pool_cr_label')}</Table.Th>
+                            <Table.Th
+                                className={`uppercase text-right ${agentVaultsInformation.data?.length !== 0 ? classes.sticky : ''}`}
                             >
-                                <div className="flex flex-wrap justify-between items-center">
-                                    <div className="flex justify-between">
-                                        <Text
-                                            fw={700}
-                                            className={classes.vaultAddress}
-                                        >
-                                            {vault.address}
-                                        </Text>
-                                        <Button
-                                            component={Link}
-                                            href={`/vault/${agentVaultInformation.fassetSymbol}/${vault.address}`}
-                                            size="xs"
-                                            variant="gradient"
-                                            className="ml-3 shrink-0"
-                                        >
-                                            {t('vault_card.manage_button')}
-                                        </Button>
-                                    </div>
-                                </div>
-                                <div className="mt-5">
-                                    <div
-                                        className="border-b-2 pb-3 mb-3 p-2"
-                                        style={{ backgroundColor: vault.updating ? '#4983DA1A' : '#13821E1A' }}
-                                    >
-                                        <Text c="gray">{t('vault_card.status_label')}</Text>
-                                        <Text
-                                            c={vault.updating ? 'blue' : 'green'}
-                                            className="flex items-center"
-                                        >
-                                            {vault.updating
-                                                ? t('vault_card.updating_label')
-                                                : vault.status ? t('vault_card.public_live_label') : t('vault_card.not_listed_label')
-                                            }
-                                            {vault.updating
-                                                ? <IconUrgent
-                                                    size={24}
-                                                    color="var(--mantine-color-blue-text)"
-                                                    className="ml-auto self-baseline"
+                                {t('vaults_card.table.actions_label')}
+                            </Table.Th>
+                        </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                        {agentVaultsInformation.isPending &&
+                            <Table.Tr>
+                                <Table.Td
+                                    colSpan={12}
+                                >
+                                    <Loader className="flex mx-auto mt-2" />
+                                </Table.Td>
+                            </Table.Tr>
+                        }
+                        {agentVaultsInformation.data?.length === 0 && !agentVaultsInformation.isPending &&
+                            <Table.Tr>
+                                <Table.Td colSpan={12} className="text-center">
+                                    {t('vaults_card.empty_vaults_label')}
+                                </Table.Td>
+                            </Table.Tr>
+                        }
+                        {agentVaultsInformation.data !== undefined &&
+                            agentVaultsInformation.data.map(agentVaultInformation => (
+                                agentVaultInformation.vaults.map(vault => (
+                                    <Table.Tr key={vault.address}>
+                                        <Table.Td>
+                                            <div className="flex items-center">
+                                                {truncateString(vault.address, 5, 5)}
+                                                <IconCopy
+                                                    color="black"
+                                                    style={{ width: rem(15), height: rem(15) }}
+                                                    onClick={() => copyToClipboard(vault.address)}
+                                                    className="ml-2 cursor-pointer"
                                                 />
-                                                : <IconChecklist
-                                                    size={24}
-                                                    color="var(--mantine-color-green-text)"
-                                                    className="ml-auto self-baseline"
-                                                />
-                                            }
-                                        </Text>
-                                    </div>
-                                    <Text c="gray" className="px-2">{t('vault_card.fasset_type_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{agentVaultInformation.fassetSymbol}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.minted_amounts_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.mintedAmount}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.minted_lots_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.mintedlots}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.free_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.freeLots}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.vault_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.vaultAmount}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.pool_amount_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.poolAmount}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.agent_cpt_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.agentCPTs}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.vault_cr_label')}</Text>
-                                    <Text className="border-b-2 px-2 pb-3">{vault.vaultCR}</Text>
-                                    <Text c="gray" className="px-2">{t('vault_card.pool_cr_label')}</Text>
-                                    <Text className="px-2">{vault.poolCR}</Text>
-                                </div>
-                            </Paper>
-                        ))
-                    ))}
-                </div>
+                                            </div>
+                                        </Table.Td>
+                                        <Table.Td>1</Table.Td>
+                                        <Table.Td>
+                                            <Badge
+                                                variant="filled"
+                                                color="rgba(36, 36, 37, 0.06)"
+                                                radius="xs"
+                                                className="uppercase font-normal text-black"
+                                            >
+                                                {vault.updating
+                                                    ? t('vaults_card.updating_label')
+                                                    : (vault.status ? t('vaults_card.public_live_label') : t('vaults_card.not_listed_label'))
+                                                }
+                                            </Badge>
+                                        </Table.Td>
+                                        <Table.Td>{agentVaultInformation.fassetSymbol}</Table.Td>
+                                        <Table.Td>{vault.mintedAmount} {agentVaultInformation.fassetSymbol}</Table.Td>
+                                        <Table.Td>{vault.mintedlots}</Table.Td>
+                                        <Table.Td>{vault.freeLots}</Table.Td>
+                                        <Table.Td>{vault.vaultAmount}</Table.Td>
+                                        <Table.Td>{vault.poolAmount}</Table.Td>
+                                        <Table.Td>{vault.vaultCR}</Table.Td>
+                                        <Table.Td>{vault.poolCR}</Table.Td>
+                                        <Table.Td className={agentVaultsInformation.data?.length !== 0 ? classes.sticky : ''}>
+                                            <Menu>
+                                                <Menu.Target>
+                                                    <IconDots
+                                                        style={{ width: rem(20), height: rem(20) }}
+                                                        className="cursor-pointer ml-auto"
+                                                    />
+                                                </Menu.Target>
+                                                <Menu.Dropdown>
+                                                    <Menu.Label>{t('vaults_card.table.actions_menu.vault_actions_title')}</Menu.Label>
+                                                    <Menu.Item
+                                                        leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
+                                                    >
+                                                        <Link
+                                                            href={`/vault/${agentVaultInformation.fassetSymbol}/${vault.address}`}
+                                                        >
+                                                            {t('vaults_card.table.actions_menu.view_vault_label')}
+                                                        </Link>
+                                                    </Menu.Item>
+                                                    <Menu.Divider />
+                                                    <Menu.Label>{t('vaults_card.table.actions_menu.agent_vault_operations_title')}</Menu.Label>
+                                                    <Menu.Item
+                                                        leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
+                                                        onClick={() => onDepositCollateralClick(vault)}
+                                                    >
+                                                        {t('vaults_card.table.actions_menu.deposit_collateral_label')}
+                                                    </Menu.Item>
+                                                    <Menu.Item
+                                                        leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
+                                                        onClick={() => setIsDepositFLRModalActive(true)}
+                                                    >
+                                                        {t('vaults_card.table.actions_menu.deposit_flr_in_pool_label')}
+                                                    </Menu.Item>
+                                                    <Menu.Item
+                                                        leftSection={<IconDashboard style={{ width: rem(14), height: rem(14) }} />}
+                                                        onClick={() => setIsActivateVaultModalActive(true)}
+                                                        disabled={vault.status}
+                                                    >
+                                                        {t('vaults_card.table.actions_menu.activate_vault_label')}
+                                                    </Menu.Item>
+                                                    <Menu.Item
+                                                        leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
+                                                        onClick={() => setIsActivateVaultModalActive(true)}
+                                                        c="var(--mantine-color-red-9)"
+                                                        bg="rgba(248, 233, 233, 1)"
+
+                                                    >
+                                                        {t('vaults_card.table.actions_menu.close_vault_label')}
+                                                    </Menu.Item>
+                                                </Menu.Dropdown>
+                                            </Menu>
+                                        </Table.Td>
+                                    </Table.Tr>
+                                ))
+                            ))
+                        }
+                    </Table.Tbody>
+                </Table>
+            </Table.ScrollContainer>
+            {selectedAgentVault &&
+                <DepositCollateralModal
+                    agentVault={selectedAgentVault}
+                    opened={isDepositCollateralModalActive}
+                    onClose={() => setIsDepositCollateralModalActive(false)}
+                />
             }
-        </div>
+            <DepositFLRModal
+                opened={isDepositFLRModalActive}
+                onClose={() => setIsDepositFLRModalActive(false)}
+            />
+            <ActivateVaultModal
+                opened={isActivateVaultModalActive}
+                onClose={() => setIsActivateVaultModalActive(false)}
+            />
+            <DeactivateVaultModal
+                opened={isDeactivateVaultModalActive}
+                onClose={() => setIsDeactivateVaultModalActive(false)}
+            />
+        </Paper>
     );
 }

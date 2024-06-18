@@ -3,7 +3,8 @@ import {
     Title,
     Paper,
     Button,
-    Text
+    Text,
+    Divider
 } from '@mantine/core';
 import { useTranslation, Trans } from 'react-i18next';
 import { useRouter } from 'next/navigation'
@@ -31,25 +32,42 @@ export default function AddVault() {
         const status = form?.validate();
         if (status?.hasErrors || !form) return;
 
-        modals.openConfirmModal({
+        modals.open({
             title: t('add_agent_vault.confirm_modal.title'),
             children: (
-                <Text size="sm" className="whitespace-pre-line">
-                    {t('add_agent_vault.confirm_modal.content')}
-                </Text>
+                <>
+                    <Text size="sm" className="whitespace-pre-line">
+                        {t('add_agent_vault.confirm_modal.content')}
+                    </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
+                    <div className="flex justify-end">
+                        <Button
+                            onClick={onSubmit}
+                            radius="xl"
+                            size="md"
+                            color="rgba(189, 34, 34, 1)"
+                        >
+                            {t('add_agent_vault.confirm_modal.confirm_button')}
+                        </Button>
+                    </div>
+                </>
+
             ),
-            labels: {
-                confirm: t('add_agent_vault.confirm_modal.confirm_button'),
-                cancel: t('add_agent_vault.confirm_modal.cancel_button')
-            },
-            confirmProps: { color: 'red' },
             centered: true,
-            onConfirm: () => onSubmit(),
         });
     }
 
     const onSubmit = async() => {
         try {
+            modals.closeAll();
             setIsLoading(true);
             const form = formRef?.current?.form();
             const data = form?.getValues();
@@ -98,7 +116,7 @@ export default function AddVault() {
             />
             <Title order={2} fw={300}>{t('add_agent_vault.title')}</Title>
             <Paper
-                className="mt-5 p-4"
+                className="mt-5 p-8"
             >
                 <VaultForm ref={formRef} />
                 <Trans
@@ -125,22 +143,24 @@ export default function AddVault() {
                         />
                     ]}
                 />
-                <div className="flex justify-end mt-5">
-                    <Button
-                        variant="outline"
-                        loading={isLoading}
-                        onClick={() => router.push('/')}
-                        className="mr-4"
-                    >
-                        {t('add_agent_vault.discard_button')}
-                    </Button>
-                    <Button
-                        loading={isLoading}
-                        onClick={confirmModal}
-                    >
-                        {t('add_agent_vault.save_button')}
-                    </Button>
-                </div>
+                <Divider
+                    className="my-8"
+                    styles={{
+                        root: {
+                            marginLeft: '-2rem',
+                            marginRight: '-2rem'
+                        }
+                    }}
+                />
+                <Button
+                    loading={isLoading}
+                    onClick={confirmModal}
+                    fullWidth
+                    radius="xl"
+                    size="md"
+                >
+                    {t('add_agent_vault.save_button')}
+                </Button>
             </Paper>
         </Container>
     );

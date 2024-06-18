@@ -137,7 +137,7 @@ export default function Vault() {
             </div>
             <div className="flex flex-wrap md:flex-nowrap mt-5">
                 <Paper
-                    className="p-4 w-full md:w-9/12 mr-0 md:mr-10 relative"
+                    className="p-8 w-full md:w-9/12 mr-0 md:mr-10 relative"
                     withBorder
                 >
                     <LoadingOverlay visible={vaultInfo.isPending} />

@@ -55,8 +55,19 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
                     <Text>
                         {t('deposit_collateral_modal.success_message')}
                     </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
                     <div className="flex justify-end mt-4">
-                        <Button onClick={() => modals.closeAll()}>
+                        <Button
+                            onClick={() => modals.closeAll()}
+                        >
                             { t('deposit_collateral_modal.close_button')}
                         </Button>
                     </div>
@@ -75,6 +86,15 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
                     <Text>
                         {errorMessage}
                     </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
                     <div className="flex justify-end mt-4">
                         <Button onClick={() => modals.closeAll()}>
                             { t('deposit_collateral_modal.close_button')}
@@ -145,6 +165,7 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
                     <Button
                         type="submit"
                         loading={depositCollateral.isPending}
+                        fw={400}
                     >
                         {t('deposit_collateral_modal.confirm_button')}
                     </Button>

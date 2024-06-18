@@ -1,13 +1,11 @@
 import {
     Container,
-    Title,
-    Button,
+    Title
 } from '@mantine/core';
-import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import AlertsCard from '@/components/cards/AlertsCard';
-import CollateralsCard from '@/components/cards/CollateralsCard';
-import NotificationsCard from '@/components/cards/NotificationsCard';
+import AgentBotsCard from '@/components/cards/AgentBotsCard';
+import ManagementAddressCard from '@/components/cards/ManagementAddressCard';
 import VaultsCard from '@/components/cards/VaultsCard';
 
 export default function Dashboard() {
@@ -15,37 +13,53 @@ export default function Dashboard() {
 
     return (
         <Container
-            size="lg"
+            fluid
+            className="px-8 w-full"
         >
-            <div>
-                <div className="flex items-center w-full">
-                    <Title order={1}>{t('dashboard.agent_title')}</Title>
-                    <Button
-                        component={Link}
-                        href="/configure"
-                        className="ml-auto"
+            <div className="flex flex-col lg:flex-row w-full">
+                <div className="lg:w-8/12 w-full mr-8">
+                    <Title
+                        order={1}
+                        className="mb-3"
                     >
-                        {t('dashboard.configuration_button')}
-                    </Button>
+                        {t('dashboard.title')}
+                    </Title>
+                    <ManagementAddressCard />
+                    <Title
+                        order={1}
+                        className="mt-10 mb-3"
+                    >
+                        {t('dashboard.agent_title')}
+                    </Title>
+                    <AgentBotsCard />
                 </div>
-            </div>
-            <CollateralsCard className="mt-5" />
-            <div className="flex flex-wrap md:flex-nowrap mt-5">
-                <AlertsCard className="mr-0 md:mr-10" />
-                <NotificationsCard className=" md:mt-0" />
+                <div className="hidden lg:block w-full lg:w-4/12 mt-10">
+                    <Title
+                        order={1}
+                        className="mb-3"
+                    >
+                        {t('dashboard.alerts_title')}
+                    </Title>
+                    <AlertsCard />
+                </div>
             </div>
             <div className="mt-10">
-                <div className="flex items-center w-full">
-                    <Title order={1}>{t('dashboard.vaults_title')}</Title>
-                    <Button
-                        component={Link}
-                        href="/vault/add"
-                        className="ml-auto"
-                    >
-                        {t('dashboard.add_vault_button')}
-                    </Button>
-                </div>
-                <VaultsCard className="mt-5 border-primary" />
+                <Title
+                    order={1}
+                    className="mb-3"
+                >
+                    {t('dashboard.vaults_title')}
+                </Title>
+                <VaultsCard />
+            </div>
+            <div className="block lg:hidden w-full mt-10">
+                <Title
+                    order={1}
+                    className="mb-3"
+                >
+                    {t('dashboard.alerts_title')}
+                </Title>
+                <AlertsCard />
             </div>
         </Container>
     );

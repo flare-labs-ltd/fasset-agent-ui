@@ -46,8 +46,8 @@ export default function Layout({ children, ...props }: ILayout) {
                         </div>
                         <ConnectWalletButton />
                     </Container>
-                    <Container className="flex flex-1 w-full">
-                        <div className="w-full">
+                    <Container fluid className="flex flex-1 w-full">
+                        <div className="relative w-full">
                             {children}
                         </div>
                     </Container>

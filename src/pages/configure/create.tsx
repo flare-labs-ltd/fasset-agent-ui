@@ -86,8 +86,6 @@ export default function CreateSecretFile() {
                         <LoadingOverlay visible={secretsTemplate.isPending} />
                         <JsonInput
                             {...form.getInputProps('secrets')}
-                            //@ts-ignore
-                            key={form.key('secrets')}
                             autosize={true}
                             minRows={5}
                             className="mt-3"

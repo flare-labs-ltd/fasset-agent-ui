@@ -52,6 +52,15 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                     <Text>
                         {t('deposit_flr_in_pool.success_message')}
                     </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
                     <div className="flex justify-end mt-4">
                         <Button onClick={() => modals.closeAll()}>
                             { t('deposit_flr_in_pool.close_button')}
@@ -72,6 +81,15 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                     <Text>
                         {errorMessage}
                     </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
                     <div className="flex justify-end mt-4">
                         <Button onClick={() => modals.closeAll()}>
                             { t('deposit_flr_in_pool.close_button')}
@@ -142,6 +160,7 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                     <Button
                         type="submit"
                         loading={depositFLR.isPending}
+                        fw={400}
                     >
                         {t('deposit_flr_in_pool.confirm_button')}
                     </Button>

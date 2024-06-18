@@ -59,6 +59,7 @@ export default function DeactivateVaultModal({ opened, onClose }: IDeactivateVau
                     onClick={onClose}
                     className="ml-auto mr-3"
                     loading={deactivateVault.isPending}
+                    fw={400}
                 >
                     {t('deactivate_vault_modal.cancel_button')}
                 </Button>
@@ -66,6 +67,7 @@ export default function DeactivateVaultModal({ opened, onClose }: IDeactivateVau
                     color="red"
                     onClick={onDeactivateVaultClick}
                     loading={deactivateVault.isPending}
+                    fw={400}
                 >
                     {t('deactivate_vault_modal.confirm_button')}
                 </Button>

@@ -1,34 +1,38 @@
 import {
-    Title,
     Text,
     Paper,
-    Loader,
-    Button,
-    MultiSelect
-} from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+    MultiSelect,
+    Tabs,
+    rem,
+    SimpleGrid,
+    ScrollArea
+} from "@mantine/core";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
-    IconBell
-} from '@tabler/icons-react';
-import { useBotAlert } from '@/api/agent';
-import { IBotAlert } from '@/types';
-import classes from '@/styles/components/cards/AlertsCard.module.scss';
-import { useRouter } from 'next/router';
+    IconBell,
+    IconUrgent,
+    IconNotification
+} from "@tabler/icons-react";
+import { useBotAlert } from "@/api/agent";
+import { IBotAlert } from "@/types";
+import { useRouter } from "next/router";
+import { truncateString } from "@/utils";
+import classes from "@/styles/components/cards/AlertsCard.module.scss"
 
 interface IAlertCard {
     className?: string
 }
 
 const ALERTS_REFETCH_INTERVAL = 30000;
-const SHOW_ALL_BUTTON_LIMIT = 5;
+
+const TAB_ALERTS = 'alerts';
+const TAB_NOTIFICATIONS = 'notifications';
 
 export default function AlertsCard({ className }: IAlertCard) {
     const { t } = useTranslation();
-    const [isShowAllButtonVisible, setIsShowAllButtonVisible] = useState<boolean>(false);
     const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
     const [alerts, setAlerts] = useState<IBotAlert[]>([]);
-    const [showAll, setShowAll] = useState<boolean>(false);
     const botAlerts = useBotAlert();
     const router = useRouter();
 
@@ -51,7 +55,6 @@ export default function AlertsCard({ className }: IAlertCard) {
                 : botAlerts.data
             )
         }
-        setIsShowAllButtonVisible(botAlerts.data !== undefined && botAlerts?.data?.length > SHOW_ALL_BUTTON_LIMIT);
     }, [botAlerts.data]);
     useEffect(() => {
         if (selectedFilter?.length > 0) {
@@ -89,58 +92,98 @@ export default function AlertsCard({ className }: IAlertCard) {
     }, [selectedFilter]);
 
     return (
-        <div className={`flex flex-col flex-nowrap w-full ${className} relative`}>
-            <Paper
-                withBorder
-                className={`${classes.alertsContainer} flex flex-col p-4 relative ${showAll ? 'overflow-y-scroll' : ''}`}
-            >
-                <Title order={4} className="mb-4">{t('alerts_card.title')}</Title>
-                <MultiSelect
-                    value={selectedFilter}
-                    onChange={setSelectedFilter}
-                    placeholder={t('alerts_card.filter_placeholder')}
-                    clearable
-                    data={[
-                        { value: 'info', label: t('alerts_card.info_label') },
-                        { value: 'danger', label: t('alerts_card.danger_label') },
-                        { value: 'critical', label: t('alerts_card.critical_label') },
-                    ]}
-                    className="mb-4"
-                    classNames={{
-                        pill: classes.pill
-                    }}
-                />
-                {botAlerts.isPending && <Loader className="ml-auto mr-auto" /> }
-                {alerts
-                    ?.slice(0, showAll && botAlerts.data ? botAlerts?.data.length : 5)
-                    ?.map((botAlert, index) => (
-                        <div key={index} className="mt-4">
-                            <Text fw={500} size="md">{botAlert.title}</Text>
-                            <div className="flex">
-                                <Text
-                                    size="sm"
-                                    c="gray"
-                                    className={classes.alertText}
-                                >
-                                    {botAlert.description}
-                                </Text>
-                                <IconBell className="ml-3 flex-shrink-0" />
-                            </div>
-                        </div>
-                    ))}
-                {alerts?.length === 0 &&
-                    <Text>{t('alerts_card.no_alerts_label')}</Text>
-                }
-            </Paper>
-            {isShowAllButtonVisible &&
-                <Button
-                    variant="gradient"
-                    className="ml-auto mt-4"
-                    onClick={() => setShowAll(!showAll)}
+        <Paper
+            className={`p-4 ${className}`}
+            withBorder
+        >
+            <Tabs defaultValue={TAB_ALERTS}>
+                <Tabs.List>
+                    <Tabs.Tab value={TAB_ALERTS} leftSection={<IconUrgent style={{width: rem(15), height: rem(15)}} />}>
+                        {t('alerts_card.tab_alerts_label')}
+                    </Tabs.Tab>
+                    <Tabs.Tab value={TAB_NOTIFICATIONS} leftSection={<IconNotification style={{width: rem(15), height: rem(15)}} />}>
+                        {t('alerts_card.tab_notifications_label')}
+                    </Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel
+                    value={TAB_ALERTS}
                 >
-                    {showAll ? t('alerts_card.show_less_button') : t('alerts_card.show_all_button')}
-                </Button>
-            }
-        </div>
+                    <ScrollArea
+                        h={540}
+                        scrollbarSize={6}
+                        offsetScrollbars
+                        scrollbars="y"
+                    >
+                        <MultiSelect
+                            value={selectedFilter}
+                            onChange={setSelectedFilter}
+                            placeholder={t('alerts_card.alerts.filter_placeholder')}
+                            clearable
+                            data={[
+                                { value: 'info', label: t('alerts_card.alerts.info_label') },
+                                { value: 'danger', label: t('alerts_card.alerts.danger_label') },
+                                { value: 'critical', label: t('alerts_card.alerts.critical_label') },
+                            ]}
+                            className="my-6 w-full md:w-3/4"
+                        />
+                        {alerts.length === 0 &&
+                            <Text fw={700}>{t('alerts_card.alerts.no_alerts_label')}</Text>
+                        }
+                        <SimpleGrid
+                            cols={{ base: 1, '414px': 2, '1512px': 1 }}
+                            spacing="xl"
+                            type="container"
+                        >
+                            {alerts.map((alert, index) => (
+                                <div key={index}>
+                                    <div
+                                        className="flex items-center"
+                                    >
+                                        <div className={classes.alertItem}>
+                                            <Text
+                                                fw={400}
+                                                size="sm"
+                                                className="break-words capitalize"
+                                            >
+                                                {t('alerts_card.alerts.status_label', { status: alert.level})}
+                                            </Text>
+                                            <Text
+                                                size="sm"
+                                                c="var(--mantine-color-gray-6)"
+                                                className="break-words my-1"
+                                            >
+                                                {truncateString(alert.address, 5, 5)} / Agent 1
+                                            </Text>
+                                            <Text
+                                                size="sm"
+                                                c="var(--mantine-color-gray-6)"
+                                                className="break-words"
+                                            >
+                                                {alert.description}
+                                            </Text>
+                                        </div>
+                                        <IconBell className="ml-3 flex-shrink-0" />
+                                    </div>
+                                </div>
+                            ))}
+                        </SimpleGrid>
+                    </ScrollArea>
+                </Tabs.Panel>
+                <Tabs.Panel
+                    value={TAB_NOTIFICATIONS}
+                >
+                    <ScrollArea
+                        h={540}
+                        scrollbarSize={6}
+                        offsetScrollbars
+                    >
+                        <Text
+                            fw={700}
+                            className="mt-6"
+                        >{t('alerts_card.notifications.no_notifications_label')}</Text>
+                    </ScrollArea>
+                </Tabs.Panel>
+            </Tabs>
+        </Paper>
     );
 }

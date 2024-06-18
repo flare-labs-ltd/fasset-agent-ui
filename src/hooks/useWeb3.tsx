@@ -35,7 +35,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
      * TODO
      * do we want to force to user to change chain on every page focus?
      */
-
     return (
         <Web3Context.Provider
             value={{

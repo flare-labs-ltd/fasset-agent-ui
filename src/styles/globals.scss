@@ -56,3 +56,23 @@ body {
     padding-right: 2rem;
     padding-bottom: 2rem;
 }
+// Loader
+.mantine-Loader-root {
+    --loader-color: #242425;
+
+    &:after {
+        border-color: var(--loader-color) rgba(36, 36, 37, .1) rgba(36, 36, 37, .1) rgba(36, 36, 37, .1);
+    }
+}
+// Tabs
+.mantine-Tabs-tab {
+    &[data-active="true"] {
+        border-color: var(--mantine-color-black);
+    }
+}
+// Multiselect
+.mantine-MultiSelect-pill {
+    border-radius: var(--mantine-radius-xs);
+    text-transform: uppercase;
+    background-color: rgba(36, 36, 37, 0.06);
+}

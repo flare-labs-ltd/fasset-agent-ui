@@ -65,6 +65,7 @@ export default function ActivateVaultModal({ opened, onClose }: IActivateVaultMo
                     onClick={onClose}
                     className="ml-auto mr-3"
                     loading={activateVault.isPending}
+                    fw={400}
                 >
                     {t('activate_vault_modal.cancel_button')}
                 </Button>
@@ -72,6 +73,7 @@ export default function ActivateVaultModal({ opened, onClose }: IActivateVaultMo
                     color="red"
                     onClick={onActivateVaultClick}
                     loading={activateVault.isPending}
+                    fw={400}
                 >
                     {t('activate_vault_modal.confirm_button')}
                 </Button>

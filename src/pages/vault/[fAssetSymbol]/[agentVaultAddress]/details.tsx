@@ -47,6 +47,7 @@ export default function VaultDetails() {
                 <Title order={2} className="mr-3">{t('agent_vault_details.title')}</Title>
                 <Button
                     size="xs"
+                    variant="gradient"
                     onClick={() => copyToClipboard(details)}
                 >
                     {t('agent_vault_details.copy_button')}

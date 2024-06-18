@@ -22,9 +22,28 @@
         "title": "New Agent Vault",
         "xrp_min_limit_error": "You need to have at least 50 XRP on your owner underlying address"
     },
+    "agent_bots_card": {
+        "table": {
+            "actions_label": "Actions",
+            "actions_menu": {
+                "add_vault_label": "Add Vault",
+                "settings_label": "Settings",
+                "title": "Agent Bot Actions"
+            },
+            "agent_offline_label": "Agent offline",
+            "agent_online_label": "Agent online",
+            "eth_label": "ETH",
+            "flr_label": "FLR",
+            "name_label": "Name",
+            "status_label": "Status",
+            "usdc_label": "USDC",
+            "usdt_label": "USDT",
+            "working_address_label": "Working address"
+        }
+    },
     "agent_vault_details": {
         "back_button": "Back to Agent Vault",
-        "copy_button": "Copy",
+        "copy_button": "Copy details",
         "title": "Vault details"
     },
     "agent_vault_operations_card": {
@@ -36,14 +55,21 @@
         "title": "Agent Vault Operations"
     },
     "alerts_card": {
-        "critical_label": "Critical",
-        "danger_label": "Danger",
-        "filter_placeholder": "Click to add filter",
-        "info_label": "Info",
-        "no_alerts_label": "No new alerts available",
-        "show_all_button": "Show all",
-        "show_less_button": "Show less",
-        "title": "Alerts"
+        "alerts": {
+            "critical_label": "Critical",
+            "danger_label": "Danger",
+            "filter_placeholder": "Click to add filter",
+            "info_label": "Info",
+            "no_alerts_label": "No alerts available",
+            "show_all_button": "Show all",
+            "show_less_button": "Show less",
+            "status_label": "{{status}} - Status"
+        },
+        "notifications": {
+            "no_notifications_label": "No notifications available"
+        },
+        "tab_alerts_label": "Alerts",
+        "tab_notifications_label": "Notifications from Flare"
     },
     "agent_configuration": {
         "back_button": "Back to Dashboard",
@@ -93,9 +119,9 @@
         "title": "Connect Wallet"
     },
     "dashboard": {
-        "add_vault_button": "Add vault",
-        "agent_title": "Agent bot",
-        "configuration_button": "Configuration",
+        "agent_title": "Agent Bots",
+        "alerts_title": "Alerts & Notifications",
+        "title": "Overview",
         "vaults_title": "Vaults"
     },
     "deactivate_vault_modal": {
@@ -131,7 +157,7 @@
         "back_button": "Back to dashboard",
         "confirm_modal": {
             "cancel_button": "Cancel",
-            "confirm_button": "Confirm",
+            "confirm_button": "Execute",
             "content": "This process can take up to 5 minutes.",
             "title": "Before you proceed"
         },
@@ -179,6 +205,12 @@
             "title": "FAssets Agent"
         }
     },
+    "management_address_card": {
+        "address_not_whitelisted_label": "Address not whitelisted",
+        "address_whitelisted_label": "Address whitelisted",
+        "how_to_whitelist_agent_description": "To get your Agent (Management address) on whitelist please register your Agent via the<a>Fassets Telegram bot<icon></icon></a>",
+        "management_address_label": "Management address"
+    },
     "notifications_card": {
         "no_notifications_label": "No new notifications available",
         "show_all_button": "Show all",
@@ -197,26 +229,38 @@
         "try_again_label": "Try again?"
     },
     "setup": {
-        "setup_agent_button": "Set up Agent",
-        "subtitle": "Let’s set up agent, so you can start using this app.",
+        "setup_agent_button": "Connect Wallet",
+        "subtitle": "Let’s connect first...",
         "title": "Welcome to FAsset Manager!"
     },
-    "vault_card": {
-        "agent_cpt_label": "Agent CPTs",
-        "empty_vaults_label": "No vaults yet",
-        "fasset_type_label": "FAsset Type",
-        "free_amount_label": "Free lots",
-        "manage_button": "Manage",
-        "minted_amounts_label": "Minted amounts",
-        "minted_lots_label": "Minted lots",
+    "vaults_card": {
+        "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
         "not_listed_label": "Not listed - live",
-        "pool_amount_label": "Pool amount",
-        "pool_cr_label": "Pool CR",
         "public_live_label": "Public - Live",
-        "status_label": "Status",
-        "updating_label": "Updating",
-        "vault_amount_label": "Vault amount",
-        "vault_cr_label": "Vault CR"
+        "table": {
+            "actions_label": "Actions",
+            "actions_menu": {
+                "activate_vault_label": "Activate Vault (Enter)",
+                "agent_vault_operations_title": "Agent Vault Operations",
+                "close_vault_label": "Close Vault (Exit)",
+                "deposit_collateral_label": "Deposit collateral",
+                "deposit_flr_in_pool_label": "Deposit FLR in Pool",
+                "view_vault_label": "View Vault",
+                "vault_actions_title": "Vault actions"
+            },
+            "agent_label": "Agent",
+            "free_lots_label": "Free lots",
+            "minted_amounts_label": "Minted amounts",
+            "minted_lots_label": "Minted lots",
+            "pool_amount_label": "Pool amount",
+            "pool_cr_label": "Pool CR",
+            "status_label": "Status",
+            "type_label": "Type",
+            "vault_address_label": "Vault address",
+            "vault_amount_label": "Vault amount",
+            "vault_cr_label": "Vault CR"
+        },
+        "updating_label": "Updating"
     },
     "validation": {
         "messages": {

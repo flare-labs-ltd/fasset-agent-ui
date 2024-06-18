@@ -8,7 +8,8 @@ import {
     rem,
     Input,
     Loader,
-    LoadingOverlay
+    LoadingOverlay,
+    Divider
 } from '@mantine/core';
 import {
     IconUpload,
@@ -138,7 +139,7 @@ export default function AgentConfiguration() {
             <Title order={2}>{t('agent_configuration.title')}</Title>
             {!secretExists?.data &&
                 <Paper
-                    className="mt-5 p-4"
+                    className="mt-5 p-8"
                     withBorder
                 >
                     <Title order={5}>{t('agent_configuration.secret_card.title')}</Title>
@@ -211,7 +212,7 @@ export default function AgentConfiguration() {
                 </Paper>
             }
             <Paper
-                className="mt-5 p-4"
+                className="mt-5 p-8"
                 withBorder
             >
                 <Input.Wrapper
@@ -254,16 +255,31 @@ export default function AgentConfiguration() {
                     </div>
                 }
                 {isWhitelisted.data === true &&
-                    <div className="flex justify-end mt-3">
-                        <Button
-                            component={Link}
-                            href="/"
-                        >
-                            {t('agent_configuration.dashboard_button')}
-                        </Button>
-                    </div>
+                    <>
+                        <Divider
+                            className="my-8"
+                            styles={{
+                                root: {
+                                    marginLeft: '-2rem',
+                                    marginRight: '-2rem'
+                                }
+                            }}
+                        />
+                        <div className="flex mt-3">
+                            <Button
+                                component={Link}
+                                href="/"
+                                fullWidth
+                                size="md"
+                            >
+                                {t('agent_configuration.dashboard_button')}
+                            </Button>
+                        </div>
+                    </>
                 }
             </Paper>
         </Container>
     );
 }
+
+AgentConfiguration.protected = true;
