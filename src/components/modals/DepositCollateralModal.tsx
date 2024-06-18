@@ -14,12 +14,11 @@ import { modals } from '@mantine/modals';
 import * as yup from 'yup';
 import { useDepositCollateral } from '@/api/agentVault';
 import { useRouter } from 'next/router';
-import { IAgentVault } from '@/types';
 import { useState } from 'react';
 
 interface IDepositCollateralModal {
     opened: boolean;
-    agentVault: IAgentVault
+    vaultCollateralToken: string;
     onClose: () => void;
 }
 
@@ -27,7 +26,7 @@ interface IFormValues {
     amount: number|undefined;
 }
 
-export default function DepositCollateralModal({ opened, agentVault, onClose }: IDepositCollateralModal) {
+export default function DepositCollateralModal({ opened, vaultCollateralToken, onClose }: IDepositCollateralModal) {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
     const depositCollateral = useDepositCollateral();
     const { t } = useTranslation();
@@ -35,7 +34,7 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
     const { fAssetSymbol, agentVaultAddress } = router.query;
 
     const schema = yup.object().shape({
-        amount: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: agentVault.vaultCollateralToken }) }))
+        amount: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
     });
     const form = useForm<IFormValues>({
         mode: 'uncontrolled',
@@ -139,7 +138,7 @@ export default function DepositCollateralModal({ opened, agentVault, onClose }: 
             <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
                 <TextInput
                     {...form.getInputProps('amount')}
-                    label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: agentVault.vaultCollateralToken })}
+                    label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken })}
                     description={t('deposit_collateral_modal.deposit_amount_description_label')}
                     placeholder={t('deposit_collateral_modal.deposit_amount_placeholder_label')}
                     withAsterisk

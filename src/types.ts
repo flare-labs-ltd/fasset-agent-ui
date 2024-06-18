@@ -38,11 +38,14 @@ export interface ICollateral {
 }
 
 export interface IBotAlert {
-    bot_type: string;
-    address: string;
-    level: string;
-    title: string;
-    description: string
+    date: string;
+    alert: {
+        bot_type: string;
+        address: string;
+        level: string;
+        title: string;
+        description: string;
+    }
 }
 
 export interface IAgentVaultInformation {
@@ -59,6 +62,7 @@ export interface IAgentVaultInformation {
         vaultAmount: number;
         vaultCR: number;
         agentCPTs: number;
+        collateralToken: string;
     }[]
 }
 

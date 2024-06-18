@@ -64,7 +64,7 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
             {agentVault &&
                 <>
                     <DepositCollateralModal
-                        agentVault={agentVault}
+                        vaultCollateralToken={agentVault.vaultCollateralToken}
                         opened={isDepositCollateralModalActive}
                         onClose={() => setIsDepositCollateralModalActive(false)}
                     />

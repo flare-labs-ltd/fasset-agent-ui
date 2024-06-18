@@ -18,6 +18,7 @@ import { useBotAlert } from "@/api/agent";
 import { IBotAlert } from "@/types";
 import { useRouter } from "next/router";
 import { truncateString } from "@/utils";
+import moment from "moment";
 import classes from "@/styles/components/cards/AlertsCard.module.scss"
 
 interface IAlertCard {
@@ -51,7 +52,7 @@ export default function AlertsCard({ className }: IAlertCard) {
     useEffect(() => {
         if (botAlerts.data && botAlerts?.data?.length > 0) {
             setAlerts(selectedFilter?.length
-                ? botAlerts?.data?.filter(alert => selectedFilter.includes(alert.level))
+                ? botAlerts?.data?.filter(alert => selectedFilter.includes(alert.alert.level))
                 : botAlerts.data
             )
         }
@@ -82,7 +83,7 @@ export default function AlertsCard({ className }: IAlertCard) {
         }
 
         if (selectedFilter?.length > 0 && botAlerts.data && botAlerts?.data?.length > 0) {
-            setAlerts(botAlerts?.data?.filter(alert => selectedFilter.includes(alert.level)))
+            setAlerts(botAlerts?.data?.filter(alert => selectedFilter.includes(alert.alert.level)))
             return;
         }
 
@@ -98,7 +99,9 @@ export default function AlertsCard({ className }: IAlertCard) {
         >
             <Tabs defaultValue={TAB_ALERTS}>
                 <Tabs.List>
-                    <Tabs.Tab value={TAB_ALERTS} leftSection={<IconUrgent style={{width: rem(15), height: rem(15)}} />}>
+                    <Tabs.Tab
+                        value={TAB_ALERTS}
+                        leftSection={<IconUrgent style={{width: rem(15), height: rem(15)}} />}>
                         {t('alerts_card.tab_alerts_label')}
                     </Tabs.Tab>
                     <Tabs.Tab value={TAB_NOTIFICATIONS} leftSection={<IconNotification style={{width: rem(15), height: rem(15)}} />}>
@@ -145,21 +148,32 @@ export default function AlertsCard({ className }: IAlertCard) {
                                                 size="sm"
                                                 className="break-words capitalize"
                                             >
-                                                {t('alerts_card.alerts.status_label', { status: alert.level})}
+                                                {t('alerts_card.alerts.status_label', { status: alert.alert.level})}
                                             </Text>
-                                            <Text
-                                                size="sm"
-                                                c="var(--mantine-color-gray-6)"
-                                                className="break-words my-1"
-                                            >
-                                                {truncateString(alert.address, 5, 5)} / Agent 1
-                                            </Text>
+                                            <div className="flex justify-between">
+                                                {alert.date &&
+                                                    <Text
+                                                        size="sm"
+                                                        c="var(--mantine-color-gray-6)"
+                                                        className="break-words my-1 mr-3"
+                                                    >
+                                                        {moment(alert.date).format('DD.MM.YYYY HH:mm')}
+                                                    </Text>
+                                                }
+                                                <Text
+                                                    size="sm"
+                                                    c="var(--mantine-color-gray-6)"
+                                                    className="break-words my-1"
+                                                >
+                                                    {truncateString(alert.alert.address, 5, 5)} / Agent 1
+                                                </Text>
+                                            </div>
                                             <Text
                                                 size="sm"
                                                 c="var(--mantine-color-gray-6)"
                                                 className="break-words"
                                             >
-                                                {alert.description}
+                                                {alert.alert.description}
                                             </Text>
                                         </div>
                                         <IconBell className="ml-3 flex-shrink-0" />

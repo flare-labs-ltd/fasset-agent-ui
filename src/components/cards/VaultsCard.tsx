@@ -199,7 +199,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
             </Table.ScrollContainer>
             {selectedAgentVault &&
                 <DepositCollateralModal
-                    agentVault={selectedAgentVault}
+                    vaultCollateralToken={selectedAgentVault.collateralToken}
                     opened={isDepositCollateralModalActive}
                     onClose={() => setIsDepositCollateralModalActive(false)}
                 />
