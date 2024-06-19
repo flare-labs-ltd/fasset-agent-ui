@@ -1,54 +1,44 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSecretExists } from "@/api/agent";
 import { LoadingOverlay } from "@mantine/core";
+import {useWeb3} from "@/hooks/useWeb3";
 
 export default function AuthGuard({ children }: { children: React.ReactNode}) {
-    const [isConnected, setIsConnected] = useState<boolean>(false);
-    const [isInitializing, setIsInitializing] = useState<boolean>(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [checkSecret, setCheckSecret] = useState<boolean>(false);
     const router = useRouter();
-    const secretExists = useSecretExists();
+    const secretExists = useSecretExists(false);
+    const { isConnected, isInitializing } = useWeb3();
 
     const isAgentConfigured = async()  => {
-        setIsInitializing(true);
-        if (secretExists.data === false) {
-            console.log('redirect')
+        const response = await secretExists.refetch();
+        if (response.data === false) {
             await router.push('/configure');
         }
-        setIsInitializing(false);
+
+        setCheckSecret(false);
     }
 
-    const isWalletConnected = useCallback(async()  => {
-        setIsInitializing(true);
-        const localStorage = window.localStorage.getItem('ACTIVE_CONNECTION');
-        let routerStatus = false;
-        let connected = false;
+    const isWalletConnected = async(url?: string) => {
+        if (isInitializing) return;
 
-        if (localStorage) {
-            const data = JSON.parse(localStorage);
-            if (!data.hasOwnProperty('wallet')) {
-                routerStatus = await router.push('/connect');
-            } else {
-                connected = true;
-                setIsConnected(true);
-            }
-        } else {
-            routerStatus = await router.push('/connect');
-        }
-
-        if (routerStatus || connected) {
-            setIsInitializing(false);
-        }
-    }, [router]);
-
-    useEffect(() => {
-        if (secretExists.isFetched && isConnected) {
+        if (!isConnected) {
+            await router.push('/connect');
+        } else if (url !== '/configure') {
+            setCheckSecret(true);
             isAgentConfigured();
         }
-    }, [isConnected, secretExists.isFetched]);
+
+        setIsLoading(false);
+    };
+
+    useEffect(() => {
+        isWalletConnected(undefined);
+
+    }, [isInitializing, isConnected]);
 
     useEffect(() =>     {
-        isWalletConnected();
         router.events.on('routeChangeComplete', isWalletConnected)
 
         return () => {
@@ -56,44 +46,15 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
         }
     }, []);
 
-    if (isInitializing) {
+    if (isLoading || checkSecret) {
         return <LoadingOverlay
             visible={true}
             zIndex={1000}
+            style={{
+                position: 'fixed'
+            }}
         />;
     }
 
     return children;
-    /*const [agentConfigured, setAgentConfigured] = useState<boolean>(false);
-    const router = useRouter();
-    const secretExists = useSecretExists();
-
-    const isAgentConfigured = ()  => {
-        if (secretExists.data === false) {
-            setAgentConfigured(false);
-            router.push('/setup');
-        } else {
-            setAgentConfigured(true);
-        }
-    }
-
-    useEffect(() => {
-        if (secretExists.isFetched) isAgentConfigured();
-    }, [secretExists.isFetched]);
-    useEffect(() => {
-        router.events.on('routeChangeComplete', isAgentConfigured)
-
-        return () => {
-            router.events.off('routeChangeComplete', isAgentConfigured);
-        }
-    }, []);
-
-    if (secretExists.isPending) {
-        return <LoadingOverlay
-            visible={true}
-            zIndex={1000}
-        />;
-    }
-
-    return (agentConfigured && children);*/
 }

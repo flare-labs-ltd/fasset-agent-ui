@@ -31,6 +31,11 @@ interface IVaultsCard {
 
 const VAULTS_REFETCH_INTERVAL = 60000;
 
+const MODAL_DEPOSIT_COLLATERAL = 'deposit_collateral';
+const MODAL_DEPOSIT_FLR = 'deposit_flr';
+const MODAL_ACTIVATE_VAULT = 'activate_vault';
+const MODAL_DEACTIVATE_VAULT = 'deactivate_vault';
+
 export default function VaultsCard({ className }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<any>();
     const [isDepositCollateralModalActive, setIsDepositCollateralModalActive] = useState<boolean>(false);
@@ -49,8 +54,17 @@ export default function VaultsCard({ className }: IVaultsCard) {
         return () => clearInterval(agentVaultsInformationFetchInterval);
     }, []);
 
-    const onDepositCollateralClick = (vault: any) => {
-        setIsDepositCollateralModalActive(true);
+    const onClick = (modal: string, vault: any) => {
+        if (modal === MODAL_DEPOSIT_COLLATERAL) {
+            setIsDepositCollateralModalActive(true);
+        } else if (modal === MODAL_DEPOSIT_FLR) {
+            setIsDepositFLRModalActive(true);
+        } else if (modal === MODAL_ACTIVATE_VAULT) {
+            setIsActivateVaultModalActive(true);
+        } else if(modal === MODAL_DEACTIVATE_VAULT) {
+            setIsDeactivateVaultModalActive(true);
+        }
+
         setSelectedAgentVault(vault);
     }
 
@@ -161,26 +175,26 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                                     <Menu.Label>{t('vaults_card.table.actions_menu.agent_vault_operations_title')}</Menu.Label>
                                                     <Menu.Item
                                                         leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
-                                                        onClick={() => onDepositCollateralClick(vault)}
+                                                        onClick={() => onClick(MODAL_DEPOSIT_COLLATERAL, {...vault, fassetSymbol: agentVaultInformation.fassetSymbol })}
                                                     >
                                                         {t('vaults_card.table.actions_menu.deposit_collateral_label')}
                                                     </Menu.Item>
                                                     <Menu.Item
                                                         leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
-                                                        onClick={() => setIsDepositFLRModalActive(true)}
+                                                        onClick={() => onClick(MODAL_DEPOSIT_FLR, {...vault, fassetSymbol: agentVaultInformation.fassetSymbol })}
                                                     >
                                                         {t('vaults_card.table.actions_menu.deposit_flr_in_pool_label')}
                                                     </Menu.Item>
                                                     <Menu.Item
                                                         leftSection={<IconDashboard style={{ width: rem(14), height: rem(14) }} />}
-                                                        onClick={() => setIsActivateVaultModalActive(true)}
+                                                        onClick={() => onClick(MODAL_ACTIVATE_VAULT, {...vault, fassetSymbol: agentVaultInformation.fassetSymbol })}
                                                         disabled={vault.status}
                                                     >
                                                         {t('vaults_card.table.actions_menu.activate_vault_label')}
                                                     </Menu.Item>
                                                     <Menu.Item
                                                         leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
-                                                        onClick={() => setIsActivateVaultModalActive(true)}
+                                                        onClick={() => onClick(MODAL_DEACTIVATE_VAULT, {...vault, fassetSymbol: agentVaultInformation.fassetSymbol })}
                                                         c="var(--mantine-color-red-9)"
                                                         bg="rgba(248, 233, 233, 1)"
 
@@ -198,24 +212,34 @@ export default function VaultsCard({ className }: IVaultsCard) {
                 </Table>
             </Table.ScrollContainer>
             {selectedAgentVault &&
-                <DepositCollateralModal
-                    vaultCollateralToken={selectedAgentVault.collateralToken}
-                    opened={isDepositCollateralModalActive}
-                    onClose={() => setIsDepositCollateralModalActive(false)}
-                />
+                <>
+                    <DepositCollateralModal
+                        vaultCollateralToken={selectedAgentVault.collateralToken}
+                        fAssetSymbol={selectedAgentVault.fassetSymbol}
+                        agentVaultAddress={selectedAgentVault.address}
+                        opened={isDepositCollateralModalActive}
+                        onClose={() => setIsDepositCollateralModalActive(false)}
+                    />
+                    <DepositFLRModal
+                        opened={isDepositFLRModalActive}
+                        fAssetSymbol={selectedAgentVault.fassetSymbol}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={() => setIsDepositFLRModalActive(false)}
+                    />
+                    <ActivateVaultModal
+                        opened={isActivateVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fassetSymbol}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={() => setIsActivateVaultModalActive(false)}
+                    />
+                    <DeactivateVaultModal
+                        opened={isDeactivateVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fassetSymbol}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={() => setIsDeactivateVaultModalActive(false)}
+                    />
+                </>
             }
-            <DepositFLRModal
-                opened={isDepositFLRModalActive}
-                onClose={() => setIsDepositFLRModalActive(false)}
-            />
-            <ActivateVaultModal
-                opened={isActivateVaultModalActive}
-                onClose={() => setIsActivateVaultModalActive(false)}
-            />
-            <DeactivateVaultModal
-                opened={isDeactivateVaultModalActive}
-                onClose={() => setIsDeactivateVaultModalActive(false)}
-            />
         </Paper>
     );
 }

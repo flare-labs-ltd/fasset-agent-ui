@@ -19,17 +19,18 @@ import { useState } from 'react';
 interface IDepositFLRModal {
     opened: boolean;
     onClose: () => void;
+    fAssetSymbol: string;
+    agentVaultAddress: string;
 }
 interface IFormValues {
     amount: number|undefined;
 }
 
-export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
+export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: IDepositFLRModal) {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
     const depositFLR = useDepositFLRInPool();
     const { t } = useTranslation();
     const router = useRouter();
-    const { fAssetSymbol, agentVaultAddress } = router.query;
 
     const schema = yup.object().shape({
         amount: yup.number().required(t('validation.messages.required', { field: t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' }) }))
@@ -108,8 +109,8 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
 
         try {
             await depositFLR.mutateAsync({
-                fAssetSymbol: fAssetSymbol as string,
-                agentVaultAddress: agentVaultAddress as string,
+                fAssetSymbol: fAssetSymbol,
+                agentVaultAddress: agentVaultAddress,
                 amount: amount
             });
             openSuccessModal();
@@ -150,7 +151,7 @@ export default function DepositFLRModal({ opened, onClose }: IDepositFLRModal) {
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor
-                        href="https://docs.flare.network/tech/fassets"
+                        href="https://docs.flare.network/infra/fassets/agent/"
                         target="_blank"
                         size="sm"
                         c="gray"

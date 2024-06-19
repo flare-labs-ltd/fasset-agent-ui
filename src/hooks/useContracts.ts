@@ -7,8 +7,8 @@ export function useSetWorkAddress() {
         mutationFn: async(address: string) => {
             const provider = new ethers.BrowserProvider(window.ethereum);
             const signer = await provider.getSigner();
-           // const contract = new ethers.Contract("0xDb6c11b8D074D4488f5fFd0129AA5F91C4f00fb6", agentOwnerRegistryAbi, signer);
-            const contract = new ethers.Contract("0x746cBEAa5F4CAB057f70e10c2001b3137Ac223B7", agentOwnerRegistryAbi, signer);
+            const contract = new ethers.Contract("0xDb6c11b8D074D4488f5fFd0129AA5F91C4f00fb6", agentOwnerRegistryAbi, signer);
+
             return await contract.setWorkAddress(address);
         },
     });

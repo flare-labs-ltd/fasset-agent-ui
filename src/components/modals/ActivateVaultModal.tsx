@@ -3,29 +3,27 @@ import {
     Button,
     Text,
     Divider
-} from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
-import { useActivateVault } from '@/api/agent';
-import { useRouter } from 'next/router';
+} from "@mantine/core";
+import { useTranslation } from "react-i18next";
+import { showErrorNotification, showSucessNotification } from "@/hooks/useNotifications";
+import { useActivateVault } from "@/api/agent";
 
 interface IActivateVaultModal {
     opened: boolean;
     onClose: () => void;
+    fAssetSymbol: string;
+    agentVaultAddress: string;
 }
 
-export default function ActivateVaultModal({ opened, onClose }: IActivateVaultModal) {
+export default function ActivateVaultModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: IActivateVaultModal) {
     const activateVault = useActivateVault();
     const { t } = useTranslation();
-
-    const router = useRouter();
-    const { fAssetSymbol, agentVaultAddress } = router.query;
 
     const onActivateVaultClick = async() => {
         try {
             await activateVault.mutateAsync({
-                fAssetSymbol: fAssetSymbol as string,
-                agentVaultAddress: agentVaultAddress as string
+                fAssetSymbol: fAssetSymbol,
+                agentVaultAddress: agentVaultAddress
             })
             showSucessNotification(t('activate_vault_modal.success_message'));
             onClose();

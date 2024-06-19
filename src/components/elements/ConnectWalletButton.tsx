@@ -8,12 +8,21 @@ import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
 import BlingIcon from "@/components/icons/BlingIcon";
 import CflrIcon from "@/components/icons/CflrIcon";
 import { truncateString } from "@/utils";
+import { useRouter } from "next/router";
+import { useSecretExists } from "@/api/agent";
 
 export default function ConnectWalletButton() {
+    const router = useRouter();
     const { t } = useTranslation();
     const { account } = useWeb3();
+    const secretExists = useSecretExists();
     const { openConnectWalletModal } = useConnectWalletModal();
 
+    const onClick = () => {
+        openConnectWalletModal((wallet: string) => {
+            if (wallet) router.push(secretExists.data === true ? '/' : '/configure');
+        })
+    }
     return (
         <>
             {account
@@ -33,7 +42,7 @@ export default function ConnectWalletButton() {
                 </Button>
                 : <Button
                     size="md"
-                    onClick={() => openConnectWalletModal()}
+                    onClick={onClick}
                     radius="xl"
                     rightSection={<BlingIcon width="14" height="14" />}
                 >

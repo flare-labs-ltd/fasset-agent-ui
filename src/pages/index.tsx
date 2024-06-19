@@ -33,7 +33,7 @@ export default function Dashboard() {
                     </Title>
                     <AgentBotsCard />
                 </div>
-                <div className="hidden lg:block w-full lg:w-4/12 mt-10">
+                <div className="hidden lg:block w-full lg:w-4/12">
                     <Title
                         order={1}
                         className="mb-3"

@@ -3,14 +3,15 @@ import {
     Paper,
     Button,
     LoadingOverlay
-} from '@mantine/core';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import DepositCollateralModal from '@/components/modals/DepositCollateralModal';
-import DepositFLRModal from '@/components/modals/DepositFLRModal';
-import ActivateVaultModal from '@/components/modals/ActivateVaultModal';
-import DeactivateVaultModal from '@/components/modals/DeactivateVaultModal';
-import { IAgentVault } from '@/types';
+} from "@mantine/core";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import DepositCollateralModal from "@/components/modals/DepositCollateralModal";
+import DepositFLRModal from "@/components/modals/DepositFLRModal";
+import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
+import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
+import { IAgentVault } from "@/types";
+import { useRouter } from "next/router";
 
 
 interface IAgentVaultOperationsCard {
@@ -24,6 +25,8 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
     const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
     const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
     const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
+    const router = useRouter();
+    const { fAssetSymbol, agentVaultAddress } = router.query;
 
     return (
         <Paper
@@ -65,21 +68,29 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
                 <>
                     <DepositCollateralModal
                         vaultCollateralToken={agentVault.vaultCollateralToken}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
                         opened={isDepositCollateralModalActive}
                         onClose={() => setIsDepositCollateralModalActive(false)}
                     />
                     <DepositFLRModal
                         opened={isDepositFLRModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
                         onClose={() => setIsDepositFLRModalActive(false)}
                     />
                 </>
             }
             <ActivateVaultModal
                 opened={isActivateVaultModalActive}
+                fAssetSymbol={fAssetSymbol as string}
+                agentVaultAddress={agentVaultAddress as string}
                 onClose={() => setIsActivateVaultModalActive(false)}
             />
             <DeactivateVaultModal
                 opened={isDeactivateVaultModalActive}
+                fAssetSymbol={fAssetSymbol as string}
+                agentVaultAddress={agentVaultAddress as string}
                 onClose={() => setIsDeactivateVaultModalActive(false)}
             />
         </Paper>

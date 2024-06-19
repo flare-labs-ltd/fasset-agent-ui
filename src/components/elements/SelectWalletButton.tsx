@@ -17,7 +17,7 @@ import classes from '@/styles/components/elements/SelectWalletButton.module.scss
 
 export default function SelectWalletButton({ wallet, disabled = false }: { wallet: IEnabledWallet, disabled?: boolean }) {
     const { connector, hooks } = wallet;
-    const { supportedChainId } = useWeb3();
+    const { supportedChainId, connect, disconnect } = useWeb3();
     const { useIsActive } = hooks;
     const { t } = useTranslation();
     const [error, setError] = useState<boolean>(false);
@@ -31,19 +31,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
     const isMetamaskAndOnMobile = connector instanceof MetaMask && isMobile && !window.ethereum;
 
     const deactivateConnector = async() => {
-        connector?.deactivate
-            ? await connector.deactivate()
-            : await connector.resetState();
-
-        window.localStorage.setItem(
-            'ACTIVE_CONNECTION',
-            JSON.stringify({
-                wallet: undefined,
-            })
-        );
-        Object.keys(localStorage)
-            .filter((item) => item.startsWith('wc@'))
-            .forEach((item) => localStorage.removeItem(item));
+        await disconnect(connector);
         setNotConnectedChainId(supportedChainId as AllSupportedChainsType);
         closeConnectWalletModal();
         router.push('/connect');
@@ -83,9 +71,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             );
 
             try {
-                connector instanceof WalletConnectV2
-                    ? await connector.activate()
-                    : await connector.activate(desiredChainId);
+                await connect(connector, desiredChainId);
             } catch (error: any) {
                 notifications.show({
                     title: t('select_wallet_button.error_title'),
@@ -94,7 +80,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
                 });
                 if (error.code === 4902 || error.code === 32603 || error.data?.originalError?.code === 4902 || error.code === -32000) {
                     try {
-                        await connector.activate();
+                        await connect(connector);
                         setError(false);
                     } catch (error) {
                         setError(true);
@@ -110,13 +96,11 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             }
         } else {
             try {
-                // @ts-ignore
-                await connector.activate();
+                await connect(connector);
                 setError(false);
             } catch (error: any) {
                 try {
-                    // @ts-ignore
-                    await connector.activate();
+                    await connect(connector);
                     setError(false);
                 } catch (error) {
                     setError(true);

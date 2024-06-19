@@ -6,19 +6,20 @@ import {
     TextInput,
     Text,
     Divider
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
-import { yupResolver } from 'mantine-form-yup-resolver';
-import { modals } from '@mantine/modals';
-import * as yup from 'yup';
-import { useDepositCollateral } from '@/api/agentVault';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "mantine-form-yup-resolver";
+import { modals } from "@mantine/modals";
+import * as yup from "yup";
+import { useDepositCollateral } from "@/api/agentVault";
+import { useState } from "react";
 
 interface IDepositCollateralModal {
     opened: boolean;
     vaultCollateralToken: string;
+    fAssetSymbol: string;
+    agentVaultAddress: string;
     onClose: () => void;
 }
 
@@ -26,12 +27,10 @@ interface IFormValues {
     amount: number|undefined;
 }
 
-export default function DepositCollateralModal({ opened, vaultCollateralToken, onClose }: IDepositCollateralModal) {
+export default function DepositCollateralModal({ opened, vaultCollateralToken, fAssetSymbol, agentVaultAddress, onClose }: IDepositCollateralModal) {
     const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
     const depositCollateral = useDepositCollateral();
     const { t } = useTranslation();
-    const router = useRouter();
-    const { fAssetSymbol, agentVaultAddress } = router.query;
 
     const schema = yup.object().shape({
         amount: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
@@ -112,8 +111,8 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, o
 
         try {
             await depositCollateral.mutateAsync({
-                fAssetSymbol: fAssetSymbol as string,
-                agentVaultAddress: agentVaultAddress as string,
+                fAssetSymbol: fAssetSymbol,
+                agentVaultAddress: agentVaultAddress,
                 amount: amount
             });
             openSuccessModal();
@@ -154,7 +153,7 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, o
                 />
                 <Group justify="space-between" className="mt-5">
                     <Anchor
-                        href="https://docs.flare.network/tech/fassets"
+                        href="https://docs.flare.network/infra/fassets/agent/"
                         target="_blank"
                         size="sm"
                         c="gray"

@@ -162,7 +162,7 @@
             "title": "Before you proceed"
         },
         "details_button": "Details",
-        "discard_button": "Discard and go back",
+        "discard_button": "Discard",
         "edit_button": "Edit",
         "save_button": "Save and execute",
         "success_message": "Agent Vault successfully updated",

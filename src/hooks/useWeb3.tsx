@@ -1,24 +1,37 @@
-import React, { createContext, useContext, useEffect } from 'react';
-import { useWeb3React, Web3ContextType as Web3ReactContextType, Web3ReactProvider } from '@web3-react/core';
-import type { Web3Provider as BaseWeb3Provider } from '@ethersproject/providers';
-import { AllSupportedChainsType } from '@/chains/chains';
-import { isChainSupported } from '@/chains/utils';
-import connectors from '@/connectors/connectors';
-import { connectEagerlyOnRefreshLocalStorage } from '@/utils';
+import React, { createContext, useContext, useEffect, useState, useMemo } from "react";
+import {
+    useWeb3React,
+    Web3ContextType as Web3ReactContextType,
+    Web3ReactProvider
+} from "@web3-react/core";
+import type { Web3Provider as BaseWeb3Provider } from "@ethersproject/providers";
+import { AllSupportedChainsType } from "@/chains/chains";
+import { isChainSupported } from "@/chains/utils";
+import connectors from "@/connectors/connectors";
+import { connectEagerlyOnRefreshLocalStorage } from "@/utils";
+import {MetaMask} from "@web3-react/metamask";
+import {WalletConnect as WalletConnectV2} from "@web3-react/walletconnect-v2";
+import {CoinbaseWallet} from "@web3-react/coinbase-wallet";
+import { Network } from "@web3-react/network";
 
 /**
  * Extended base web3react provider to support other functionality as well
  */
 type Web3ContextType = {
     supportedChainId: false | AllSupportedChainsType;
+    isConnected: boolean;
+    isInitializing: boolean;
+    connect: (connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network, chainId?: number) => Promise<void>;
+    disconnect: (connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network) => Promise<void>;
 } & Web3ReactContextType<BaseWeb3Provider>;
 
 const Web3Context = createContext<Web3ContextType | null>(null);
 
 export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const [isInitializing, setIsInitializing] = useState<boolean>(true);
     const web3React = useWeb3React<BaseWeb3Provider>();
     const { chainId } = web3React;
-
     const supportedChainId = isChainSupported(chainId);
 
     /**
@@ -28,17 +41,62 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
      * Only connect eagerly on last connected chain
      */
     useEffect(() => {
-        connectEagerlyOnRefreshLocalStorage();
+        const getConnectedAccount = async() => {
+            const accounts = await connectEagerlyOnRefreshLocalStorage();
+            setIsInitializing(accounts === undefined);
+            if (accounts === undefined) return;
+
+            setIsConnected(accounts.length > 0);
+        }
+
+        getConnectedAccount();
     }, []);
 
-    /**
-     * TODO
-     * do we want to force to user to change chain on every page focus?
-     */
+    const connect = async(connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network, chainId?: number) => {
+        connector instanceof WalletConnectV2
+            ? await connector.activate()
+            : await connector.activate(chainId);
+        setIsConnected(true);
+    }
+
+    const disconnect = async(connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network) => {
+        connector?.deactivate
+            ? await connector.deactivate()
+            : await connector.resetState();
+
+        window.localStorage.setItem(
+            'ACTIVE_CONNECTION',
+            JSON.stringify({
+                wallet: undefined,
+            })
+        );
+        Object.keys(localStorage)
+            .filter((item) => item.startsWith('wc@'))
+            .forEach((item) => localStorage.removeItem(item));
+        setIsConnected(false);
+    }
+
+    const value = useMemo(
+        () => ({
+            supportedChainId,
+            isConnected,
+            connect,
+            disconnect,
+            isInitializing,
+        }),
+        [
+            supportedChainId,
+            isConnected,
+            connect,
+            disconnect,
+            isInitializing,
+        ],
+    );
+
     return (
         <Web3Context.Provider
             value={{
-                supportedChainId,
+                ...value,
                 ...web3React,
             }}
         >

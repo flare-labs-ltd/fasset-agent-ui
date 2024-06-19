@@ -174,13 +174,24 @@ export default function Vault() {
                                     }
                                 }}
                             />
-                            <Button
-                                loading={updateVault.isPending}
-                                onClick={confirmModal}
-                                fullWidth
-                            >
-                                {t('edit_agent_vault.save_button')}
-                            </Button>
+                            <div className="flex justify-between flex-wrap sm:flex-nowrap">
+                                <Button
+                                    variant="gradient"
+                                    loading={updateVault.isPending}
+                                    onClick={() => setIsEditing(false)}
+                                    fullWidth
+                                    className="mr-0 sm:mr-3 mb-3 sm:mb-0"
+                                >
+                                    {t('edit_agent_vault.discard_button')}
+                                </Button>
+                                <Button
+                                    loading={updateVault.isPending}
+                                    onClick={confirmModal}
+                                    fullWidth
+                                >
+                                    {t('edit_agent_vault.save_button')}
+                                </Button>
+                            </div>
                         </>
                     }
                 </Paper>

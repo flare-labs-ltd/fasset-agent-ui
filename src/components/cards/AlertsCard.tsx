@@ -5,7 +5,8 @@ import {
     Tabs,
     rem,
     SimpleGrid,
-    ScrollArea
+    ScrollArea,
+    Loader
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -129,7 +130,12 @@ export default function AlertsCard({ className }: IAlertCard) {
                             ]}
                             className="my-6 w-full md:w-3/4"
                         />
-                        {alerts.length === 0 &&
+                        {botAlerts.isFetching &&
+                            <div className="flex justify-center">
+                                <Loader />
+                            </div>
+                        }
+                        {!botAlerts.isFetching && alerts.length === 0 &&
                             <Text fw={700}>{t('alerts_card.alerts.no_alerts_label')}</Text>
                         }
                         <SimpleGrid
@@ -157,7 +163,7 @@ export default function AlertsCard({ className }: IAlertCard) {
                                                         c="var(--mantine-color-gray-6)"
                                                         className="break-words my-1 mr-3"
                                                     >
-                                                        {moment(alert.date).format('DD.MM.YYYY HH:mm')}
+                                                        {moment(parseInt(alert.date)).format('DD.MM.YYYY HH:mm')}
                                                     </Text>
                                                 }
                                                 <Text

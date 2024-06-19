@@ -120,13 +120,14 @@ export function useVaultCollaterals() {
     });
 }
 
-export function useSecretExists() {
+export function useSecretExists(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.SECRET_EXISTS],
         queryFn: async(): Promise<boolean> => {
             const response = await apiClient.get(`${resource}/secretsExist`);
             return response.data.data;
-        }
+        },
+        enabled: enabled
     });
 }
 
