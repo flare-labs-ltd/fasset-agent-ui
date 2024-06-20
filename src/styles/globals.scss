@@ -7,6 +7,7 @@
     --background-start-rgb: 214, 219, 220;
     --background-end-rgb: 255, 255, 255;
     --input-bg: 0, 0, 0;
+    --flr-red: #d3385a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -43,12 +44,21 @@ body {
         color: var(--mantine-color-black);
         border: 0.5px solid var(--mantine-color-black);
 
+        &:hover {
+            background: linear-gradient(90deg,#fff 1.02%,#ffd8e1 96.26%);
+            border-color: var(--flr-red);
+        }
         &[data-loading="true"] {
             .mantine-Loader-root {
                 &:after {
                     border-color: #000 rgba(36, 36, 37, 0.1) rgba(36, 36, 37, 0.1) rgba(36, 36, 37, 0.1);
                 }
             }
+        }
+    }
+    &:not([data-variant="gradient"]):not([data-variant="outline"]):not([data-variant="transparent"]) {
+        &:hover {
+            background: var(--flr-red);
         }
     }
 }

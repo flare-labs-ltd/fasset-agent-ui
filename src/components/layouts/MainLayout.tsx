@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import ConnectWalletButton from "@/components/elements/ConnectWalletButton";
 import LogoIcon from "@/components/icons/LogoIcon";
 import FlrIcon from "@/components/icons/FlrIcon";
+import Link from "next/link";
 import {
     IconLifebuoy,
     IconAt,
@@ -75,14 +76,14 @@ export default function Layout({ children, ...props }: ILayout) {
                                 </Menu.Target>
                                 <Menu.Dropdown className="p-2">
                                     <Menu.Item
-                                        component="a"
+                                        component={Link}
                                         href="mailto:support@flare.network"
                                         leftSection={<IconAt style={{ width: rem(20), height: rem(20) }} />}
                                     >
                                         {t('layout.header.email_label')}
                                     </Menu.Item>
                                     <Menu.Item
-                                        component="a"
+                                        component={Link}
                                         href="https://t.me/FlareSupport"
                                         target="_blank"
                                         leftSection={<IconBrandTelegram style={{ width: rem(20), height: rem(20) }} />}
