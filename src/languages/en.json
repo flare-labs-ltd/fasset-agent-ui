@@ -15,7 +15,7 @@
             "content": "This process can take up to 5 minutes.",
             "title": "Before you proceed"
         },
-        "discard_button": "Discard and go back",
+        "discard_button": "Discard",
         "min_amount_description_label": "You need to have at least 50 XRP on your owner underlying address (faucet: <0>https://test.bithomp.com/faucet</0>). \n Your work address needs to have a CFLR for gas and funding the agent-vault (faucet:  <1>https://faucet.flare.network</1>)",
         "save_button": "Save and execute",
         "success_message": "Agent Vault successfully created",
