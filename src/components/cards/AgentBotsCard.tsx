@@ -14,13 +14,13 @@ import {
     useWorkAddress
 } from "@/api/agent";
 import {
-    IconCopy,
     IconDots,
     IconFileSearch,
     IconPencilPlus
 } from "@tabler/icons-react";
-import { truncateString, copyToClipboard } from "@/utils";
+import { truncateString } from "@/utils";
 import { useState, useEffect } from "react";
+import CopyIcon from "@/components/icons/CopyIcon";
 import classes from "@/styles/components/cards/AgentBotsCard.module.scss";
 
 interface IAgentBotsCard {
@@ -58,13 +58,13 @@ export default function AgentBotsCard({ className }: IAgentBotsCard) {
                 >
                     <Table.Thead>
                         <Table.Tr>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.name_label')}</Table.Th>
+                            <Table.Th className="uppercase">#</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.status_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.working_address_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.usdc_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.usdt_label')}</Table.Th>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.flr_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.eth_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('agent_bots_card.table.flr_label')}</Table.Th>
                             <Table.Th
                                 className={`uppercase text-right ${classes.sticky}`}
                             >
@@ -98,18 +98,15 @@ export default function AgentBotsCard({ className }: IAgentBotsCard) {
                                 <Table.Td>
                                     <div className="flex items-center">
                                         {truncateString(workAddress.data ?? '', 5, 5)}
-                                        <IconCopy
-                                            color="black"
-                                            style={{ width: rem(15), height: rem(15) }}
-                                            onClick={() => copyToClipboard(workAddress.data ?? '')}
-                                            className="ml-2 cursor-pointer"
+                                        <CopyIcon
+                                            text={workAddress.data ?? ''}
                                         />
                                     </div>
                                 </Table.Td>
                                 <Table.Td>{usdcLabel}</Table.Td>
                                 <Table.Td>{usdtLabel}</Table.Td>
-                                <Table.Td>{flrLabel}</Table.Td>
                                 <Table.Td>{ethLabel}</Table.Td>
+                                <Table.Td>{flrLabel}</Table.Td>
                                 <Table.Td className={classes.sticky}>
                                     <Menu>
                                         <Menu.Target>

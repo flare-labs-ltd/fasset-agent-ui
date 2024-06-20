@@ -61,8 +61,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
             styles: {
                 input: {
                     backgroundColor: '#FAFAFA',
-                    borderBottom: '1px solid #777777',
-
+                    borderBottom: '1px solid #777777'
                 }
             },
         }),

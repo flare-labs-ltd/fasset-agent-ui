@@ -10,6 +10,7 @@ const nextConfig = {
         FASSET_SYMBOL: process.env.FASSET_SYMBOL,
         FASSET_API_KEY: process.env.FASSET_API_KEY,
         API_URL: process.env.API_URL,
+        APP_VERSION: process.env.npm_package_version
     }
 };
 

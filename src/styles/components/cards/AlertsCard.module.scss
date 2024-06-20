@@ -1,3 +1,16 @@
 .alertItem {
     word-break: break-word;
 }
+.notificationIndicatorIcon {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    color: var(--mantine-color-red-6);
+    fill: var(--mantine-color-red-6);
+    animation: blinker 1s cubic-bezier(.5, 0, 1, 1) infinite alternate;
+}
+
+@keyframes blinker {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

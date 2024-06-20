@@ -8,7 +8,6 @@ import {
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import {
-    IconCopy,
     IconDots,
     IconBook2,
     IconBookUpload,
@@ -17,12 +16,13 @@ import {
 } from '@tabler/icons-react';
 import { useAgentVaultsInformation } from '@/api/agent';
 import { useEffect, useState } from 'react';
-import { truncateString, copyToClipboard } from "@/utils";
+import { truncateString } from "@/utils";
 import Link from "next/link";
 import DepositCollateralModal from "@/components/modals/DepositCollateralModal";
 import DepositFLRModal from "@/components/modals/DepositFLRModal";
 import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
 import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
+import CopyIcon from "@/components/icons/CopyIcon";
 import classes from "@/styles/components/cards/VaultsCard.module.scss";
 
 interface IVaultsCard {
@@ -83,6 +83,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                             <Table.Th className="uppercase">{t('vaults_card.table.vault_address_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('vaults_card.table.agent_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('vaults_card.table.status_label')}</Table.Th>
+                            <Table.Th className="uppercase">{t('vaults_card.table.health_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('vaults_card.table.type_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('vaults_card.table.minted_amounts_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('vaults_card.table.minted_lots_label')}</Table.Th>
@@ -102,7 +103,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                         {agentVaultsInformation.isPending &&
                             <Table.Tr>
                                 <Table.Td
-                                    colSpan={12}
+                                    colSpan={13}
                                 >
                                     <Loader className="flex mx-auto mt-2" />
                                 </Table.Td>
@@ -110,7 +111,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                         }
                         {agentVaultsInformation.data?.length === 0 && !agentVaultsInformation.isPending &&
                             <Table.Tr>
-                                <Table.Td colSpan={12} className="text-center">
+                                <Table.Td colSpan={13} className="text-center">
                                     {t('vaults_card.empty_vaults_label')}
                                 </Table.Td>
                             </Table.Tr>
@@ -122,11 +123,8 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                         <Table.Td>
                                             <div className="flex items-center">
                                                 {truncateString(vault.address, 5, 5)}
-                                                <IconCopy
-                                                    color="black"
-                                                    style={{ width: rem(15), height: rem(15) }}
-                                                    onClick={() => copyToClipboard(vault.address)}
-                                                    className="ml-2 cursor-pointer"
+                                                <CopyIcon
+                                                    text={vault.address}
                                                 />
                                             </div>
                                         </Table.Td>
@@ -144,6 +142,7 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                                 }
                                             </Badge>
                                         </Table.Td>
+                                        <Table.Td>{vault.health}</Table.Td>
                                         <Table.Td>{agentVaultInformation.fassetSymbol}</Table.Td>
                                         <Table.Td>{vault.mintedAmount} {agentVaultInformation.fassetSymbol}</Table.Td>
                                         <Table.Td>{vault.mintedlots}</Table.Td>

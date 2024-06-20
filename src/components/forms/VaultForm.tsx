@@ -3,8 +3,7 @@ import {
     NumberInput,
     Divider,
     Select,
-    Loader,
-    rem
+    Loader
 } from '@mantine/core';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import {
@@ -12,14 +11,14 @@ import {
     useEffect,
     useImperativeHandle,
     useState
-} from 'react';
-import { useTranslation } from 'react-i18next';
-import { yupResolver } from 'mantine-form-yup-resolver';
-import * as yup from 'yup';
-import { useVaultCollaterals } from '@/api/agent';
-import { IAgentVault } from '@/types';
-import { useRouter } from 'next/router';
-import { IconCopy } from '@tabler/icons-react';
+} from "react";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "mantine-form-yup-resolver";
+import * as yup from "yup";
+import { useVaultCollaterals } from "@/api/agent";
+import { IAgentVault } from "@/types";
+import { useRouter } from "next/router";
+import CopyIcon from "@/components/icons/CopyIcon";
 interface IForm {
     disabled?: boolean;
     vault?: IAgentVault;
@@ -85,8 +84,8 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         mode: 'uncontrolled',
         initialValues: {
             name: '',
-            fAssetType: '',
-            vaultCollateralToken: '',
+            fAssetType: undefined,
+            vaultCollateralToken: undefined,
             poolTokenSuffix: '',
             fee: undefined,
             poolFeeShare: undefined,
@@ -101,7 +100,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         validate: yupResolver(schema),
         onValuesChange: (values) => {
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
-            setIsHidden(values.fAssetType === null || values.vaultCollateralToken === null);
+            setIsHidden(values.fAssetType === undefined || values.vaultCollateralToken === undefined);
             setPoolTokenSuffixCharCount(values.poolTokenSuffix ? values.poolTokenSuffix.length : 0);
         }
     });
@@ -192,10 +191,6 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         }
     }
 
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text)
-    }
-
     return (
         <form>
             {agentVaultAddress &&
@@ -208,14 +203,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                     placeholder={t('forms.vault.enter_placeholder')}
                     disabled={true}
                     className="font-normal"
-                    rightSection={<IconCopy
-                        color="black"
-                        style={{ width: rem(15), height: rem(15) }}
-                        onClick={() => copyToClipboard(agentVaultAddress as string)}
-                    />}
-                    styles={{
-                        section: {cursor: 'pointer'}
-                    }}
+                    rightSection={<CopyIcon text={agentVaultAddress as string} />}
                 />
             }
             <Select
@@ -235,6 +223,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                 }
                 className="mt-4"
                 disabled={disabled || vault != null}
+                allowDeselect={false}
             />
             <Select
                 {...form.getInputProps('vaultCollateralToken')}
@@ -253,6 +242,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                 }
                 className="mt-4 font-normal"
                 disabled={disabled || vault != null}
+                allowDeselect={false}
             />
             {!isHidden &&
                 <>
@@ -270,8 +260,9 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                             maxLength={20}
                             withAsterisk
                             disabled={isHiddenInputDisabled || vault != null}
+                            rightSection={<div className="text-xs">{poolTokenSuffixCharCount}/{POOL_TOKEN_SUFFIX_MAX_LENGTH}</div>}
                         />
-                        <div className="text-xs mt-1">{poolTokenSuffixCharCount}/{POOL_TOKEN_SUFFIX_MAX_LENGTH}</div>
+
                     </div>
                     <NumberInput
                         {...form.getInputProps('fee')}

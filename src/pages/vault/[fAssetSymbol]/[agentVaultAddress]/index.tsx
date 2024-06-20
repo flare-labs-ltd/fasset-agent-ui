@@ -181,6 +181,8 @@ export default function Vault() {
                                     onClick={() => setIsEditing(false)}
                                     fullWidth
                                     className="mr-0 sm:mr-3 mb-3 sm:mb-0"
+                                    radius="xl"
+                                    size="md"
                                 >
                                     {t('edit_agent_vault.discard_button')}
                                 </Button>
@@ -188,6 +190,8 @@ export default function Vault() {
                                     loading={updateVault.isPending}
                                     onClick={confirmModal}
                                     fullWidth
+                                    radius="xl"
+                                    size="md"
                                 >
                                     {t('edit_agent_vault.save_button')}
                                 </Button>

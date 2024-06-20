@@ -152,15 +152,28 @@ export default function AddVault() {
                         }
                     }}
                 />
-                <Button
-                    loading={isLoading}
-                    onClick={confirmModal}
-                    fullWidth
-                    radius="xl"
-                    size="md"
-                >
-                    {t('add_agent_vault.save_button')}
-                </Button>
+                <div className="flex justify-between flex-wrap sm:flex-nowrap">
+                    <Button
+                        variant="gradient"
+                        loading={isLoading}
+                        onClick={() => router.push('/')}
+                        fullWidth
+                        className="mr-0 sm:mr-3 mb-3 sm:mb-0"
+                        radius="xl"
+                        size="md"
+                    >
+                        {t('add_agent_vault.discard_button')}
+                    </Button>
+                    <Button
+                        loading={isLoading}
+                        onClick={confirmModal}
+                        fullWidth
+                        radius="xl"
+                        size="md"
+                    >
+                        {t('add_agent_vault.save_button')}
+                    </Button>
+                </div>
             </Paper>
         </Container>
     );

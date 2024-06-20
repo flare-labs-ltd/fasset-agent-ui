@@ -4,14 +4,17 @@ import {
     Paper,
     Button,
     Title,
-    LoadingOverlay
+    LoadingOverlay,
+    Popover, Text
 } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { useVaultInfo } from '@/api/agent';
 import { useEffect, useState } from 'react';
 import BackButton from "@/components/elements/BackButton";
+
 export default function VaultDetails() {
+    const [isPopoverActive, setIsPopoverActive] = useState<boolean>(false);
     const [details, setDetails] = useState<string>('');
     const { t } = useTranslation();
     const router = useRouter();
@@ -30,8 +33,11 @@ export default function VaultDetails() {
     }, [vaultInfo.isFetched]);
 
     const copyToClipboard = (text: string) => {
-        console.log(text)
-        navigator.clipboard.writeText(text)
+        setIsPopoverActive(true);
+        setTimeout(() => {
+            setIsPopoverActive(false);
+        }, 800);
+        copyToClipboard(text);
     }
 
     return (
@@ -45,13 +51,24 @@ export default function VaultDetails() {
             />
             <div className="flex justify-between items-center">
                 <Title order={2} className="mr-3">{t('agent_vault_details.title')}</Title>
-                <Button
-                    size="xs"
-                    variant="gradient"
-                    onClick={() => copyToClipboard(details)}
+                <Popover
+                    withArrow
+                    opened={isPopoverActive}
+                    onChange={() => setIsPopoverActive(false)}
                 >
-                    {t('agent_vault_details.copy_button')}
-                </Button>
+                    <Popover.Target>
+                        <Button
+                            size="xs"
+                            variant="gradient"
+                            onClick={() => copyToClipboard(details)}
+                        >
+                            {t('agent_vault_details.copy_button')}
+                        </Button>
+                    </Popover.Target>
+                    <Popover.Dropdown className="p-2 bg-black text-white">
+                        <Text size="xs">{t('copy_icon.copied_label')}</Text>
+                    </Popover.Dropdown>
+                </Popover>
             </div>
             <Paper
                 className="mt-5 p-4"

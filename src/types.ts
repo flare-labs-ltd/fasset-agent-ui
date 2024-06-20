@@ -63,6 +63,7 @@ export interface IAgentVaultInformation {
         vaultCR: number;
         agentCPTs: number;
         collateralToken: string;
+        health: string;
     }[]
 }
 

@@ -34,7 +34,6 @@
             "agent_online_label": "Agent online",
             "eth_label": "ETH",
             "flr_label": "FLR",
-            "name_label": "Name",
             "status_label": "Status",
             "usdc_label": "USDC",
             "usdt_label": "USDT",
@@ -118,6 +117,9 @@
         "term_of_service_label": "By connecting a wallet, you agree to the <0>Terms of Service</0>",
         "title": "Connect Wallet"
     },
+    "copy_icon": {
+        "copied_label": "Copied"
+    },
     "dashboard": {
         "agent_title": "Agent Bots",
         "alerts_title": "Alerts & Notifications",
@@ -200,8 +202,14 @@
         }
     },
     "layout": {
+        "footer": {
+            "title": "Flare Labs"
+        },
         "header": {
             "beta_label": "beta",
+            "email_label": "Email",
+            "support_button": "Support",
+            "telegram_label": "Telegram",
             "title": "FAssets Agent"
         }
     },
@@ -231,7 +239,7 @@
     "setup": {
         "setup_agent_button": "Connect Wallet",
         "subtitle": "Let’s connect first...",
-        "title": "Welcome to FAsset Manager!"
+        "title": "Welcome to FAsset Agent Manager!"
     },
     "vaults_card": {
         "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
@@ -245,6 +253,7 @@
                 "close_vault_label": "Close Vault (Exit)",
                 "deposit_collateral_label": "Deposit collateral",
                 "deposit_flr_in_pool_label": "Deposit FLR in Pool",
+                "health_label": "Health",
                 "view_vault_label": "View Vault",
                 "vault_actions_title": "Vault actions"
             },

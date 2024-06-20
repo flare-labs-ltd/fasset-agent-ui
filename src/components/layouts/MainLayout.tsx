@@ -1,9 +1,22 @@
-import { AppShell, Container, Title, Text } from '@mantine/core';
-import Head from 'next/head';
-import { useTranslation } from 'react-i18next';
-import ConnectWalletButton from '@/components/elements/ConnectWalletButton';
+import {
+    AppShell,
+    Container,
+    Title,
+    Text,
+    Menu,
+    Button,
+    rem
+} from "@mantine/core";
+import Head from "next/head";
+import { useTranslation } from "react-i18next";
+import ConnectWalletButton from "@/components/elements/ConnectWalletButton";
 import LogoIcon from "@/components/icons/LogoIcon";
 import FlrIcon from "@/components/icons/FlrIcon";
+import {
+    IconLifebuoy,
+    IconAt,
+    IconBrandTelegram
+} from "@tabler/icons-react";
 
 export interface ILayout {
     children?: React.ReactNode;
@@ -11,6 +24,7 @@ export interface ILayout {
 
 export default function Layout({ children, ...props }: ILayout) {
     const { t } = useTranslation();
+    const version = process?.env?.APP_VERSION;
 
     return (
         <>
@@ -25,10 +39,10 @@ export default function Layout({ children, ...props }: ILayout) {
                 <meta name="theme-color" content="#ffffff" />
             </Head>
             <AppShell>
-                <AppShell.Main className="flex flex-col pb-10">
+                <AppShell.Main className="flex flex-col">
                     <Container
                         fluid
-                        className="flex justify-between p-1 bg-white px-4 sm:px-8 w-full items-center mb-8"
+                        className="flex flex-wrap justify-between p-1 bg-white px-4 sm:px-8 w-full items-center mb-8"
                     >
                         <div className="flex items-center">
                             <LogoIcon width="60" height="60" />
@@ -44,12 +58,66 @@ export default function Layout({ children, ...props }: ILayout) {
                                 </div>
                             </div>
                         </div>
-                        <ConnectWalletButton />
+                        <div className="flex mt-2 ml-auto">
+                            <Menu
+                                radius={16}
+                            >
+                                <Menu.Target>
+                                    <Button
+                                        variant="outline"
+                                        size="md"
+                                        className="mr-3 text-black border-gray-200"
+                                        fw={400}
+                                        leftSection={<IconLifebuoy style={{ width: rem(20), height: rem(20) }} />}
+                                    >
+                                        {t('layout.header.support_button')}
+                                    </Button>
+                                </Menu.Target>
+                                <Menu.Dropdown className="p-2">
+                                    <Menu.Item
+                                        component="a"
+                                        href="mailto:support@flare.network"
+                                        leftSection={<IconAt style={{ width: rem(20), height: rem(20) }} />}
+                                    >
+                                        {t('layout.header.email_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        component="a"
+                                        href="https://t.me/FlareSupport"
+                                        target="_blank"
+                                        leftSection={<IconBrandTelegram style={{ width: rem(20), height: rem(20) }} />}
+                                    >
+                                        {t('layout.header.telegram_label')}
+                                    </Menu.Item>
+                                </Menu.Dropdown>
+                            </Menu>
+                            <ConnectWalletButton />
+                        </div>
                     </Container>
                     <Container fluid className="flex flex-1 w-full">
                         <div className="relative w-full">
                             {children}
                         </div>
+                    </Container>
+                    <Container
+                        fluid
+                        className="flex p-3 px-8 w-full mt-2"
+                    >
+                        <Text
+                            size="sm"
+                            c="var(--mantine-color-black)"
+                            className="mr-4"
+                        >
+                            {t('layout.footer.title')}
+                        </Text>
+                        {version &&
+                            <Text
+                                size="sm"
+                                c="rgba(119, 119, 119, 1)"
+                            >
+                                v{version}
+                            </Text>
+                        }
                     </Container>
                 </AppShell.Main>
             </AppShell>

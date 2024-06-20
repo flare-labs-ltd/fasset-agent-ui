@@ -15,7 +15,6 @@ import {
     IconUpload,
     IconPhoto,
     IconX,
-    IconCopy,
 } from '@tabler/icons-react';
 import {Dropzone, FileWithPath} from '@mantine/dropzone';
 import Link from 'next/link';
@@ -34,6 +33,7 @@ import { useConnectWalletModal } from "@/hooks/useEthereumLogin";
 import { useWeb3 } from "@/hooks/useWeb3";
 import { useSetWorkAddress } from "@/hooks/useContracts";
 import BackButton from "@/components/elements/BackButton";
+import CopyIcon from "@/components/icons/CopyIcon";
 
 const FILE_MAX_SIZE = 5 * 1048576; // 5mb
 
@@ -100,7 +100,7 @@ export default function AgentConfiguration() {
         try {
             setIsLoading(true);
             if (!account) {
-                openConnectWalletModal(async(wallet) => {
+                openConnectWalletModal(async (wallet) => {
                     if (!wallet) return;
                     await generateAddress();
                 });
@@ -113,9 +113,6 @@ export default function AgentConfiguration() {
         } finally {
             setIsLoading(false);
         }
-    }
-    const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text)
     }
 
     const onFileDrop = (files: FileWithPath[]) => {
@@ -228,11 +225,7 @@ export default function AgentConfiguration() {
                         rightSection={
                             (!workAddress.isPending ? workAddress.isRefetching : false)
                                 ? <Loader size="xs" />
-                                : workAddress.data && <IconCopy
-                                color="black"
-                                style={{ width: rem(20), height: rem(20) }}
-                                onClick={() => copyToClipboard(workAddress.data)}
-                            />
+                                : workAddress.data && <CopyIcon text={workAddress.data} />
                         }
                         styles={{
                             section: { cursor: 'pointer' },

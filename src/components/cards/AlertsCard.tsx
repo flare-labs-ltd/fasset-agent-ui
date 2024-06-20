@@ -13,7 +13,8 @@ import { useTranslation } from "react-i18next";
 import {
     IconBell,
     IconUrgent,
-    IconNotification
+    IconNotification,
+    IconCircle
 } from "@tabler/icons-react";
 import { useBotAlert } from "@/api/agent";
 import { IBotAlert } from "@/types";
@@ -26,7 +27,7 @@ interface IAlertCard {
     className?: string
 }
 
-const ALERTS_REFETCH_INTERVAL = 3000;
+const ALERTS_REFETCH_INTERVAL = 30000;
 
 const TAB_ALERTS = 'alerts';
 const TAB_NOTIFICATIONS = 'notifications';
@@ -105,8 +106,17 @@ export default function AlertsCard({ className }: IAlertCard) {
                         leftSection={<IconUrgent style={{width: rem(15), height: rem(15)}} />}>
                         {t('alerts_card.tab_alerts_label')}
                     </Tabs.Tab>
-                    <Tabs.Tab value={TAB_NOTIFICATIONS} leftSection={<IconNotification style={{width: rem(15), height: rem(15)}} />}>
-                        {t('alerts_card.tab_notifications_label')}
+                    <Tabs.Tab
+                        value={TAB_NOTIFICATIONS}
+                        leftSection={<IconNotification style={{width: rem(15), height: rem(15)}} />}
+                    >
+                        <div>
+                            {t('alerts_card.tab_notifications_label')}
+                            <IconCircle
+                                style={{width: rem(15), height: rem(15)}}
+                                className={classes.notificationIndicatorIcon}
+                            />
+                        </div>
                     </Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel
