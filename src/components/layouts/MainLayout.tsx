@@ -50,6 +50,7 @@ export default function Layout({ children, ...props }: ILayout) {
                             <div className="ml-3">
                                 <Title
                                     order={4}
+                                    fw={700}
                                 >
                                     {t('layout.header.title')}
                                 </Title>
