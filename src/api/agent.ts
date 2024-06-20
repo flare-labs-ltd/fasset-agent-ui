@@ -2,8 +2,8 @@ import {
     useQuery,
     useQueryClient,
     useMutation,
-} from '@tanstack/react-query';
-import apiClient from '@/api/apiClient';
+} from "@tanstack/react-query";
+import apiClient from "@/api/apiClient";
 import {
     ICollateral,
     IBotAlert,
@@ -13,7 +13,8 @@ import {
     IAgentSettingsDTO,
     ISecretsTemplate,
     IVaultCollateral
-} from '@/types';
+} from "@/types";
+import { orderBy } from "lodash";
 
 const resource = 'agent';
 const AGENT_KEY = {
@@ -269,7 +270,7 @@ export function useBotAlert() {
             return response.data.data
         },
         select: (data: IBotAlert[]) => {
-            return data.reverse();
+            return orderBy(data, 'date', 'desc');
         }
     });
 }
