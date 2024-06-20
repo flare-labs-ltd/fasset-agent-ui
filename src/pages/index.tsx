@@ -14,10 +14,10 @@ export default function Dashboard() {
     return (
         <Container
             fluid
-            className="px-8 w-full"
+            className="px-0 sm:px-6 w-full"
         >
             <div className="flex flex-col lg:flex-row w-full">
-                <div className="lg:w-8/12 w-full mr-8">
+                <div className="lg:w-3/5 w-full mr-8">
                     <Title
                         order={1}
                         className="mb-3"
@@ -33,7 +33,7 @@ export default function Dashboard() {
                     </Title>
                     <AgentBotsCard />
                 </div>
-                <div className="hidden lg:block w-full lg:w-4/12">
+                <div className="hidden lg:block w-full lg:w-2/5">
                     <Title
                         order={1}
                         className="mb-3"

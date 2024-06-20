@@ -28,7 +28,7 @@ export default function Layout({ children, ...props }: ILayout) {
                 <AppShell.Main className="flex flex-col pb-10">
                     <Container
                         fluid
-                        className="flex justify-between p-1 bg-white px-8 w-full items-center mb-8"
+                        className="flex justify-between p-1 bg-white px-4 sm:px-8 w-full items-center mb-8"
                     >
                         <div className="flex items-center">
                             <LogoIcon width="60" height="60" />

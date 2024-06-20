@@ -26,7 +26,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
             withBorder
         >
             <div className="flex justify-between flex-wrap md:flex-nowrap">
-                <div className="flex justify-between sm:justify-normal w-full sm:w-auto">
+                <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap">
                     <Text
                         className="mr-3"
                         c="var(--mantine-color-gray-7)"

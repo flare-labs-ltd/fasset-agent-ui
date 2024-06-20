@@ -26,7 +26,7 @@ interface IAlertCard {
     className?: string
 }
 
-const ALERTS_REFETCH_INTERVAL = 30000;
+const ALERTS_REFETCH_INTERVAL = 3000;
 
 const TAB_ALERTS = 'alerts';
 const TAB_NOTIFICATIONS = 'notifications';
@@ -113,7 +113,7 @@ export default function AlertsCard({ className }: IAlertCard) {
                     value={TAB_ALERTS}
                 >
                     <ScrollArea
-                        h={540}
+                        h={alerts.length > 0 ? 540 : 150}
                         scrollbarSize={6}
                         offsetScrollbars
                         scrollbars="y"
@@ -130,12 +130,12 @@ export default function AlertsCard({ className }: IAlertCard) {
                             ]}
                             className="my-6 w-full md:w-3/4"
                         />
-                        {botAlerts.isFetching &&
+                        {botAlerts.isPending &&
                             <div className="flex justify-center">
                                 <Loader />
                             </div>
                         }
-                        {!botAlerts.isFetching && alerts.length === 0 &&
+                        {!botAlerts.isPending && alerts.length === 0 &&
                             <Text fw={700}>{t('alerts_card.alerts.no_alerts_label')}</Text>
                         }
                         <SimpleGrid
