@@ -6,7 +6,8 @@ import {
     rem,
     SimpleGrid,
     ScrollArea,
-    Loader
+    Loader,
+    Badge
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,11 +17,12 @@ import {
     IconNotification,
     IconCircle
 } from "@tabler/icons-react";
-import { useBotAlert } from "@/api/agent";
+import { useBotAlert, useNotifications } from "@/api/agent";
 import { IBotAlert } from "@/types";
 import { useRouter } from "next/router";
 import { truncateString } from "@/utils";
 import moment from "moment";
+import { useNotificationStore } from "@/store/notification";
 import classes from "@/styles/components/cards/AlertsCard.module.scss"
 
 interface IAlertCard {
@@ -28,6 +30,7 @@ interface IAlertCard {
 }
 
 const ALERTS_REFETCH_INTERVAL = 30000;
+const NOTIFICATIONS_REFETCH_INTERVAL = 6000;
 
 const TAB_ALERTS = 'alerts';
 const TAB_NOTIFICATIONS = 'notifications';
@@ -36,21 +39,32 @@ export default function AlertsCard({ className }: IAlertCard) {
     const { t } = useTranslation();
     const [selectedFilter, setSelectedFilter] = useState<string[]>([]);
     const [alerts, setAlerts] = useState<IBotAlert[]>([]);
+    const [hasUnreadNotifications, setHasUnreadNotifications] = useState<boolean>(false);
     const botAlerts = useBotAlert();
+    const notifications = useNotifications();
     const router = useRouter();
+    const { setLatestNotificationId, latestNotificationId } = useNotificationStore();
 
     useEffect(() => {
         if (!router.isReady || !('level' in router.query)) return;
         const level = router?.query?.level as string;
         setSelectedFilter(level.split(','));
     }, [router?.isReady]);
+
     useEffect(() => {
         const botFetchInterval = setInterval(() => {
             botAlerts.refetch();
         }, ALERTS_REFETCH_INTERVAL);
+        const notificationFetchInterval = setInterval(() => {
+            notifications.refetch();
+        }, NOTIFICATIONS_REFETCH_INTERVAL);
 
-        return () => clearInterval(botFetchInterval);
+        return () => {
+            clearInterval(botFetchInterval);
+            clearInterval(notificationFetchInterval);
+        }
     }, []);
+
     useEffect(() => {
         if (botAlerts.data && botAlerts?.data?.length > 0) {
             setAlerts(selectedFilter?.length
@@ -59,6 +73,16 @@ export default function AlertsCard({ className }: IAlertCard) {
             )
         }
     }, [botAlerts.data]);
+
+    useEffect(() => {
+        if (!notifications.data || notifications?.data?.length === 0) return;
+
+        const id = notifications.data[0].id;
+        if (!latestNotificationId || id > latestNotificationId) {
+            setHasUnreadNotifications(true);
+        }
+    }, [notifications.data]);
+
     useEffect(() => {
         if (selectedFilter?.length > 0) {
             router.push(
@@ -94,6 +118,14 @@ export default function AlertsCard({ className }: IAlertCard) {
         }
     }, [selectedFilter]);
 
+    const onNotificationTabClick = () => {
+        if (!notifications.data || notifications?.data?.length === 0) return;
+
+        const id = notifications.data[0].id;
+        setLatestNotificationId(id);
+        setHasUnreadNotifications(false);
+    }
+
     return (
         <Paper
             className={`p-4 ${className}`}
@@ -109,13 +141,16 @@ export default function AlertsCard({ className }: IAlertCard) {
                     <Tabs.Tab
                         value={TAB_NOTIFICATIONS}
                         leftSection={<IconNotification style={{width: rem(15), height: rem(15)}} />}
+                        onClick={onNotificationTabClick}
                     >
                         <div>
                             {t('alerts_card.tab_notifications_label')}
-                            <IconCircle
-                                style={{width: rem(15), height: rem(15)}}
-                                className={classes.notificationIndicatorIcon}
-                            />
+                            {hasUnreadNotifications &&
+                                <IconCircle
+                                    style={{width: rem(15), height: rem(15)}}
+                                    className={classes.notificationIndicatorIcon}
+                                />
+                            }
                         </div>
                     </Tabs.Tab>
                 </Tabs.List>
@@ -203,14 +238,57 @@ export default function AlertsCard({ className }: IAlertCard) {
                     value={TAB_NOTIFICATIONS}
                 >
                     <ScrollArea
-                        h={540}
+                        h={notifications.data && notifications.data?.length > 0 ? 540 : 150}
                         scrollbarSize={6}
                         offsetScrollbars
+                        scrollbars="y"
                     >
-                        <Text
-                            fw={700}
-                            className="mt-6"
-                        >{t('alerts_card.notifications.no_notifications_label')}</Text>
+                        {notifications.isPending &&
+                            <div className="flex justify-center">
+                                <Loader className="mt-6" />
+                            </div>
+                        }
+                        {!notifications.isPending && notifications?.data?.length === 0 &&
+                            <Text
+                                fw={700}
+                                className="mt-6"
+                            >
+                                {t('alerts_card.notifications.no_notifications_label')}
+                            </Text>
+                        }
+                        <SimpleGrid
+                            cols={1}
+                            type="container"
+                            className="mt-5"
+                        >
+                            {notifications?.data?.map((notification, index) => (
+                                <div key={index}>
+                                    <div className="flex justify-between">
+                                        <Text
+                                            size="sm"
+                                            c="var(--mantine-color-gray-6)"
+                                        >
+                                            {moment(notification.time).format('DD.MM.YYYY HH:mm')}
+                                        </Text>
+                                        <Badge
+                                            color="rgba(36, 36, 37, 0.06)"
+                                            radius="xs"
+                                            className="uppercase text-black"
+                                            fw={400}
+                                        >
+                                            {t('alerts_card.notifications.all_agents_label')}
+                                        </Badge>
+                                    </div>
+                                    <Text
+                                        size="sm"
+                                        c="var(--mantine-color-gray-6)"
+                                        className="mt-2"
+                                    >
+                                        {notification.messages}
+                                    </Text>
+                                </div>
+                            ))}
+                        </SimpleGrid>
                     </ScrollArea>
                 </Tabs.Panel>
             </Tabs>

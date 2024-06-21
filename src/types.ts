@@ -48,6 +48,12 @@ export interface IBotAlert {
     }
 }
 
+export interface INotification {
+    id: number;
+    messages: string;
+    time: string;
+}
+
 export interface IAgentVaultInformation {
     fassetSymbol: string;
     vaults: {

@@ -19,6 +19,7 @@ import { useVaultCollaterals } from "@/api/agent";
 import { IAgentVault } from "@/types";
 import { useRouter } from "next/router";
 import CopyIcon from "@/components/icons/CopyIcon";
+
 interface IForm {
     disabled?: boolean;
     vault?: IAgentVault;
@@ -202,7 +203,6 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                     description={t('forms.vault.address_description_label')}
                     placeholder={t('forms.vault.enter_placeholder')}
                     disabled={true}
-                    className="font-normal"
                     rightSection={<CopyIcon text={agentVaultAddress as string} />}
                 />
             }

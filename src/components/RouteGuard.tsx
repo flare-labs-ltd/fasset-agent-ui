@@ -35,7 +35,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
 
     useEffect(() => {
         isWalletConnected(undefined);
-
     }, [isInitializing, isConnected]);
 
     useEffect(() =>     {

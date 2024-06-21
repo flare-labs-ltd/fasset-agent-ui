@@ -12,7 +12,8 @@ import {
     IAgentVaultInformation,
     IAgentSettingsDTO,
     ISecretsTemplate,
-    IVaultCollateral
+    IVaultCollateral,
+    INotification
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -278,10 +279,12 @@ export function useBotAlert() {
 export function useNotifications() {
     return useQuery({
         queryKey: [AGENT_KEY.NOTIFICATIONS],
-        queryFn: async(): Promise<IBotAlert[]> => {
-            //TODO: REPLACE WITH NOTIFICATIONS REQUEST
-            const response = await apiClient.get(`${resource}/botAlert`);
+        queryFn: async(): Promise<INotification[]> => {
+            const response = await apiClient.get('https://fasset-tg-bot.flare.rocks/pull_flare_messages');
             return response.data.data
+        },
+        select: (data: INotification[]) => {
+            return orderBy(data, 'time', 'desc');
         }
     });
 }

@@ -12,7 +12,7 @@
         "confirm_modal": {
             "cancel_button": "Cancel",
             "confirm_button": "Confirm",
-            "content": "This process can take up to 5 minutes.",
+            "content": "This process can take up to 5 minutes. Settings will be updated by agent-bota after some time.",
             "title": "Before you proceed"
         },
         "discard_button": "Discard",
@@ -65,6 +65,7 @@
             "status_label": "{{status}} - Status"
         },
         "notifications": {
+            "all_agents_label": "All agents",
             "no_notifications_label": "No notifications available"
         },
         "tab_alerts_label": "Alerts",
@@ -253,12 +254,12 @@
                 "close_vault_label": "Close Vault (Exit)",
                 "deposit_collateral_label": "Deposit collateral",
                 "deposit_flr_in_pool_label": "Deposit FLR in Pool",
-                "health_label": "Health",
                 "view_vault_label": "View Vault",
                 "vault_actions_title": "Vault actions"
             },
             "agent_label": "Agent",
             "free_lots_label": "Free lots",
+            "health_label": "Health",
             "minted_amounts_label": "Minted amounts",
             "minted_lots_label": "Minted lots",
             "pool_amount_label": "Pool amount",
