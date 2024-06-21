@@ -161,7 +161,7 @@
         "confirm_modal": {
             "cancel_button": "Cancel",
             "confirm_button": "Execute",
-            "content": "This process can take up to 5 minutes.",
+            "content": "This process can take up to 5 minutes. Settings will be updated by agent-bota after some time.",
             "title": "Before you proceed"
         },
         "details_button": "Details",
