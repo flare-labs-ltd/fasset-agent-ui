@@ -30,7 +30,7 @@ interface IAlertCard {
 }
 
 const ALERTS_REFETCH_INTERVAL = 30000;
-const NOTIFICATIONS_REFETCH_INTERVAL = 6000;
+const NOTIFICATIONS_REFETCH_INTERVAL = 60000;
 
 const TAB_ALERTS = 'alerts';
 const TAB_NOTIFICATIONS = 'notifications';

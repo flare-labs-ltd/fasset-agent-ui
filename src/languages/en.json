@@ -258,6 +258,7 @@
                 "vault_actions_title": "Vault actions"
             },
             "agent_label": "Agent",
+            "flr_label": "FLR",
             "free_lots_label": "Free lots",
             "health_label": "Health",
             "minted_amounts_label": "Minted amounts",

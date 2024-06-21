@@ -147,8 +147,8 @@ export default function VaultsCard({ className }: IVaultsCard) {
                                         <Table.Td>{vault.mintedAmount} {agentVaultInformation.fassetSymbol}</Table.Td>
                                         <Table.Td>{vault.mintedlots}</Table.Td>
                                         <Table.Td>{vault.freeLots}</Table.Td>
-                                        <Table.Td>{vault.vaultAmount}</Table.Td>
-                                        <Table.Td>{vault.poolAmount}</Table.Td>
+                                        <Table.Td>{vault.vaultAmount} {vault.collateralToken}</Table.Td>
+                                        <Table.Td>{vault.poolAmount} {t('vaults_card.table.flr_label')}</Table.Td>
                                         <Table.Td>{vault.vaultCR}</Table.Td>
                                         <Table.Td>{vault.poolCR}</Table.Td>
                                         <Table.Td className={agentVaultsInformation.data?.length !== 0 ? classes.sticky : ''}>
