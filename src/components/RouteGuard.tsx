@@ -49,9 +49,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
         return <LoadingOverlay
             visible={true}
             zIndex={1000}
-            style={{
-                position: 'fixed'
-            }}
+            className="fixed"
         />;
     }
 
