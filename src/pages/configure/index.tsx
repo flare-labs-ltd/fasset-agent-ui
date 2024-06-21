@@ -34,6 +34,7 @@ import { useWeb3 } from "@/hooks/useWeb3";
 import { useSetWorkAddress } from "@/hooks/useContracts";
 import BackButton from "@/components/elements/BackButton";
 import CopyIcon from "@/components/icons/CopyIcon";
+import { ErrorDecoder } from "ethers-decode-error";
 
 const FILE_MAX_SIZE = 5 * 1048576; // 5mb
 
@@ -93,7 +94,9 @@ export default function AgentConfiguration() {
             workAddress.refetch();
             showSucessNotification(t('agent_configuration.working_address_card.success_message'));
         } catch (error) {
-            showErrorNotification((error as any).message);
+            const errorDecoder = ErrorDecoder.create();
+            const decodedError = await errorDecoder.decode(error);
+            showErrorNotification(decodedError.reason);
         }
     }
     const onChangeWorkingAddressClick = async() => {
@@ -126,6 +129,7 @@ export default function AgentConfiguration() {
             <LoadingOverlay
                 visible={isLoading || secretExists.isPending || (isWhitelisted.isStale && isWhitelisted.isPending)}
                 zIndex={1000}
+                className="fixed"
             />
             {isWhitelisted.data &&
                 <BackButton
@@ -200,7 +204,7 @@ export default function AgentConfiguration() {
                         <Button
                             variant="outline"
                             size="xs"
-                            disabled={secretsFile === null}
+                            disabled={secretsFile === undefined}
                             onClick={onClickUploadSecret}
                         >
                             {t('agent_configuration.secret_card.upload_button')}
@@ -208,69 +212,71 @@ export default function AgentConfiguration() {
                     </div>
                 </Paper>
             }
-            <Paper
-                className="mt-5 p-8"
-                withBorder
-            >
-                <Input.Wrapper
-                    label={t('agent_configuration.working_address_card.title')}
-                    description={t('agent_configuration.working_address_card.subtitle')}
+            {secretExists?.data &&
+                <Paper
+                    className="mt-5 p-8"
+                    withBorder
                 >
-                    <Input
-                        value={workAddress.data || ''}
-                        disabled={true}
-                        className="mt-3"
-                        variant="filled"
-                        rightSectionPointerEvents="all"
-                        rightSection={
-                            (!workAddress.isPending ? workAddress.isRefetching : false)
-                                ? <Loader size="xs" />
-                                : workAddress.data && <CopyIcon text={workAddress.data} />
-                        }
-                        styles={{
-                            section: { cursor: 'pointer' },
-                            input: { color: 'var(--mantine-color-dark-text)', opacity: 1 }
-                        }}
-                    />
-                </Input.Wrapper>
-                <Button
-                    variant="gradient"
-                    size="xs"
-                    className="mt-3"
-                    onClick={onChangeWorkingAddressClick}
-                >
-                    {t('agent_configuration.working_address_card.change_button')}
-                </Button>
-                {isWhitelisted.data === false &&
-                    <div className="mt-3">
-                        <Title order={5}>{t('agent_configuration.working_address_card.not_whitelisted_title')}</Title>
-                        <Text size="sm" c="gray">{t('agent_configuration.working_address_card.not_whitelisted_text')}</Text>
-                    </div>
-                }
-                {isWhitelisted.data === true &&
-                    <>
-                        <Divider
-                            className="my-8"
+                    <Input.Wrapper
+                        label={t('agent_configuration.working_address_card.title')}
+                        description={t('agent_configuration.working_address_card.subtitle')}
+                    >
+                        <Input
+                            value={workAddress.data || ''}
+                            disabled={true}
+                            className="mt-3"
+                            variant="filled"
+                            rightSectionPointerEvents="all"
+                            rightSection={
+                                (!workAddress.isPending ? workAddress.isRefetching : false)
+                                    ? <Loader size="xs" />
+                                    : workAddress.data && <CopyIcon text={workAddress.data} />
+                            }
                             styles={{
-                                root: {
-                                    marginLeft: '-2rem',
-                                    marginRight: '-2rem'
-                                }
+                                section: { cursor: 'pointer' },
+                                input: { color: 'var(--mantine-color-dark-text)', opacity: 1 }
                             }}
                         />
-                        <div className="flex mt-3">
-                            <Button
-                                component={Link}
-                                href="/"
-                                fullWidth
-                                size="md"
-                            >
-                                {t('agent_configuration.dashboard_button')}
-                            </Button>
+                    </Input.Wrapper>
+                    <Button
+                        variant="gradient"
+                        size="xs"
+                        className="mt-3"
+                        onClick={onChangeWorkingAddressClick}
+                    >
+                        {t('agent_configuration.working_address_card.change_button')}
+                    </Button>
+                    {isWhitelisted.data === false &&
+                        <div className="mt-3">
+                            <Title order={5}>{t('agent_configuration.working_address_card.not_whitelisted_title')}</Title>
+                            <Text size="sm" c="gray">{t('agent_configuration.working_address_card.not_whitelisted_text')}</Text>
                         </div>
-                    </>
-                }
-            </Paper>
+                    }
+                    {isWhitelisted.data === true &&
+                        <>
+                            <Divider
+                                className="my-8"
+                                styles={{
+                                    root: {
+                                        marginLeft: '-2rem',
+                                        marginRight: '-2rem'
+                                    }
+                                }}
+                            />
+                            <div className="flex mt-3">
+                                <Button
+                                    component={Link}
+                                    href="/"
+                                    fullWidth
+                                    size="md"
+                                >
+                                    {t('agent_configuration.dashboard_button')}
+                                </Button>
+                            </div>
+                        </>
+                    }
+                </Paper>
+            }
         </Container>
     );
 }
