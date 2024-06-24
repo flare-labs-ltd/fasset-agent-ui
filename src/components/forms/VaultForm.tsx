@@ -196,13 +196,12 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         if (event.key !== 'Backspace') return;
 
         event.preventDefault();
-        form.setFieldValue(event.target.dataset.path, event.target.value.substring(0, event.target.value.length - 1));
-        setTimeout(() => {
-            const input = document.querySelector(`[data-path="${event.target.dataset.path}"]`);
-            if (input) {
-                input.focus();
-            }
-        }, 0);
+        form.setFieldValue(
+            event.target.dataset.path,
+            event.target.value.substring(0, event.target.value.length - 1),
+            { forceUpdate: false }
+        );
+        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
     }
 
     return (
