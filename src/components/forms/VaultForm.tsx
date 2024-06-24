@@ -4,8 +4,8 @@ import {
     Divider,
     Select,
     Loader
-} from '@mantine/core';
-import { useForm, UseFormReturnType } from '@mantine/form';
+} from "@mantine/core";
+import { useForm, UseFormReturnType } from "@mantine/form";
 import {
     forwardRef,
     useEffect,
@@ -99,11 +99,11 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         },
         //@ts-ignore
         validate: yupResolver(schema),
-        onValuesChange: (values) => {
+        onValuesChange: (values, previousValues) => {
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
             setIsHidden(values.fAssetType === undefined || values.vaultCollateralToken === undefined);
             setPoolTokenSuffixCharCount(values.poolTokenSuffix ? values.poolTokenSuffix.length : 0);
-        }
+        },
     });
 
     useEffect(() => {
@@ -192,6 +192,19 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         }
     }
 
+    const onKeyDownCapture = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key !== 'Backspace') return;
+
+        event.preventDefault();
+        form.setFieldValue(event.target.dataset.path, event.target.value.substring(0, event.target.value.length - 1));
+        setTimeout(() => {
+            const input = document.querySelector(`[data-path="${event.target.dataset.path}"]`);
+            if (input) {
+                input.focus();
+            }
+        }, 0);
+    }
+
     return (
         <form>
             {agentVaultAddress &&
@@ -277,6 +290,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         step={0.1}
                         suffix="%"
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('poolFeeShare')}
@@ -291,6 +305,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         step={1}
                         suffix="%"
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('mintingVaultCollateralRatio')}
@@ -304,6 +319,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.01}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('mintingPoolCollateralRatio')}
@@ -317,6 +333,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.1}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('poolExitCollateralRatio')}
@@ -330,6 +347,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.1}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('buyFAssetByAgentFactor')}
@@ -343,6 +361,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.1}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('poolTopUpCollateralRatio')}
@@ -356,6 +375,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.1}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                     <NumberInput
                         {...form.getInputProps('poolTopUpTokenPriceFactor')}
@@ -369,6 +389,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         allowNegative={false}
                         step={0.1}
                         className="mt-4"
+                        onKeyDownCapture={onKeyDownCapture}
                     />
                 </>
             }

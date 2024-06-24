@@ -24,8 +24,6 @@ export default function Vault() {
     const { t } = useTranslation();
     const router = useRouter();
     let { fAssetSymbol, agentVaultAddress } = router.query;
-    fAssetSymbol = fAssetSymbol as string;
-    agentVaultAddress = agentVaultAddress as string;
     const vaultInfo = useVaultInfo(fAssetSymbol, agentVaultAddress, fAssetSymbol != null && agentVaultAddress != null);
     const updateVault = useUpdateVault();
     const formRef = useRef<FormRef>(null);
@@ -117,6 +115,26 @@ export default function Vault() {
         }
     }
 
+    const onDiscard = () => {
+        const form = formRef?.current?.form();
+        if (form) {
+            form.setValues({
+                name: agentVaultAddress as string,
+                poolTokenSuffix: vaultInfo.data.poolSuffix,
+                vaultCollateralToken: vaultInfo.data.vaultCollateralToken,
+                fee: Number(vaultInfo.data.feeBIPS) / 100,
+                poolFeeShare: Number(vaultInfo.data.poolFeeShareBIPS) / 100,
+                mintingVaultCollateralRatio: Number(vaultInfo.data.mintingVaultCollateralRatioBIPS) / 10000,
+                mintingPoolCollateralRatio: Number(vaultInfo.data.mintingPoolCollateralRatioBIPS) / 10000,
+                poolExitCollateralRatio: Number(vaultInfo.data.poolExitCollateralRatioBIPS) / 10000,
+                buyFAssetByAgentFactor: Number(vaultInfo.data.buyFAssetByAgentFactorBIPS) / 10000,
+                poolTopUpCollateralRatio: Number(vaultInfo.data.poolTopupCollateralRatioBIPS) / 10000,
+                poolTopUpTokenPriceFactor: Number(vaultInfo.data.poolTopupTokenPriceFactorBIPS) / 10000,
+            });
+        }
+        setIsEditing(false);
+    }
+
     return (
         <Container
             size="xl"
@@ -178,7 +196,7 @@ export default function Vault() {
                                 <Button
                                     variant="gradient"
                                     loading={updateVault.isPending}
-                                    onClick={() => setIsEditing(false)}
+                                    onClick={onDiscard}
                                     fullWidth
                                     className="mr-0 sm:mr-3 mb-3 sm:mb-0"
                                     radius="xl"

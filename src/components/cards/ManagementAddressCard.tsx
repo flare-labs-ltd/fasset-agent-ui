@@ -5,11 +5,10 @@ import {
     Anchor,
     rem
 } from '@mantine/core';
-import { useIsWhitelisted } from "@/api/agent";
+import { useIsWhitelisted, useManagementAddress } from "@/api/agent";
 import { useTranslation, Trans } from "react-i18next";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { truncateString } from "@/utils";
-import { useWeb3 } from "@/hooks/useWeb3";
 
 interface IManagementAddressCard {
     className?: string;
@@ -18,7 +17,7 @@ interface IManagementAddressCard {
 export default function ManagementAddressCard({ className }: IManagementAddressCard) {
     const { t } = useTranslation();
     const isWhitelisted = useIsWhitelisted();
-    const { account } = useWeb3();
+    const managementAddress= useManagementAddress();
 
     return (
         <Paper
@@ -38,13 +37,13 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                         size="sm"
                         className="hidden sm:block"
                     >
-                        {account}
+                        {managementAddress.data}
                     </Text>
                     <Text
                         size="sm"
                         className="sm:hidden"
                     >
-                        {truncateString(account ?? '', 9, 9)}
+                        {truncateString(managementAddress.data ?? '', 9, 9)}
                     </Text>
                 </div>
                 {!isWhitelisted.isPending &&

@@ -6,12 +6,13 @@ import {
     Title,
     LoadingOverlay,
     Popover, Text
-} from '@mantine/core';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+} from "@mantine/core";
+import { useRouter } from "next/router";
+import { useTranslation } from "react-i18next";
 import { useVaultInfo } from '@/api/agent';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import BackButton from "@/components/elements/BackButton";
+import { copyToClipboard } from "@/utils";
 
 export default function VaultDetails() {
     const [isPopoverActive, setIsPopoverActive] = useState<boolean>(false);
@@ -32,7 +33,7 @@ export default function VaultDetails() {
         setDetails(text);
     }, [vaultInfo.isFetched]);
 
-    const copyToClipboard = (text: string) => {
+    const onCopyClick = (text: string) => {
         setIsPopoverActive(true);
         setTimeout(() => {
             setIsPopoverActive(false);
@@ -60,7 +61,7 @@ export default function VaultDetails() {
                         <Button
                             size="xs"
                             variant="gradient"
-                            onClick={() => copyToClipboard(details)}
+                            onClick={() => onCopyClick(details)}
                         >
                             {t('agent_vault_details.copy_button')}
                         </Button>

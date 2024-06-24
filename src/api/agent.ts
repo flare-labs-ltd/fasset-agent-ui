@@ -30,7 +30,8 @@ const AGENT_KEY = {
     VAULT_INFO: 'agentVaultInfo',
     SECRETS_TEMPLATE: 'agentSecretsTemplate',
     UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance',
-    NOTIFICATIONS: 'notifications'
+    NOTIFICATIONS: 'notifications',
+    MANAGEMENT_ADDRESS: 'managementAddress'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -285,6 +286,16 @@ export function useNotifications() {
         },
         select: (data: INotification[]) => {
             return orderBy(data, 'time', 'desc');
+        }
+    });
+}
+
+export function useManagementAddress() {
+    return useQuery({
+        queryKey: [AGENT_KEY.MANAGEMENT_ADDRESS],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/managementAddress`);
+            return response.data.data
         }
     });
 }

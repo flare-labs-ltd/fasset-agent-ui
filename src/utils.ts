@@ -44,8 +44,6 @@ export const connectEagerlyOnRefreshLocalStorage = async (): Promise<string[]|un
 export const truncateString = (text: string, from: number = 4, to: number = 4) => {
     return `${text.substring(0, from)}...${text.substring(text.length - to, text.length)}`;
 }
-
-
 export const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
 }

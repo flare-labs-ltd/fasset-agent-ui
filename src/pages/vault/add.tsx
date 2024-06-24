@@ -106,6 +106,14 @@ export default function AddVault() {
         }
     }
 
+    const onDiscard = () => {
+        const form = formRef?.current?.form();
+        if (form) {
+            form.reset();
+        }
+        router.push('/');
+    }
+
     return (
         <Container
             size="sm"
@@ -156,7 +164,7 @@ export default function AddVault() {
                     <Button
                         variant="gradient"
                         loading={isLoading}
-                        onClick={() => router.push('/')}
+                        onClick={onDiscard}
                         fullWidth
                         className="mr-0 sm:mr-3 mb-3 sm:mb-0"
                         radius="xl"
