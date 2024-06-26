@@ -78,7 +78,7 @@ export default function Layout({ children, ...props }: ILayout) {
                                 <Menu.Dropdown className="p-2">
                                     <Menu.Item
                                         component={Link}
-                                        href={t('layout.header.support_email')}
+                                        href={`mailto:${t('layout.header.support_email')}`}
                                         leftSection={<IconAt style={{ width: rem(20), height: rem(20) }} />}
                                     >
                                         {t('layout.header.email_label')}
