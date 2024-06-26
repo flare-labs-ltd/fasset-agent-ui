@@ -14,3 +14,5 @@
 2. Make changes in `.env` to fulfil your requirements
 3. Run docker-compose up -d --build (add build command only once)
 4. Open http://localhost:3000 with your browser to see the result
+
+Wallet connect project id can be obtained from flare fassets support telegram.

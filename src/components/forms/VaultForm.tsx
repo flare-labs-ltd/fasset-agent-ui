@@ -193,15 +193,18 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
     }
 
     const onKeyDownCapture = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key !== 'Backspace') return;
+        if (event.code !== 'Backspace') return;
 
         event.preventDefault();
+        const eventTarget = event.target as HTMLInputElement;
+
         form.setFieldValue(
-            event.target.dataset.path,
-            event.target.value.substring(0, event.target.value.length - 1),
+            // @ts-ignore
+            eventTarget.dataset.path,
+            eventTarget.value.substring(0, eventTarget.value.length - 1),
             { forceUpdate: false }
         );
-        event.target.value = event.target.value.substring(0, event.target.value.length - 1);
+        eventTarget.value = eventTarget.value.substring(0, eventTarget.value.length - 1);
     }
 
     return (

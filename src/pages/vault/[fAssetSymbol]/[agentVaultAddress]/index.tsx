@@ -24,7 +24,7 @@ export default function Vault() {
     const { t } = useTranslation();
     const router = useRouter();
     let { fAssetSymbol, agentVaultAddress } = router.query;
-    const vaultInfo = useVaultInfo(fAssetSymbol, agentVaultAddress, fAssetSymbol != null && agentVaultAddress != null);
+    const vaultInfo = useVaultInfo(fAssetSymbol as string, agentVaultAddress as string, fAssetSymbol != null && agentVaultAddress != null);
     const updateVault = useUpdateVault();
     const formRef = useRef<FormRef>(null);
 
@@ -105,8 +105,8 @@ export default function Vault() {
             ];
 
             await updateVault.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress,
+                fAssetSymbol: fAssetSymbol as string,
+                agentVaultAddress: agentVaultAddress as string,
                 payload: payload
             });
             showSucessNotification(t('edit_agent_vault.success_message'));
@@ -117,7 +117,7 @@ export default function Vault() {
 
     const onDiscard = () => {
         const form = formRef?.current?.form();
-        if (form) {
+        if (form && vaultInfo.data) {
             form.setValues({
                 name: agentVaultAddress as string,
                 poolTokenSuffix: vaultInfo.data.poolSuffix,

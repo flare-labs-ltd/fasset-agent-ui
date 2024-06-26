@@ -85,6 +85,12 @@
             "success_message": "New secret file successfully created",
             "title": "Edit secret file"
         },
+        "confirm_modal": {
+            "cancel_button": "Cancel",
+            "confirm_button": "Confirm",
+            "description_label": "You are about to change your work address in secrets.json. Before continuing, save owner.native.address and owner.native.private_key from your secrets.json if you have any funds that need to be transferred.",
+            "title": "Change working address"
+        },
         "secret_card": {
             "create_button": "Create",
             "drag_file_label": "Drag secret file here or click to select file",
@@ -210,7 +216,9 @@
             "beta_label": "beta",
             "email_label": "Email",
             "support_button": "Support",
+            "support_email": "support@flarelabs.org",
             "telegram_label": "Telegram",
+            "telegram_url": "https://t.me/FlareSupport",
             "title": "FAssets Agent"
         }
     },

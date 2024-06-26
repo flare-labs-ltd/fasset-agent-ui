@@ -10,16 +10,17 @@ import {
     Loader,
     LoadingOverlay,
     Divider
-} from '@mantine/core';
+} from "@mantine/core";
+import { modals } from "@mantine/modals";
 import {
     IconUpload,
     IconPhoto,
     IconX,
 } from '@tabler/icons-react';
-import {Dropzone, FileWithPath} from '@mantine/dropzone';
-import Link from 'next/link';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import {Dropzone, FileWithPath} from "@mantine/dropzone";
+import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import {
     useGenerateWorkAddress,
     useIsWhitelisted,
@@ -27,8 +28,8 @@ import {
     useSecretExists,
     useUploadSecret,
     useWorkAddress
-} from '@/api/agent';
-import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
+} from "@/api/agent";
+import { showErrorNotification, showSucessNotification } from "@/hooks/useNotifications";
 import { useConnectWalletModal } from "@/hooks/useEthereumLogin";
 import { useWeb3 } from "@/hooks/useWeb3";
 import { useSetWorkAddress } from "@/hooks/useContracts";
@@ -96,7 +97,9 @@ export default function AgentConfiguration() {
         } catch (error) {
             const errorDecoder = ErrorDecoder.create();
             const decodedError = await errorDecoder.decode(error);
-            showErrorNotification(decodedError.reason);
+            if (decodedError.reason) {
+                showErrorNotification(decodedError.reason);
+            }
         }
     }
     const onChangeWorkingAddressClick = async() => {
@@ -117,6 +120,36 @@ export default function AgentConfiguration() {
             setIsLoading(false);
         }
     }
+
+    const openConfirmModal = () => modals.openConfirmModal({
+        title: t('agent_configuration.confirm_modal.title'),
+        children: (
+            <>
+                <Text>{t('agent_configuration.confirm_modal.description_label')}</Text>
+                <Divider
+                    className="my-8"
+                    styles={{
+                        root: {
+                            marginLeft: '-2rem',
+                            marginRight: '-2rem'
+                        }
+                    }}
+                />
+            </>
+        ),
+        labels: {
+            confirm: t('agent_configuration.confirm_modal.confirm_button'),
+            cancel: t('agent_configuration.confirm_modal.cancel_button')
+        },
+        cancelProps: {
+            radius: 'xl',
+        },
+        confirmProps: {
+            color: 'rgba(189, 34, 34, 1)',
+            radius: 'xl',
+        },
+        onConfirm: () => onChangeWorkingAddressClick()
+    });
 
     const onFileDrop = (files: FileWithPath[]) => {
         setSecretsFile(files[0]);
@@ -242,7 +275,7 @@ export default function AgentConfiguration() {
                         variant="gradient"
                         size="xs"
                         className="mt-3"
-                        onClick={onChangeWorkingAddressClick}
+                        onClick={openConfirmModal}
                     >
                         {t('agent_configuration.working_address_card.change_button')}
                     </Button>

@@ -57,7 +57,7 @@ body {
             }
         }
     }
-    &:not([data-variant="gradient"]):not([data-variant="outline"]):not([data-variant="transparent"]) {
+    &:not([data-variant="gradient"]):not([data-variant="outline"]):not([data-variant="transparent"]):not([data-variant="default"]) {
         &:hover {
             background: var(--flr-red);
         }

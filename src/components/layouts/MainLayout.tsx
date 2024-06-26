@@ -78,14 +78,14 @@ export default function Layout({ children, ...props }: ILayout) {
                                 <Menu.Dropdown className="p-2">
                                     <Menu.Item
                                         component={Link}
-                                        href="mailto:support@flare.network"
+                                        href={t('layout.header.support_email')}
                                         leftSection={<IconAt style={{ width: rem(20), height: rem(20) }} />}
                                     >
                                         {t('layout.header.email_label')}
                                     </Menu.Item>
                                     <Menu.Item
                                         component={Link}
-                                        href="https://t.me/FlareSupport"
+                                        href={t('layout.header.telegram_url')}
                                         target="_blank"
                                         leftSection={<IconBrandTelegram style={{ width: rem(20), height: rem(20) }} />}
                                     >
