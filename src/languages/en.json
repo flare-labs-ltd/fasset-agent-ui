@@ -248,7 +248,7 @@
     "setup": {
         "setup_agent_button": "Connect Wallet",
         "subtitle": "Let’s connect first...",
-        "title": "Welcome to FAsset Agent Manager!"
+        "title": "Welcome to Admin Console!"
     },
     "vaults_card": {
         "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
