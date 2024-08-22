@@ -223,9 +223,11 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                             >
                                 <Text
                                     size="sm"
-                                >{vault.mintedAmount} {vault.fassetSymbol}</Text>
+                                >
+                                    ${toNumber(vault.poolCollateralUSD).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    </Text>
                             </Tooltip>
-                            <Text size="xs">{vault.mintedlots.toLocaleString('en-US')}</Text>
+                            {/* <Text size="xs">{vault.mintCount || '0'}</Text> */}
                         </div>
                     );
                 }
@@ -295,7 +297,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                 id: 'pool_fee',
                 label: t('vaults_card.table.pool_fee'),
                 sorted: true,
-                render: (vault: IVault) => `${vault.userPoolFees || '0'} %`
+                render: (vault: IVault) => `${vault.poolFee || '0'} %`
             },
             {
                 id: 'actions',

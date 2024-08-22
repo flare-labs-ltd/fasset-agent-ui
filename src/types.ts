@@ -71,8 +71,10 @@ export interface IVault {
     collateralToken: string;
     numLiquidations: number;
     health: string;
-    userPoolFees?: string; 
+    poolFee?: string; 
+    mintCount?: string; 
     fassetSymbol?: string;
+    poolCollateralUSD: string;
 
 }
 
