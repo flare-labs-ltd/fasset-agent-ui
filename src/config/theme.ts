@@ -108,7 +108,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
         }),
         Table: Table.extend({
             classNames: {
-                th: 'font-normal text-xs',
+                th: 'font-normal text-sm',
                 tr: 'pt-5',
                 td: 'text-sm'
             },

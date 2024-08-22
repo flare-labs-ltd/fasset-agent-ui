@@ -28,13 +28,15 @@ export interface IVaultCollateral {
     fassetSymbol: string;
 }
 
+export interface ICollateralItem {
+    symbol: string;
+    balance: string;
+    wrapped?: string;
+}
+
 export interface ICollateral {
     fassetSymbol: string;
-    collaterals: {
-        symbol: string;
-        balance: string;
-        wrapped?: string;
-    }[]
+    collaterals: ICollateralItem[]
 }
 
 export interface IBotAlert {
@@ -54,23 +56,29 @@ export interface INotification {
     time: string;
 }
 
+export interface IVault {
+    address: string;
+    freeLots: number;
+    mintedAmount: number;
+    mintedlots: number;
+    poolAmount: string;
+    poolCR: string;
+    status: boolean;
+    updating: boolean;
+    vaultAmount: number;
+    vaultCR: string;
+    agentCPTs: number;
+    collateralToken: string;
+    numLiquidations: number;
+    health: string;
+    userPoolFees?: string; 
+    fassetSymbol?: string;
+
+}
+
 export interface IAgentVaultInformation {
     fassetSymbol: string;
-    vaults: {
-        address: string;
-        freeLots: number;
-        mintedAmount: number;
-        mintedlots: number;
-        poolAmount: number;
-        poolCR: number;
-        status: boolean;
-        updating: boolean;
-        vaultAmount: number;
-        vaultCR: number;
-        agentCPTs: number;
-        collateralToken: string;
-        health: string;
-    }[]
+    vaults: IVault[];
 }
 
 export interface IAgentSettingsDTO {
@@ -133,4 +141,10 @@ export interface IAgentVault {
     poolTopupCollateralRatioBIPS: string;
     poolTopupTokenPriceFactorBIPS: string;
     poolSuffix: string;
+}
+
+export interface IIconProps {
+    width?: string;
+    height?: string;
+    className?: string;
 }

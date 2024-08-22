@@ -22,38 +22,44 @@ import { truncateString } from "@/utils";
 import { useState, useEffect } from "react";
 import CopyIcon from "@/components/icons/CopyIcon";
 import classes from "@/styles/components/cards/AgentBotsCard.module.scss";
+import { ICollateralItem } from "@/types";
+import { UseQueryResult } from "@tanstack/react-query";
 
 interface IAgentBotsCard {
     className?: string;
+    collateral: UseQueryResult<ICollateralItem[], Error>;
 }
 
-export default function AgentBotsCard({ className }: IAgentBotsCard) {
+export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard) {
     const [usdcLabel, setUsdcLabel] = useState<string>();
     const [usdtLabel, setUsdtLabel] = useState<string>();
     const [flrLabel, setFlrLabel] = useState<string>();
     const [ethLabel, setEthLabel] = useState<string>();
 
     const { t } = useTranslation();
-    const collaterals = useCollaterals();
     const workAddress = useWorkAddress();
     const botStatus = useBotStatus();
 
     useEffect(() => {
-        if (collaterals.data === undefined) return;
-        setUsdcLabel(collaterals.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdc')?.balance);
-        setUsdtLabel(collaterals.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdt')?.balance);
-        setFlrLabel(collaterals.data.find(collateral => collateral.symbol.toLowerCase() === 'cflr')?.balance);
-        setEthLabel(collaterals.data.find(collateral => collateral.symbol.toLowerCase() === 'testeth')?.balance);
-    }, [collaterals.data]);
+        if (collateral.data === undefined) return;
+        setUsdcLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdc')?.balance);
+        setUsdtLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdt')?.balance);
+        setFlrLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'cflr')?.balance);
+        setEthLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testeth')?.balance);
+    }, [collateral]);
+
+    let textColorStatus = 'var(--dark-red-default)';
+    if (botStatus.data) {
+        textColorStatus = 'var(--green-default)';
+    }
 
     return (
         <Paper
-            className={`p-4 ${className}`}
+            className={`${className}`}
             withBorder
         >
             <Table.ScrollContainer minWidth={470}>
                 <Table
-                    withTableBorder
                     verticalSpacing="md"
                 >
                     <Table.Thead>
@@ -66,14 +72,14 @@ export default function AgentBotsCard({ className }: IAgentBotsCard) {
                             <Table.Th className="uppercase">{t('agent_bots_card.table.eth_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.flr_label')}</Table.Th>
                             <Table.Th
-                                className={`uppercase text-right ${classes.sticky}`}
+                                className={`uppercase ${classes.sticky}`}
                             >
                                 {t('agent_bots_card.table.actions_label')}
                             </Table.Th>
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {collaterals.isPending &&
+                        {collateral.isPending &&
                             <Table.Tr>
                                 <Table.Td
                                     colSpan={8}
@@ -82,18 +88,28 @@ export default function AgentBotsCard({ className }: IAgentBotsCard) {
                                 </Table.Td>
                             </Table.Tr>
                         }
-                        {collaterals.data !== undefined &&
+                        {collateral.data !== undefined &&
                             <Table.Tr>
                                 <Table.Td>1</Table.Td>
                                 <Table.Td>
-                                    <Badge
-                                        variant="filled"
-                                        color={botStatus.data ? 'rgba(36, 36, 37, 0.06)' : 'var(--mantine-color-red-1)'}
-                                        radius="xs"
-                                        className={`uppercase font-normal ${botStatus.data ? 'text-black' : 'text-red-700'}`}
-                                    >
-                                        {t(`agent_bots_card.table.${botStatus.data ? 'agent_online_label' : 'agent_offline_label'}`)}
+                                    <div>
+                                        <div className="flex items-center mb-1">
+                                            <Badge
+                                            variant="outline"
+                                            color={textColorStatus}
+                                            radius="xs"
+                                            className={`font-normal`}
+                                        >
+                                        <div className="flex items-center">
+                                            <span className="status-dot mr-2" style={{ backgroundColor: textColorStatus }}></span>
+                                            <span style={{ color: textColorStatus }}>
+                                                {t(`agent_bots_card.table.agent_${botStatus.data  ? 'live' : 'offline'}_label`)}
+                                            </span>
+                                        </div>
                                     </Badge>
+                                    </div>
+                                </div>
+                                
                                 </Table.Td>
                                 <Table.Td>
                                     <div className="flex items-center">

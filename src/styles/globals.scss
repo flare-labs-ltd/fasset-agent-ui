@@ -8,6 +8,9 @@
     --background-end-rgb: 255, 255, 255;
     --input-bg: 0, 0, 0;
     --flr-red: #d3385a;
+    --green-default: #116622;
+    --orange-default: #F19D70;
+    --dark-red-default: #BD2222;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -97,4 +100,15 @@ body {
     border-radius: var(--mantine-radius-xs);
     text-transform: uppercase;
     background-color: rgba(36, 36, 37, 0.06);
+}
+
+.status-dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.mantine-Badge-root .mantine-Badge-label {
+    text-transform: none;
 }

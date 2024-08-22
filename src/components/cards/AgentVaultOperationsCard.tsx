@@ -10,16 +10,19 @@ import DepositCollateralModal from "@/components/modals/DepositCollateralModal";
 import DepositFLRModal from "@/components/modals/DepositFLRModal";
 import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
 import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
-import { IAgentVault } from "@/types";
+import { IAgentVault, ICollateralItem } from "@/types";
 import { useRouter } from "next/router";
+import { UseQueryResult } from "@tanstack/react-query";
 
 
 interface IAgentVaultOperationsCard {
     className?: string;
     agentVault: IAgentVault|undefined;
+    collateral: UseQueryResult<ICollateralItem[], Error>;
+
 }
 
-export default function AgentVaultOperationsCard({ className, agentVault }: IAgentVaultOperationsCard) {
+export default function AgentVaultOperationsCard({ className, agentVault, collateral}: IAgentVaultOperationsCard) {
     const { t } = useTranslation();
     const [isDepositCollateralModalActive, setIsDepositCollateralModalActive] = useState<boolean>(false);
     const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
@@ -67,6 +70,7 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
             {agentVault &&
                 <>
                     <DepositCollateralModal
+                        collateral={collateral}
                         vaultCollateralToken={agentVault.vaultCollateralToken}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
@@ -74,6 +78,7 @@ export default function AgentVaultOperationsCard({ className, agentVault }: IAge
                         onClose={() => setIsDepositCollateralModalActive(false)}
                     />
                     <DepositFLRModal
+                        collateral={collateral}
                         opened={isDepositFLRModalActive}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}

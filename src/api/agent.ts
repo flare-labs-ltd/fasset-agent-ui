@@ -13,7 +13,8 @@ import {
     IAgentSettingsDTO,
     ISecretsTemplate,
     IVaultCollateral,
-    INotification
+    INotification,
+    ICollateralItem
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -93,11 +94,7 @@ export function useCollaterals() {
             return response.data.data;
         },
         select: (data: ICollateral[]) => {
-            const collaterals: {
-                symbol: string;
-                balance: string;
-                wrapped?: string;
-            }[] = [];
+            const collaterals: ICollateralItem[] = [];
             const symbols: string[] = [];
 
             data.forEach(item => {

@@ -12,7 +12,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { modals } from '@mantine/modals';
-import { useVaultInfo, useUpdateVault } from '@/api/agent';
+import { useVaultInfo, useUpdateVault, useCollaterals } from '@/api/agent';
 import VaultForm, { FormRef } from '@/components/forms/VaultForm';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import AgentVaultOperationsCard from '@/components/cards/AgentVaultOperationsCard';
@@ -27,6 +27,7 @@ export default function Vault() {
     const vaultInfo = useVaultInfo(fAssetSymbol as string, agentVaultAddress as string, fAssetSymbol != null && agentVaultAddress != null);
     const updateVault = useUpdateVault();
     const formRef = useRef<FormRef>(null);
+    const collateral = useCollaterals();
 
     const confirmModal = () => {
         const form = formRef?.current?.form();
@@ -219,6 +220,7 @@ export default function Vault() {
                 </Paper>
                 {!isEditing &&
                     <AgentVaultOperationsCard
+                        collateral={collateral}
                         agentVault={vaultInfo.data}
                         className="mt-8 md:mt-0 border-primary w-full md:w-1/4 self-start"
                     />

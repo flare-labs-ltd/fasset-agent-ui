@@ -9,6 +9,7 @@ import { useIsWhitelisted, useManagementAddress } from "@/api/agent";
 import { useTranslation, Trans } from "react-i18next";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { truncateString } from "@/utils";
+import CopyIcon from '../icons/CopyIcon';
 
 interface IManagementAddressCard {
     className?: string;
@@ -25,7 +26,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
             withBorder
         >
             <div className="flex justify-between flex-wrap md:flex-nowrap">
-                <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap">
+                <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap items-center">
                     <Text
                         className="mr-3"
                         c="var(--mantine-color-gray-7)"
@@ -45,6 +46,9 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                     >
                         {truncateString(managementAddress.data ?? '', 9, 9)}
                     </Text>
+                    <CopyIcon
+                          text={managementAddress.data ?? ''}
+                      />
                 </div>
                 {!isWhitelisted.isPending &&
                     <Badge

@@ -30,8 +30,8 @@
                 "settings_label": "Settings",
                 "title": "Agent Bot Actions"
             },
-            "agent_offline_label": "Agent offline",
-            "agent_online_label": "Agent online",
+            "agent_offline_label": "Offline",
+            "agent_live_label": "Online",
             "eth_label": "ETH",
             "flr_label": "FLR",
             "status_label": "Status",
@@ -143,7 +143,7 @@
     "deposit_collateral_modal": {
         "close_button": "Close",
         "confirm_button": "Deposit",
-        "deposit_amount_description_label": "Deposit your Vault Collateral Token",
+        "deposit_amount_description_label": "Your current balance on working address: {{amount}} {{token}}.",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
         "error_message": "Unable to deposit collateral",
@@ -154,7 +154,7 @@
     "deposit_flr_in_pool": {
         "close_button": "Close",
         "confirm_button": "Deposit",
-        "deposit_amount_description_label": "Deposit FLR",
+        "deposit_amount_description_label": "Your current balance on working address: {{amount}} {{token}}.",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
         "error_message": "Unable to deposit FLR in pool",
@@ -265,19 +265,33 @@
                 "view_vault_label": "View Vault",
                 "vault_actions_title": "Vault actions"
             },
+            "health_status_label": "Health & Status",
+            "health_status_ccb_label": "CCB",
+            "health_status_closing_label": "Closing",
+            "health_status_healthy_label": "Healthy",
+            "health_status_in_full_liquidation_label": "In full liquidation",
+            "health_status_in_liquidation_label": "In Liquidation",
+            "status_live_label": "Public - Live",
+            "status_not_listed_label": "Not listed - live",
             "agent_label": "Agent",
             "flr_label": "FLR",
-            "free_lots_label": "Free lots",
+            "free_lots_label": "Available lots",
             "health_label": "Health",
             "minted_amounts_label": "Minted amounts",
             "minted_lots_label": "Minted lots",
             "pool_amount_label": "Pool amount",
-            "pool_cr_label": "Pool CR",
-            "status_label": "Status",
+            "status_health_label": "Health & Status",
             "type_label": "Type",
             "vault_address_label": "Vault address",
             "vault_amount_label": "Vault amount",
-            "vault_cr_label": "Vault CR"
+            "cr_label": "Collateral Ratio",
+            "tvl_mint_label": "TVL & Mint Count",
+            "pool_fee": "Pool Fee",
+            "vault_label": "Vault",
+            "pool_label": "Pool",
+            "pool_collateral_label": "Pool collateral:",
+            "vault_collateral_label": "Vault collateral:",
+            "tvl_mint_count_label": "Tvl & Mint count"
         },
         "updating_label": "Updating"
     },
@@ -312,9 +326,22 @@
             "not_equal": "The {{field1}} field can not be the same as {field2}}",
             "password_no_match": "Password does not match",
             "birth_day": "The {{field}} field must be a valid date"
+        },
+        "custom_messages": {
+            "balance_to_low": "Balance is to low"
         }
     },
     "working_address_card": {
         "title": "Working address"
+    },
+    "token": {
+        "cflr_label": "CFLR",
+        "flr_label": "FLR",
+        "cpt_label": "CPT",
+        "f_test_xrp_label": "FTestXRP",
+        "test_eth_label": "TestETH",
+        "test_usdc_label": "TestUSDC",
+        "test_usdt_label": "TestUSDT",
+        "test_xrp_label": "testXRP"
     }
 }

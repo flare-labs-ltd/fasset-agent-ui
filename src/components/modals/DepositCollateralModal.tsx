@@ -5,7 +5,9 @@ import {
     Anchor,
     TextInput,
     Text,
-    Divider
+    Divider,
+    rem,
+    NumberInput
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useTranslation } from "react-i18next";
@@ -14,12 +16,17 @@ import { modals } from "@mantine/modals";
 import * as yup from "yup";
 import { useDepositCollateral } from "@/api/agentVault";
 import { useState } from "react";
+import { UseQueryResult } from "@tanstack/react-query";
+import { ICollateralItem } from "@/types";
+import { IconExclamationCircle } from "@tabler/icons-react";
+import { toNumber } from "@/utils";
 
 interface IDepositCollateralModal {
     opened: boolean;
     vaultCollateralToken: string;
     fAssetSymbol: string;
     agentVaultAddress: string;
+    collateral: UseQueryResult<ICollateralItem[], Error>;
     onClose: () => void;
 }
 
@@ -27,13 +34,19 @@ interface IFormValues {
     amount: number|undefined;
 }
 
-export default function DepositCollateralModal({ opened, vaultCollateralToken, fAssetSymbol, agentVaultAddress, onClose }: IDepositCollateralModal) {
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
+export default function DepositCollateralModal({ opened, vaultCollateralToken, fAssetSymbol, agentVaultAddress, onClose, collateral }: IDepositCollateralModal) {
     const depositCollateral = useDepositCollateral();
+    const [errorMessage, setErrorMessage] = useState<string>();
+
     const { t } = useTranslation();
 
+    const amount = toNumber((collateral?.data || []).find(c => c.symbol.toLowerCase() === vaultCollateralToken.toLowerCase())?.balance || '0');
     const schema = yup.object().shape({
-        amount: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
+        amount: yup.number()
+        .required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
+        .max(amount, t('validation.custom_messages.balance_to_low'))
+        .min(1)
+
     });
     const form = useForm<IFormValues>({
         mode: 'uncontrolled',
@@ -44,8 +57,14 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
         validate: yupResolver(schema)
     });
 
-    const openSuccessModal = () => {
+    const handleOnClose = () => {
+        setErrorMessage(undefined);
+        form.reset();
         onClose();
+    }
+
+    const openSuccessModal = () => {
+        handleOnClose();
         modals.open({
             title: t('deposit_collateral_modal.title'),
             children: (
@@ -75,39 +94,11 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
         });
     }
 
-    const openErrorModal = (errorMessage: string) => {
-        setIsModalVisible(false);
-        modals.open({
-            title: t('deposit_collateral_modal.title'),
-            children: (
-                <>
-                    <Text>
-                        {errorMessage}
-                    </Text>
-                    <Divider
-                        className="my-8"
-                        styles={{
-                            root: {
-                                marginLeft: '-2rem',
-                                marginRight: '-2rem'
-                            }
-                        }}
-                    />
-                    <div className="flex justify-end mt-4">
-                        <Button onClick={() => modals.closeAll()}>
-                            { t('deposit_collateral_modal.close_button')}
-                        </Button>
-                    </div>
-                </>
-            ),
-            centered: true,
-            onClose: () => setIsModalVisible(true)
-        });
-    }
-
     const onDepositCollateralSubmit = async(amount: number) => {
         const status = form.validate();
         if (status.hasErrors) return;
+
+        setErrorMessage(undefined);
 
         try {
             await depositCollateral.mutateAsync({
@@ -118,27 +109,46 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
             openSuccessModal();
         } catch (error) {
             if ((error as any).message) {
-                openErrorModal((error as any).response.data.message);
+                setErrorMessage((error as any).response.data.message);
             } else {
-                openErrorModal(t('deposit_collateral_modal.error_message'));
+                setErrorMessage(t('deposit_collateral_modal.error_message'));
             }
         }
     }
 
     return (
         <Modal
-            opened={isModalVisible && opened}
-            onClose={onClose}
+            opened={opened}
+            onClose={handleOnClose}
             title={t('deposit_collateral_modal.title')}
             closeOnClickOutside={!depositCollateral.isPending}
             closeOnEscape={!depositCollateral.isPending}
             centered
         >
             <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
-                <TextInput
+
+                {errorMessage &&
+                    <div className="flex items-center mb-5 border border-red-700 p-3 bg-red-100">
+                        <IconExclamationCircle
+                            style={{ width: rem(25), height: rem(25) }}
+                            color="var(--flr-red)"
+                            className="mr-3"
+                        />
+                        <Text
+                            size="sm"
+                            c="var(--flr-red)"
+                        >
+                            {errorMessage}
+                        </Text>
+                    </div>
+                }
+
+                <NumberInput
                     {...form.getInputProps('amount')}
+                    decimalScale={3}
+                    min={0}
                     label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken })}
-                    description={t('deposit_collateral_modal.deposit_amount_description_label')}
+                    description={t('deposit_collateral_modal.deposit_amount_description_label', {amount: amount , token: vaultCollateralToken})}
                     placeholder={t('deposit_collateral_modal.deposit_amount_placeholder_label')}
                     withAsterisk
                 />

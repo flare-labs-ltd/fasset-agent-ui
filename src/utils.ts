@@ -47,3 +47,34 @@ export const truncateString = (text: string, from: number = 4, to: number = 4) =
 export const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
 }
+
+export const isNumeric = (value: string | number | boolean | undefined | null) => {
+    if (value === undefined || value === null) {
+        return false;
+    }
+    if (isBoolean(value)) {
+        return false;
+    }
+
+    return typeof value === 'number'
+        ? true
+        : /^[+-]?\d+(\.\d+)?$/.test(value as string);
+}
+
+export const isBoolean = (val: any) => {
+    return val === false || val === true;
+}
+
+export const toNumber = (value: string) => {
+    return Number(value.replace(/,/g, ''));
+}
+
+export const isMaxCRValue = (value: string | undefined | null) => {
+    if (value === '<inf>') {
+        return true;
+    }
+    if (value !== null && value !== undefined && isNumeric(value)) {
+        return Number(value.replace(/,/g, '')) >= 1000;
+    }
+    return false;
+}
