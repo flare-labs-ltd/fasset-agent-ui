@@ -3,7 +3,8 @@ import {
     NumberInput,
     Divider,
     Select,
-    Loader
+    Loader,
+    Text
 } from "@mantine/core";
 import { useForm, UseFormReturnType } from "@mantine/form";
 import {
@@ -12,7 +13,7 @@ import {
     useImperativeHandle,
     useState
 } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { yupResolver } from "mantine-form-yup-resolver";
 import * as yup from "yup";
 import { useVaultCollaterals } from "@/api/agent";
@@ -61,6 +62,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
     const [vaultCollateralTokens, setVaultCollateralTokens] = useState<string[]>([]);
     const [collateralTemplate, setCollateralTemplate] = useState<ICollateralTemplate|null>();
     const [poolTokenSuffixCharCount, setPoolTokenSuffixCharCount] = useState<number>(0);
+    const [minAmountDescriptionLabel, setMinAmountDescriptionLabel] = useState<string>();
     const { t } = useTranslation();
     const vaultCollaterals = useVaultCollaterals();
 
@@ -103,6 +105,16 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
             setIsHidden(values.fAssetType === undefined || values.vaultCollateralToken === undefined);
             setPoolTokenSuffixCharCount(values.poolTokenSuffix ? values.poolTokenSuffix.length : 0);
+
+            if (values.fAssetType !== undefined) {
+                if (values.fAssetType!.toLowerCase() === 'ftestxrp') {
+                    setMinAmountDescriptionLabel('forms.vault.xrp_min_amount_description_label');
+                } else if (values.fAssetType!.toLowerCase() === 'ftestbtc') {
+                    setMinAmountDescriptionLabel('forms.vault.btc_min_amount_description_label');
+                } else if (values.fAssetType!.toLowerCase() === 'ftestdoge') {
+                    setMinAmountDescriptionLabel('forms.vault.doge_min_amount_description_label');
+                }
+            }
         },
     });
 
@@ -394,6 +406,32 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         onKeyDownCapture={onKeyDownCapture}
                     />
                 </>
+            }
+            {minAmountDescriptionLabel &&
+                <Trans
+                    i18nKey={minAmountDescriptionLabel}
+                    parent={Text}
+                    size="xs"
+                    className="whitespace-pre-line mt-4"
+                    components={[
+                        <Text
+                            size="xs"
+                            component="a"
+                            target="_blank"
+                            href="https://test.bithomp.com/faucet"
+                            c="primary"
+                            key="https://test.bithomp.com/faucet"
+                        />,
+                        <Text
+                            size="xs"
+                            component="a"
+                            target="_blank"
+                            href="https://faucet.flare.network"
+                            c="primary"
+                            key="https://faucet.flare.network"
+                        />
+                    ]}
+                />
             }
         </form>
     )

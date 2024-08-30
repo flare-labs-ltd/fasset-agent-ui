@@ -6,7 +6,7 @@ import {
     Text,
     Divider
 } from '@mantine/core';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation'
 import { modals } from '@mantine/modals';
 import { useState, useRef } from 'react';
@@ -15,8 +15,11 @@ import { useCreateVault, useGetUnderlyingAssetBalance } from '@/api/agent';
 import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
 import { IAgentSettingsConfig } from '@/types';
 import BackButton from "@/components/elements/BackButton";
+import { satoshiToBtc, toNumber } from "@/utils";
 
 const MIN_XRP_LIMIT = 50;
+const MIN_BTC_LIMIT = 0.001;
+const MIN_DOGE_LIMIT = 20;
 
 export default function AddVault() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -73,9 +76,27 @@ export default function AddVault() {
             const data = form?.getValues();
             
             await setFAssetType(data.fAssetType);
-            await underlyingAssetBalance.refetch();
-            if (underlyingAssetBalance.data < MIN_XRP_LIMIT) {
-                showErrorNotification(t('add_agent_vault.xrp_min_limit_error'));
+            const response: any = await underlyingAssetBalance.refetch();
+            let balance = toNumber(response.data.balance);
+
+            const type = data.fAssetType.toLowerCase();
+            if (type === 'ftestbtc') {
+                balance = satoshiToBtc(balance);
+            }
+
+            const minLimit = type === 'ftestxrp'
+                ? MIN_XRP_LIMIT
+                : type === 'ftestbtc'
+                    ? MIN_BTC_LIMIT
+                    : MIN_DOGE_LIMIT;
+
+            if (balance < minLimit) {
+                const key = type === 'ftestxrp'
+                    ? 'add_agent_vault.xrp_min_limit_error'
+                    : type === 'ftestbtc'
+                        ? 'add_agent_vault.btc_min_limit_error'
+                        : 'add_agent_vault.doge_min_limit_error';
+                showErrorNotification(t(key));
                 return;
             }
 
@@ -100,6 +121,7 @@ export default function AddVault() {
             showSucessNotification(t('add_agent_vault.success_message'));
             router.push('/');
         } catch (error) {
+            console.log(error)
             showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
@@ -127,30 +149,6 @@ export default function AddVault() {
                 className="mt-5 p-8"
             >
                 <VaultForm ref={formRef} />
-                <Trans
-                    i18nKey="add_agent_vault.min_amount_description_label"
-                    parent={Text}
-                    size="xs"
-                    className="whitespace-pre-line mt-4"
-                    components={[
-                        <Text
-                            size="xs"
-                            component="a"
-                            target="_blank"
-                            href="https://test.bithomp.com/faucet"
-                            c="primary"
-                            key="https://test.bithomp.com/faucet"
-                        />,
-                        <Text
-                            size="xs"
-                            component="a"
-                            target="_blank"
-                            href="https://faucet.flare.network"
-                            c="primary"
-                            key="https://faucet.flare.network"
-                        />
-                    ]}
-                />
                 <Divider
                     className="my-8"
                     styles={{

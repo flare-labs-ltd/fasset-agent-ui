@@ -78,3 +78,11 @@ export const isMaxCRValue = (value: string | undefined | null) => {
     }
     return false;
 }
+
+export const satoshiToBtc = (value: string|number) => {
+    if (typeof value === 'string') {
+        value = toNumber(value);
+    }
+
+    return value / 100000000;
+}

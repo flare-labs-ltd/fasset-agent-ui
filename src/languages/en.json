@@ -9,6 +9,7 @@
     },
     "add_agent_vault": {
         "back_button": "Back to Dashboard",
+        "btc_min_limit_error": "You need to have at least 0.001 BTC on your owner underlying address",
         "confirm_modal": {
             "cancel_button": "Cancel",
             "confirm_button": "Confirm",
@@ -16,7 +17,7 @@
             "title": "Before you proceed"
         },
         "discard_button": "Discard",
-        "min_amount_description_label": "You need to have at least 50 XRP on your owner underlying address (faucet: <0>https://test.bithomp.com/faucet</0>). \n Your work address needs to have a CFLR for gas and funding the agent-vault (faucet:  <1>https://faucet.flare.network</1>)",
+        "doge_min_limit_error": "You need to have at least 20 DOGE on your owner underlying address",
         "save_button": "Save and execute",
         "success_message": "Agent Vault successfully created",
         "title": "New Agent Vault",
@@ -183,6 +184,8 @@
             "address_label": "Address",
             "buy_fasset_by_agent_factor_description_label": "The factor by which FAsset can be redeemed in case of liquidation",
             "buy_fasset_by_agent_factor_label": "Buy FAsset By Agent Factor",
+            "btc_min_amount_description_label": "You need to have at least 0.001 BTC on your owner underlying address (faucet: <0>https://bitcoinfaucet.uo1.net/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
+            "doge_min_amount_description_label": "You need to have at least 20 DOGE on your owner underlying address (faucet: <0>https://dogecointf.salmen.website/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "enter_placeholder": "Enter ...",
             "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault",
             "fasset_type_label": "FAsset type",
@@ -205,7 +208,8 @@
             "pool_token_suffix_label": "Pool Token Suffix",
             "vault_collateral_token_description_label": "Defines which type of collateral will be used, only one type per Vault",
             "vault_collateral_token_label": "Vault collateral token",
-            "vault_collateral_token_placeholder": "Select your currency (USDC, USDT, ...)"
+            "vault_collateral_token_placeholder": "Select your currency (USDC, USDT, ...)",
+            "xrp_min_amount_description_label": "You need to have at least 50 XRP on your owner underlying address (faucet: <0>https://test.bithomp.com/faucet</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)"
         }
     },
     "layout": {
