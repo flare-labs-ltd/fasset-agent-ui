@@ -18,7 +18,7 @@ import BackButton from "@/components/elements/BackButton";
 import { satoshiToBtc, toNumber } from "@/utils";
 
 const MIN_XRP_LIMIT = 50;
-const MIN_BTC_LIMIT = 0.001;
+const MIN_BTC_LIMIT = 0.1;
 const MIN_DOGE_LIMIT = 20;
 
 export default function AddVault() {
