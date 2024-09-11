@@ -6,12 +6,6 @@ interface INotificationState {
     setLatestNotificationId: (id: number) => void;
 }
 
-/*
-export const useNotificationStore = create<INotificationStore>()((set) => ({
-    readAt: undefined,
-    setReadAt: () => set((state) => ({ readAt: Math.floor((new Date()).getTime() / 1000) })),
-}))*/
-
 export const useNotificationStore = create<INotificationState>()(
     persist(
         (set) => ({

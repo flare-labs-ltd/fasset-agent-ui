@@ -20,6 +20,7 @@ import { useVaultCollaterals } from "@/api/agent";
 import { IAgentVault } from "@/types";
 import { useRouter } from "next/router";
 import CopyIcon from "@/components/icons/CopyIcon";
+import { MIN_CREATE_VAULT_BALANCE } from "@/constants";
 
 interface IForm {
     disabled?: boolean;
@@ -63,6 +64,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
     const [collateralTemplate, setCollateralTemplate] = useState<ICollateralTemplate|null>();
     const [poolTokenSuffixCharCount, setPoolTokenSuffixCharCount] = useState<number>(0);
     const [minAmountDescriptionLabel, setMinAmountDescriptionLabel] = useState<string>();
+    const [minAmount, setMinAmount] = useState<number>();
     const { t } = useTranslation();
     const vaultCollaterals = useVaultCollaterals();
 
@@ -109,10 +111,13 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             if (values.fAssetType !== undefined) {
                 if (values.fAssetType!.toLowerCase() === 'ftestxrp') {
                     setMinAmountDescriptionLabel('forms.vault.xrp_min_amount_description_label');
+                    setMinAmount(MIN_CREATE_VAULT_BALANCE.XRP);
                 } else if (values.fAssetType!.toLowerCase() === 'ftestbtc') {
                     setMinAmountDescriptionLabel('forms.vault.btc_min_amount_description_label');
+                    setMinAmount(MIN_CREATE_VAULT_BALANCE.BTC);
                 } else if (values.fAssetType!.toLowerCase() === 'ftestdoge') {
                     setMinAmountDescriptionLabel('forms.vault.doge_min_amount_description_label');
+                    setMinAmount(MIN_CREATE_VAULT_BALANCE.DOGE);
                 }
             }
         },
@@ -431,6 +436,9 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                             key="https://faucet.flare.network"
                         />
                     ]}
+                    values={{
+                        amount: minAmount
+                    }}
                 />
             }
         </form>

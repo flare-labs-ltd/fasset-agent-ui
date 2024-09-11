@@ -16,10 +16,7 @@ import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifi
 import { IAgentSettingsConfig } from '@/types';
 import BackButton from "@/components/elements/BackButton";
 import { satoshiToBtc, toNumber } from "@/utils";
-
-const MIN_XRP_LIMIT = 50;
-const MIN_BTC_LIMIT = 0.1;
-const MIN_DOGE_LIMIT = 20;
+import { MIN_CREATE_VAULT_BALANCE } from "@/constants";
 
 export default function AddVault() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -85,10 +82,10 @@ export default function AddVault() {
             }
 
             const minLimit = type === 'ftestxrp'
-                ? MIN_XRP_LIMIT
+                ? MIN_CREATE_VAULT_BALANCE.XRP
                 : type === 'ftestbtc'
-                    ? MIN_BTC_LIMIT
-                    : MIN_DOGE_LIMIT;
+                    ? MIN_CREATE_VAULT_BALANCE.BTC
+                    : MIN_CREATE_VAULT_BALANCE.DOGE;
 
             if (balance < minLimit) {
                 const key = type === 'ftestxrp'
@@ -96,7 +93,11 @@ export default function AddVault() {
                     : type === 'ftestbtc'
                         ? 'add_agent_vault.btc_min_limit_error'
                         : 'add_agent_vault.doge_min_limit_error';
-                showErrorNotification(t(key));
+                showErrorNotification(t(key, {
+                    amount: type === 'ftestxrp'
+                        ? MIN_CREATE_VAULT_BALANCE.XRP
+                        : type === 'ftestbtc' ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
+                }));
                 return;
             }
 
