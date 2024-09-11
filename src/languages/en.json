@@ -294,8 +294,7 @@
             "vault_label": "Vault",
             "pool_label": "Pool",
             "pool_collateral_label": "Pool collateral:",
-            "vault_collateral_label": "Vault collateral:",
-            "tvl_mint_count_label": "Tvl & Mint count"
+            "vault_collateral_label": "Vault collateral:"
         },
         "updating_label": "Updating"
     },

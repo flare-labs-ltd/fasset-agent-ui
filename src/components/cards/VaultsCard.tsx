@@ -69,12 +69,12 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     useEffect(() => {
         let vaults: IVault[] = [];
         agentVaultsInformation.data !== undefined &&
-                            agentVaultsInformation.data.forEach(agentVaultInformation => (
-                                agentVaultInformation.vaults.forEach(v => {
-                                    vaults.push({...v, fassetSymbol: agentVaultInformation.fassetSymbol});
-                                }
-                            )
-                        ));
+        agentVaultsInformation.data.forEach(agentVaultInformation => (
+            agentVaultInformation.vaults.forEach(v => {
+                vaults.push({...v, fassetSymbol: agentVaultInformation.fassetSymbol});
+            }
+        )));
+
         let columns: IFAssetColumn[] = [
             {
                 id: 'type',
@@ -98,7 +98,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             }, {
                 id: 'agent',
                 label: t('vaults_card.table.agent_label'),
- 
+
                 render: (vault: IVault) => {
                     return (
                         1
@@ -159,7 +159,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 </Badge>
                             </div>
                             {
-                                vault.numLiquidations !== undefined && 
+                                vault.numLiquidations !== undefined &&
                                 <Badge
                                 variant="outline"
                                 color="var(--mantine-color-gray-7)"
@@ -174,65 +174,6 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                 }
             },
             {
-                id: 'tvl_mint_count',
-                label: t('vaults_card.table.tvl_mint_count_label'),
-                render: (vault: IVault) => {
-                    return (
-                        <div>
-                            <Tooltip
-                                label={
-                                    <Table
-                                        withRowBorders={false}
-                                        className="!border-0"
-                                        style={{
-                                            boxShadow: 'none'
-                                        }}
-                                    >
-                                        <Table.Tbody>
-                                            <Table.Tr>
-                                                <Table.Td className="p-0 pb-2 !border-0">
-                                                    <Text size="sm" className="mr-5">{t('vaults_card.table.pool_collateral_label')}</Text>
-                                                </Table.Td>
-                                                <Table.Td className="p-0 pb-2 !border-0">
-                                                    <div className="flex items-center justify-end">
-                                                        <CurrencyIcon currency="cflr" width="18" height="18" className="mr-1 self-center shrink-0" />
-                                                        <span>{vault.poolAmount}</span>
-                                                    </div>
-                                                </Table.Td>
-                                                <Table.Td className="p-0 pb-2 !border-0">
-                                                    <span className="ml-1 text-gray-400 text-sm">{t('token.flr_label')}</span>
-                                                </Table.Td>
-                                            </Table.Tr>
-                                            <Table.Tr>
-                                                <Table.Td className="p-0 !border-0">
-                                                    <Text size="sm">{t('vaults_card.table.vault_collateral_label')}</Text>
-                                                </Table.Td>
-                                                <Table.Td className="p-0 !border-0">
-                                                    <div className="flex items-center justify-end">
-                                                        <CurrencyIcon currency={vault.collateralToken} width="18" height="18" className="mr-1 self-center shrink-0" />
-                                                        <span>{vault.vaultAmount}</span>
-                                                    </div>
-                                                </Table.Td>
-                                                <Table.Td className="p-0 !border-0">
-                                                    <span className="ml-1 text-gray-400 text-sm">{vault.collateralToken}</span>
-                                                </Table.Td>
-                                            </Table.Tr>
-                                        </Table.Tbody>
-                                    </Table>
-                                }
-                            >
-                                <Text
-                                    size="sm"
-                                >
-                                    ${toNumber(vault.poolCollateralUSD).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                    </Text>
-                            </Tooltip>
-                            {/* <Text size="xs">{vault.mintCount || '0'}</Text> */}
-                        </div>
-                    );
-                }
-            },
-            {
                 id: 'freeLots',
                 label: t('vaults_card.table.free_lots_label'),
                 render: (vault: IVault) => `${vault.freeLots}`
@@ -241,58 +182,56 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                 id: 'vaultCR',
                 label: t('vaults_card.table.cr_label'),
                 render: (vault: IVault) => {
-                            let vaultCr = vault.vaultCR;
-                            let poolCr = vault.poolCR;
-        
-                            if (isMaxCRValue(vaultCr)) {
-                                vaultCr = '∞'
-                            } else {
-                                vaultCr = toNumber(vaultCr).toPrecision(3);
-                            }
-        
-                            if (isMaxCRValue(poolCr)) {
-                                poolCr = '∞'
-                            } else {
-                                poolCr = toNumber(poolCr).toPrecision(3);
-                            }
+                    let vaultCr = vault.vaultCR;
+                    let poolCr = vault.poolCR;
 
-        
-                            return (
-                                <Grid gutter="xs">
-                                    <Grid.Col span={4}>
-                    
-                                            <div className="flex flex-col">
-                                                <div style={{ fontSize: vaultCr === '∞' ? 'larger' : '' }}>
-                                                    {vaultCr}
-                                                </div>
-                                                <Text
-                                                    size="xs"
-                                                    className="mt-1"
-                                                >
-                                                    <span className="text-gray-400">{t('vaults_card.table.vault_label')}</span>
-                                                </Text>
-                                            </div>
-                                    </Grid.Col>
-                                    <Grid.Col span={4}>
-                                       
-                                            <div className="flex flex-col">
-                                                <div style={{ fontSize: poolCr === '∞' ? 'larger' : '' }}>
-                                                    {poolCr}
-                                                </div>
-                                                <Text
-                                                    size="xs"
-                                                    className="mt-1"
-                                                >
-                                                    <span className="text-gray-400">{t('vaults_card.table.pool_label')}</span>
-                                                </Text>
-                                            </div>
-                                    </Grid.Col>
-                                </Grid >
-                            )
-                        }
-                    
-                },
-            
+                    if (isMaxCRValue(vaultCr)) {
+                        vaultCr = '∞'
+                    } else {
+                        vaultCr = toNumber(vaultCr).toPrecision(3);
+                    }
+
+                    if (isMaxCRValue(poolCr)) {
+                        poolCr = '∞'
+                    } else {
+                        poolCr = toNumber(poolCr).toPrecision(3);
+                    }
+
+
+                    return (
+                        <Grid gutter="xs">
+                            <Grid.Col span={4}>
+
+                                    <div className="flex flex-col">
+                                        <div style={{ fontSize: vaultCr === '∞' ? 'larger' : '' }}>
+                                            {vaultCr}
+                                        </div>
+                                        <Text
+                                            size="xs"
+                                            className="mt-1"
+                                        >
+                                            <span className="text-gray-400">{t('vaults_card.table.vault_label')}</span>
+                                        </Text>
+                                    </div>
+                            </Grid.Col>
+                            <Grid.Col span={4}>
+
+                                    <div className="flex flex-col">
+                                        <div style={{ fontSize: poolCr === '∞' ? 'larger' : '' }}>
+                                            {poolCr}
+                                        </div>
+                                        <Text
+                                            size="xs"
+                                            className="mt-1"
+                                        >
+                                            <span className="text-gray-400">{t('vaults_card.table.pool_label')}</span>
+                                        </Text>
+                                    </div>
+                            </Grid.Col>
+                        </Grid >
+                    )
+                }
+            },
             {
                 id: 'pool_fee',
                 label: t('vaults_card.table.pool_fee'),
@@ -359,12 +298,10 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                     )
                 }
             },
-
         ];
 
         setVaults(vaults);
         setColumns(columns);
-
     }, [agentVaultsInformation.data]);
 
     const onClick = (modal: string, vault: any) => {
