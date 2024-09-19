@@ -34,7 +34,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
         await disconnect(connector);
         setNotConnectedChainId(supportedChainId as AllSupportedChainsType);
         closeConnectWalletModal();
-        router.push('/connect');
+        await router.push('/connect');
     };
 
     const activateConnector = async() => {

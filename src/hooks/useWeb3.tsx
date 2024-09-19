@@ -5,14 +5,17 @@ import {
     Web3ReactProvider
 } from "@web3-react/core";
 import type { Web3Provider as BaseWeb3Provider } from "@ethersproject/providers";
-import { AllSupportedChainsType } from "@/chains/chains";
+import {AllSupportedChainsType, appChainParams} from "@/chains/chains";
 import { isChainSupported } from "@/chains/utils";
-import connectors from "@/connectors/connectors";
+import connectors, { enabledWallets } from "@/connectors/connectors";
 import { connectEagerlyOnRefreshLocalStorage } from "@/utils";
 import {MetaMask} from "@web3-react/metamask";
 import {WalletConnect as WalletConnectV2} from "@web3-react/walletconnect-v2";
 import {CoinbaseWallet} from "@web3-react/coinbase-wallet";
 import { Network } from "@web3-react/network";
+import { useRouter } from "next/router";
+import {useGlobalStateChainIdWhenNotConnected} from "@/hooks/useNotConnectedChainProvider";
+
 
 /**
  * Extended base web3react provider to support other functionality as well
@@ -33,6 +36,8 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
     const web3React = useWeb3React<BaseWeb3Provider>();
     const { chainId } = web3React;
     const supportedChainId = isChainSupported(chainId);
+    const { notConnectedChainId, setNotConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
+    const router = useRouter();
 
     /**
      * Try to connect WalletConnect
@@ -50,6 +55,25 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
         }
 
         getConnectedAccount();
+
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', async (accounts: string[]) => {
+                const connectionData = window.localStorage.getItem('ACTIVE_CONNECTION');
+                if (connectionData !== null) {
+                    const data = JSON.parse(connectionData);
+
+                    if (data.wallet == 'MetaMask') {
+                        if (accounts.length > 0) {
+                            const desiredChainId = notConnectedChainId || appChainParams.desiredChainID;
+                            await connect(enabledWallets.metamask.connector, desiredChainId);
+                            await router.push('/');
+                        } else {
+                            await router.push('/connect');
+                        }
+                    }
+                }
+            })
+        }
     }, []);
 
     const connect = async(connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network, chainId?: number) => {

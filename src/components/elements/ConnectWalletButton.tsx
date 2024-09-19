@@ -14,7 +14,8 @@ import { useSecretExists } from "@/api/agent";
 export default function ConnectWalletButton() {
     const router = useRouter();
     const { t } = useTranslation();
-    const { account } = useWeb3();
+    const { account, isConnected } = useWeb3();
+
     const secretExists = useSecretExists();
     const { openConnectWalletModal } = useConnectWalletModal();
 
@@ -23,9 +24,10 @@ export default function ConnectWalletButton() {
             if (wallet) router.push(secretExists.data === true ? '/' : '/configure');
         })
     }
+
     return (
         <>
-            {account
+            {account && isConnected
                 ? <Button
                     variant="outline"
                     radius="xl"

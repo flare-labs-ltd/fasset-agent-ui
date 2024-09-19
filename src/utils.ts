@@ -4,6 +4,7 @@ import { walletConnectV2 } from '@/connectors/walletConnectV2';
 
 export const connectEagerlyOnRefreshLocalStorage = async (): Promise<string[]|undefined> => {
     const connectionData = window.localStorage.getItem('ACTIVE_CONNECTION');
+
     if (connectionData !== null) {
         const data = JSON.parse(connectionData);
 

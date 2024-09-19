@@ -18,6 +18,7 @@ export default function Connect() {
     const { account } = useWeb3();
     const { t } = useTranslation();
     const secretExists = useSecretExists();
+
     const onSetupAgentClick = async() => {
         if (account) {
             router.push(secretExists.data === true ? '/' : '/configure');

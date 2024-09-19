@@ -278,7 +278,7 @@ export function useNotifications() {
     return useQuery({
         queryKey: [AGENT_KEY.NOTIFICATIONS],
         queryFn: async(): Promise<INotification[]> => {
-            const response = await apiClient.get('https://fasset-tg-bot.flare.rocks/pull_flare_messages');
+            const response = await apiClient.get('https://fasset-tg-bot.flare.network/pull_flare_messages');
             return response.data.data
         },
         select: (data: INotification[]) => {
