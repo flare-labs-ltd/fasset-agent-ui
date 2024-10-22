@@ -1,49 +1,46 @@
+import { useState } from "react";
 import {
     Modal,
-    Group,
     Button,
-    Anchor,
     Text,
     Divider,
+    NumberInput,
     rem,
-    NumberInput
+    Anchor,
+    Group,
+    LoadingOverlay
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
 import { useTranslation } from "react-i18next";
-import { yupResolver } from "mantine-form-yup-resolver";
-import { modals } from "@mantine/modals";
 import * as yup from "yup";
-import { useDepositCollateral } from "@/api/agentVault";
-import { useState } from "react";
-import { UseQueryResult } from "@tanstack/react-query";
-import { ICollateralItem } from "@/types";
+import { useForm } from "@mantine/form";
+import { yupResolver } from "mantine-form-yup-resolver";
 import { IconExclamationCircle } from "@tabler/icons-react";
+import { modals } from "@mantine/modals";
 import { toNumber } from "@/utils";
+import { useFreeVaultBalance, useWithdrawVault } from "@/api/agentVault";
 
-interface IDepositCollateralModal {
+interface IWithdrawVaultCollateralModal {
     opened: boolean;
-    vaultCollateralToken: string;
+    onClose: () => void;
     fAssetSymbol: string;
     agentVaultAddress: string;
-    collateral: UseQueryResult<ICollateralItem[], Error>;
-    onClose: () => void;
 }
 
 interface IFormValues {
     amount: number|undefined;
 }
 
-export default function DepositCollateralModal({ opened, vaultCollateralToken, fAssetSymbol, agentVaultAddress, onClose, collateral }: IDepositCollateralModal) {
-    const depositCollateral = useDepositCollateral();
+export default function WithdrawVaultCollateralModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: IWithdrawVaultCollateralModal) {
     const [errorMessage, setErrorMessage] = useState<string>();
+    const freeVaultBalance = useFreeVaultBalance(fAssetSymbol, agentVaultAddress, opened);
+    const withdrawVault = useWithdrawVault();
     const { t } = useTranslation();
 
-    const amount = toNumber((collateral?.data || []).find(c => c.symbol.toLowerCase() === vaultCollateralToken.toLowerCase())?.balance || '0');
+    const amount = toNumber(freeVaultBalance?.data?.data?.balance ?? '0');
     const schema = yup.object().shape({
         amount: yup.number()
-        .required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
-        .max(amount, t('validation.custom_messages.balance_to_low'))
-        .min(1)
+            .required(t('validation.messages.required', { field: t('withdraw_vault_collateral_modal.withdraw_amount_label') }))
+            .min(1)
     });
     const form = useForm<IFormValues>({
         mode: 'uncontrolled',
@@ -59,6 +56,23 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
         }
     });
 
+    const onWithdrawVaultClick = async (amount: number) => {
+        try {
+            await withdrawVault.mutateAsync({
+                fAssetSymbol: fAssetSymbol,
+                agentVaultAddress: agentVaultAddress,
+                amount: amount
+            });
+            openSuccessModal();
+        } catch (error: any) {
+            if ((error as any).message) {
+                setErrorMessage((error as any).response.data.message);
+            } else {
+                setErrorMessage(t('withdraw_vault_collateral_modal.error_message'));
+            }
+        }
+    }
+
     const handleOnClose = () => {
         setErrorMessage(undefined);
         form.reset();
@@ -68,11 +82,11 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
     const openSuccessModal = () => {
         handleOnClose();
         modals.open({
-            title: t('deposit_collateral_modal.title'),
+            title: t('withdraw_vault_collateral_modal.title'),
             children: (
                 <>
                     <Text>
-                        {t('deposit_collateral_modal.success_message')}
+                        {t('withdraw_vault_collateral_modal.success_message')}
                     </Text>
                     <Divider
                         className="my-8"
@@ -87,7 +101,7 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
                         <Button
                             onClick={() => modals.closeAll()}
                         >
-                            { t('deposit_collateral_modal.close_button')}
+                            { t('withdraw_vault_collateral_modal.close_button')}
                         </Button>
                     </div>
                 </>
@@ -96,38 +110,17 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
         });
     }
 
-    const onDepositCollateralSubmit = async(amount: number) => {
-        const status = form.validate();
-        if (status.hasErrors) return;
-
-        setErrorMessage(undefined);
-
-        try {
-            await depositCollateral.mutateAsync({
-                fAssetSymbol: fAssetSymbol,
-                agentVaultAddress: agentVaultAddress,
-                amount: amount
-            });
-            openSuccessModal();
-        } catch (error) {
-            if ((error as any).message) {
-                setErrorMessage((error as any).response.data.message);
-            } else {
-                setErrorMessage(t('deposit_collateral_modal.error_message'));
-            }
-        }
-    }
-
     return (
         <Modal
             opened={opened}
             onClose={handleOnClose}
-            title={t('deposit_collateral_modal.title')}
-            closeOnClickOutside={!depositCollateral.isPending}
-            closeOnEscape={!depositCollateral.isPending}
+            title={t('withdraw_vault_collateral_modal.title')}
+            closeOnClickOutside={!withdrawVault.isPending}
+            closeOnEscape={!withdrawVault.isPending}
             centered
         >
-            <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
+            <LoadingOverlay visible={freeVaultBalance.isPending} />
+            <form onSubmit={form.onSubmit(form => onWithdrawVaultClick(form.amount as number))}>
                 {errorMessage &&
                     <div className="flex items-center mb-5 border border-red-700 p-3 bg-red-100">
                         <IconExclamationCircle
@@ -143,14 +136,15 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
                         </Text>
                     </div>
                 }
+                <Text>{t('withdraw_vault_collateral_modal.description_label', {amount: amount})}</Text>
                 <NumberInput
                     {...form.getInputProps('amount')}
-                    decimalScale={3}
                     min={0}
-                    label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken })}
-                    description={t('deposit_collateral_modal.deposit_amount_description_label', {amount: amount , token: vaultCollateralToken})}
-                    placeholder={t('deposit_collateral_modal.deposit_amount_placeholder_label')}
+                    max={amount}
+                    label={t('withdraw_vault_collateral_modal.withdraw_amount_label')}
+                    placeholder={t('withdraw_vault_collateral_modal.withdraw_amount_label')}
                     withAsterisk
+                    className="mt-5"
                 />
                 <Divider
                     className="my-8"
@@ -168,17 +162,17 @@ export default function DepositCollateralModal({ opened, vaultCollateralToken, f
                         size="sm"
                         c="gray"
                     >
-                        {t('deposit_collateral_modal.need_help_label')}
+                        {t('withdraw_vault_collateral_modal.need_help_label')}
                     </Anchor>
                     <Button
                         type="submit"
-                        loading={depositCollateral.isPending}
+                        loading={withdrawVault.isPending}
                         fw={400}
                     >
-                        {t('deposit_collateral_modal.confirm_button')}
+                        {t('withdraw_vault_collateral_modal.confirm_button')}
                     </Button>
                 </Group>
             </form>
         </Modal>
-    );
+    )
 }

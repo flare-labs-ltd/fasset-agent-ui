@@ -150,3 +150,17 @@ export interface IIconProps {
     height?: string;
     className?: string;
 }
+
+export interface IPoolBalance {
+    status: string;
+    data: {
+        balance: string;
+    }
+}
+
+export interface IFreeVaultBalance {
+    status: string;
+    data: {
+        balance: string;
+    }
+}
