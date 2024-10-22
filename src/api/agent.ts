@@ -296,3 +296,12 @@ export function useManagementAddress() {
         }
     });
 }
+
+export function useSelfClose() {
+    return useMutation({
+        mutationFn: async({ fAssetSymbol, agentVaultAddress, amount }: { fAssetSymbol: string, agentVaultAddress: string, amount: number }) => {
+            const response = await apiClient.post(`${resource}/selfClose/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
+            return response.data;
+        },
+    })
+}

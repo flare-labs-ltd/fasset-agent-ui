@@ -27,7 +27,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
             await router.push('/connect');
         } else if (url !== '/configure') {
             setCheckSecret(true);
-            isAgentConfigured();
+            await isAgentConfigured();
         }
 
         setIsLoading(false);

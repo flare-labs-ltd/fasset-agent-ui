@@ -112,10 +112,21 @@
             "title": "Working address"
         }
     },
+    "close_vault_modal": {
+        "cancel_button": "Cancel",
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to close vault? Vault will be closed by agent-bot after some time.",
+        "error_message": "Unable to close vault",
+        "success_message": "Vault successfully closed",
+        "title": "Close vault"
+    },
     "collaterals_card": {
         "agent_offline_label": "Agent offline",
         "agent_online_label": "Agent online",
         "title": "Working address"
+    },
+    "configure": {
+        "secrets_file_missing_label": "Secrets.json file does not exist. Please configure the file as instructed in <a>https://docs.flare.network/infra/fassets/deploying-agent/#setting-up-the-agent</a>"
     },
     "connect_wallet_button": {
         "connected_label": "Connected",
@@ -241,6 +252,17 @@
         "error_title": "Error",
         "success_title": "Success"
     },
+    "self_close_modal": {
+        "cancel_button": "Cancel",
+        "close_button": "Close",
+        "confirm_button": "Confirm",
+        "description_label": "Agent is backing {{amount}} {{fAssetSymbol}}.",
+        "error_message": "Unable to self-close",
+        "need_help_label": "Need help?",
+        "success_message": "FAssets successfully self-closed.",
+        "title": "Self-close",
+        "withdraw_amount_label": "Amount"
+    },
     "select_wallet_button": {
         "connect_label": "Connect",
         "disconnect_label": "Disconnect",
@@ -254,6 +276,16 @@
         "subtitle": "Let’s connect first...",
         "title": "Welcome to Admin Console!"
     },
+    "token": {
+        "cflr_label": "CFLR",
+        "flr_label": "FLR",
+        "cpt_label": "CPT",
+        "f_test_xrp_label": "FTestXRP",
+        "test_eth_label": "TestETH",
+        "test_usdc_label": "TestUSDC",
+        "test_usdt_label": "TestUSDT",
+        "test_xrp_label": "testXRP"
+    },
     "vaults_card": {
         "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
         "not_listed_label": "Not listed - live",
@@ -264,10 +296,14 @@
                 "activate_vault_label": "Activate Vault (Enter)",
                 "agent_vault_operations_title": "Agent Vault Operations",
                 "close_vault_label": "Close Vault (Exit)",
+                "deactivate_vault_label": "Deactivate vault",
                 "deposit_collateral_label": "Deposit collateral",
                 "deposit_flr_in_pool_label": "Deposit FLR in Pool",
+                "self_close_label": "Self-close",
                 "view_vault_label": "View Vault",
-                "vault_actions_title": "Vault actions"
+                "vault_actions_label": "Vault actions",
+                "withdraw_collateral_pool_tokens_label": "Withdraw collateral pool tokens",
+                "withdraw_vault_collateral_label": "Withdraw Vault collateral"
             },
             "health_status_label": "Health & Status",
             "health_status_ccb_label": "CCB",
@@ -337,14 +373,26 @@
     "working_address_card": {
         "title": "Working address"
     },
-    "token": {
-        "cflr_label": "CFLR",
-        "flr_label": "FLR",
-        "cpt_label": "CPT",
-        "f_test_xrp_label": "FTestXRP",
-        "test_eth_label": "TestETH",
-        "test_usdc_label": "TestUSDC",
-        "test_usdt_label": "TestUSDT",
-        "test_xrp_label": "testXRP"
+    "withdraw_collateral_pool_tokens_modal": {
+        "cancel_button": "Cancel",
+        "close_button": "Close",
+        "confirm_button": "Confirm",
+        "description_label": "Collateral pool tokens will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral pool tokens.",
+        "error_message": "Unable to withdraw collateral pool tokens",
+        "need_help_label": "Need help?",
+        "success_message": "Collateral successfully withdrawn",
+        "title": "Withdraw collateral pool tokens",
+        "withdraw_amount_label": "Withdraw amount"
+    },
+    "withdraw_vault_collateral_modal": {
+        "cancel_button": "Cancel",
+        "close_button": "Close",
+        "confirm_button": "Confirm",
+        "description_label": "Vault collateral will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral.",
+        "error_message": "Unable to withdraw vault collateral",
+        "need_help_label": "Need help?",
+        "success_message": "Vault Collateral successfully withdrawn",
+        "title": "Withdraw vault collateral",
+        "withdraw_amount_label": "Withdraw amount"
     }
 }
