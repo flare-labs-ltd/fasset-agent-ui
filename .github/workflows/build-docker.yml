@@ -2,8 +2,8 @@ name: container-images
 
 on:
   push:
-    branches: [ "main" ]
-    tags: [ "v*" ]
+    branches: [ "master" ]
+    #tags: [ "v*" ]
 
 jobs:
   build-container-image:
