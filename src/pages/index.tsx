@@ -13,7 +13,6 @@ export default function Dashboard() {
     const { t } = useTranslation();
     const collateral = useCollaterals();
 
-
     return (
         <Container
             fluid
