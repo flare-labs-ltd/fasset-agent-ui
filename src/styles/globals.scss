@@ -40,9 +40,6 @@ body {
     &:focus {
         border-color: var(--mantine-color-black);
     }
-    &:not([data-error="true"]) {
-        border-bottom: 1px solid #777777;
-    }
 }
 // Button
 .mantine-Button-root {

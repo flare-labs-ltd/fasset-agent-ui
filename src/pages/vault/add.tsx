@@ -122,6 +122,7 @@ export default function AddVault() {
             showSucessNotification(t('add_agent_vault.success_message'));
             router.push('/');
         } catch (error) {
+            console.log(error)
             showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);

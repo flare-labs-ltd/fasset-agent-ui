@@ -18,7 +18,6 @@ import {
     IconAt,
     IconBrandTelegram
 } from "@tabler/icons-react";
-import { useWeb3 } from "@/hooks/useWeb3";
 
 export interface ILayout {
     children?: React.ReactNode;
@@ -26,7 +25,6 @@ export interface ILayout {
 
 export default function Layout({ children, ...props }: ILayout) {
     const { t } = useTranslation();
-    const { isAuthenticated } = useWeb3();
     const version = process?.env?.APP_VERSION;
 
     return (
@@ -95,9 +93,7 @@ export default function Layout({ children, ...props }: ILayout) {
                                     </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
-                            {isAuthenticated &&
-                                <ConnectWalletButton />
-                            }
+                            <ConnectWalletButton />
                         </div>
                     </Container>
                     <Container fluid className="flex flex-1 w-full">

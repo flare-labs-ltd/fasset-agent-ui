@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { useWeb3 } from "@/hooks/useWeb3";
 import { useConnectWalletModal } from "@/hooks/useEthereumLogin";
+import { useSecretExists } from "@/api/agent";
 import BlingIcon from "@/components/icons/BlingIcon";
 
 export default function Connect() {
@@ -16,14 +17,14 @@ export default function Connect() {
     const { openConnectWalletModal } = useConnectWalletModal();
     const { account } = useWeb3();
     const { t } = useTranslation();
+    const secretExists = useSecretExists();
 
-    const onConnect = async() => {
+    const onSetupAgentClick = async() => {
         if (account) {
-            router.push('/');
+            router.push(secretExists.data === true ? '/' : '/configure');
         } else {
             openConnectWalletModal((wallet: string) => {
-                console.log('wallet', wallet)
-                if (wallet) router.push('/');
+                if (wallet) router.push(secretExists.data === true ? '/' : '/configure');
             });
         }
     };
@@ -41,7 +42,7 @@ export default function Connect() {
             >
                 <Button
                     variant="filled"
-                    onClick={onConnect}
+                    onClick={onSetupAgentClick}
                     size="lg"
                     fw={300}
                     rightSection={<BlingIcon width="14" height="14" />}
@@ -52,5 +53,3 @@ export default function Connect() {
         </Container>
     );
 }
-
-Connect.protected = true;

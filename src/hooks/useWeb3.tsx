@@ -9,13 +9,13 @@ import {AllSupportedChainsType, appChainParams} from "@/chains/chains";
 import { isChainSupported } from "@/chains/utils";
 import connectors, { enabledWallets } from "@/connectors/connectors";
 import { connectEagerlyOnRefreshLocalStorage } from "@/utils";
-import { MetaMask } from "@web3-react/metamask";
-import { WalletConnect as WalletConnectV2 } from "@web3-react/walletconnect-v2";
-import { CoinbaseWallet } from "@web3-react/coinbase-wallet";
+import {MetaMask} from "@web3-react/metamask";
+import {WalletConnect as WalletConnectV2} from "@web3-react/walletconnect-v2";
+import {CoinbaseWallet} from "@web3-react/coinbase-wallet";
 import { Network } from "@web3-react/network";
-import { useLogin } from "@/api/auth";
 import { useRouter } from "next/router";
-import { useGlobalStateChainIdWhenNotConnected } from "@/hooks/useNotConnectedChainProvider";
+import {useGlobalStateChainIdWhenNotConnected} from "@/hooks/useNotConnectedChainProvider";
+
 
 /**
  * Extended base web3react provider to support other functionality as well
@@ -23,11 +23,9 @@ import { useGlobalStateChainIdWhenNotConnected } from "@/hooks/useNotConnectedCh
 type Web3ContextType = {
     supportedChainId: false | AllSupportedChainsType;
     isConnected: boolean;
-    isAuthenticated: boolean;
     isInitializing: boolean;
     connect: (connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network, chainId?: number) => Promise<void>;
     disconnect: (connector: MetaMask | WalletConnectV2 | CoinbaseWallet | Network) => Promise<void>;
-    setAuthenticated: (status: boolean) => void;
 } & Web3ReactContextType<BaseWeb3Provider>;
 
 const Web3Context = createContext<Web3ContextType | null>(null);
@@ -35,11 +33,10 @@ const Web3Context = createContext<Web3ContextType | null>(null);
 export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ children: JSX.Element }>) => {
     const [isConnected, setIsConnected] = useState<boolean>(false);
     const [isInitializing, setIsInitializing] = useState<boolean>(true);
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const web3React = useWeb3React<BaseWeb3Provider>();
     const { chainId } = web3React;
     const supportedChainId = isChainSupported(chainId);
-    const { notConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
+    const { notConnectedChainId, setNotConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
     const router = useRouter();
 
     /**
@@ -49,11 +46,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
      * Only connect eagerly on last connected chain
      */
     useEffect(() => {
-        const token = window.localStorage.getItem('FASSET_TOKEN');
-        if (token) {
-            setIsAuthenticated(true);
-        }
-
         const getConnectedAccount = async() => {
             const accounts = await connectEagerlyOnRefreshLocalStorage();
             setIsInitializing(accounts === undefined);
@@ -108,10 +100,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
         setIsConnected(false);
     }
 
-    const setAuthenticated = (status: boolean) => {
-        setIsAuthenticated(status);
-    }
-
     const value = useMemo(
         () => ({
             supportedChainId,
@@ -119,8 +107,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
             connect,
             disconnect,
             isInitializing,
-            isAuthenticated,
-            setAuthenticated
         }),
         [
             supportedChainId,
@@ -128,8 +114,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
             connect,
             disconnect,
             isInitializing,
-            isAuthenticated,
-            setAuthenticated
         ],
     );
 

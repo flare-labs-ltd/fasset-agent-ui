@@ -92,13 +92,6 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
                         );
                         return;
                     }
-                } else {
-                    window.localStorage.setItem(
-                        'ACTIVE_CONNECTION',
-                        JSON.stringify({
-                            wallet: undefined,
-                        })
-                    );
                 }
             }
         } else {
