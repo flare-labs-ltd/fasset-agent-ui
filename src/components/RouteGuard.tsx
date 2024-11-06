@@ -10,11 +10,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
     const { isConnected, isInitializing, isAuthenticated } = useWeb3();
 
     const isWalletConnected = async(url?: string) => {
-        console.log({
-            isConnected: isConnected,
-            isInitializing: isInitializing,
-            isAuthenticated: isAuthenticated,
-        })
         if (isInitializing) return;
 
         if (!isAuthenticated) {

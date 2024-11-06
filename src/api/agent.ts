@@ -14,7 +14,9 @@ import {
     ISecretsTemplate,
     IVaultCollateral,
     INotification,
-    ICollateralItem
+    ICollateralItem,
+    IBalance,
+    IUnderlyingAddress
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -32,7 +34,9 @@ const AGENT_KEY = {
     SECRETS_TEMPLATE: 'agentSecretsTemplate',
     UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance',
     NOTIFICATIONS: 'notifications',
-    MANAGEMENT_ADDRESS: 'managementAddress'
+    MANAGEMENT_ADDRESS: 'managementAddress',
+    BALANCES: 'balances',
+    UNDERLYING_ADDRESSES: 'underlyingAddresses'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -292,7 +296,7 @@ export function useManagementAddress() {
         queryKey: [AGENT_KEY.MANAGEMENT_ADDRESS],
         queryFn: async() => {
             const response = await apiClient.get(`${resource}/managementAddress`);
-            return response.data.data
+            return response.data.data;
         }
     });
 }
@@ -303,5 +307,25 @@ export function useSelfClose() {
             const response = await apiClient.post(`${resource}/selfClose/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
             return response.data;
         },
+    })
+}
+
+export function useBalances() {
+    return useQuery({
+        queryKey: [AGENT_KEY.BALANCES],
+        queryFn: async () => {
+            const response = await apiClient.get(`${resource}/balances`);
+            return response.data.data as IBalance[];
+        }
+    })
+}
+
+export function useUnderlyingAddresses() {
+    return useQuery({
+        queryKey: [AGENT_KEY.UNDERLYING_ADDRESSES],
+        queryFn: async () => {
+            const response = await apiClient.get(`${resource}/underlyingAddresses`);
+            return response.data.data as IUnderlyingAddress[];
+        }
     })
 }

@@ -7,10 +7,11 @@ import AlertsCard from '@/components/cards/AlertsCard';
 import AgentBotsCard from '@/components/cards/AgentBotsCard';
 import ManagementAddressCard from '@/components/cards/ManagementAddressCard';
 import VaultsCard from '@/components/cards/VaultsCard';
-import { useCollaterals } from '@/api/agent';
+import { useBalances, useCollaterals } from '@/api/agent';
 
 export default function Dashboard() {
     const { t } = useTranslation();
+    const balances = useBalances();
     const collateral = useCollaterals();
 
     return (
@@ -33,7 +34,7 @@ export default function Dashboard() {
                     >
                         {t('dashboard.agent_title')}
                     </Title>
-                    <AgentBotsCard collateral={collateral}  />
+                    <AgentBotsCard balances={balances} />
                 </div>
                 <div className="hidden lg:block w-full lg:w-2/5">
                     <Title
@@ -52,7 +53,7 @@ export default function Dashboard() {
                 >
                     {t('dashboard.vaults_title')}
                 </Title>
-                <VaultsCard  collateral={collateral}/>
+                <VaultsCard collateral={collateral} />
             </div>
             <div className="block lg:hidden w-full mt-10">
                 <Title

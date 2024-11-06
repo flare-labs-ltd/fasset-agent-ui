@@ -5,11 +5,11 @@ import {
     Anchor,
     rem
 } from '@mantine/core';
-import { useIsWhitelisted, useManagementAddress } from "@/api/agent";
+import { useIsWhitelisted, useManagementAddress, useUnderlyingAddresses } from "@/api/agent";
 import { useTranslation, Trans } from "react-i18next";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { truncateString } from "@/utils";
-import CopyIcon from '../icons/CopyIcon';
+import CopyIcon from '@/components/icons/CopyIcon';
 
 interface IManagementAddressCard {
     className?: string;
@@ -19,6 +19,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
     const { t } = useTranslation();
     const isWhitelisted = useIsWhitelisted();
     const managementAddress= useManagementAddress();
+    const underlyingAddresses = useUnderlyingAddresses();
 
     return (
         <Paper
@@ -47,8 +48,8 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                         {truncateString(managementAddress.data ?? '', 9, 9)}
                     </Text>
                     <CopyIcon
-                          text={managementAddress.data ?? ''}
-                      />
+                        text={managementAddress.data ?? ''}
+                    />
                 </div>
                 {!isWhitelisted.isPending &&
                     <Badge
@@ -60,6 +61,38 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                         {t(`management_address_card.${isWhitelisted.data ? 'address_whitelisted_label' : 'address_not_whitelisted_label'}`)}
                     </Badge>
                 }
+            </div>
+            <div className="flex justify-between flex-wrap md:flex-nowrap mt-2">
+                <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap">
+                    <Text
+                        className="mr-3"
+                        c="var(--mantine-color-gray-7)"
+                        size="sm"
+                    >
+                        {t('management_address_card.underlying_addresses_label')}
+                    </Text>
+                    <div>
+                        {underlyingAddresses?.data?.map(address => (
+                            <div className="flex items-center" key={address.asset}>
+                                <Text
+                                    size="sm"
+                                    className="hidden sm:block"
+                                >
+                                    {address.asset}: {address.address}
+                                </Text>
+                                <Text
+                                    size="sm"
+                                    className="sm:hidden"
+                                >
+                                    {address.asset}: {truncateString(address.address, 9, 9)}
+                                </Text>
+                                <CopyIcon
+                                    text={address.address}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
             {isWhitelisted.data === false &&
                 <Paper
@@ -84,7 +117,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                                 c="black"
                             />,
                             icon: <IconArrowUpRight
-                                style={{ width: rem(20), height: rem(20) }}
+                                style={{width: rem(20), height: rem(20)}}
                                 className="ml-1"
                             />
                         }}

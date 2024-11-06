@@ -164,3 +164,14 @@ export interface IFreeVaultBalance {
         balance: string;
     }
 }
+
+export interface IBalance {
+    symbol: string;
+    balance: string;
+    wrapped?: string;
+}
+
+export interface IUnderlyingAddress {
+    asset: string;
+    address: string;
+}

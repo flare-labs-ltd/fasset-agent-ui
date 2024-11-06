@@ -248,7 +248,8 @@
         "address_not_whitelisted_label": "Address not whitelisted",
         "address_whitelisted_label": "Address whitelisted",
         "how_to_whitelist_agent_description": "To get your Agent (Management address) on whitelist please register your Agent via the<a>Fassets Telegram bot<icon></icon></a>",
-        "management_address_label": "Management address"
+        "management_address_label": "Management address",
+        "underlying_addresses_label": "Underyling addresses"
     },
     "notifications_card": {
         "no_notifications_label": "No new notifications available",
