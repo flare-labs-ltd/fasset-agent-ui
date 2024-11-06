@@ -21,7 +21,7 @@ ENV HOST 0.0.0.0
 
 # Once envs arent set in build time.
 #COPY .env ./
-#RUN npm run build
-#CMD ["npm", "run", "start"]
+RUN npm run build
 
-CMD ["npm", "run", "dev"]
+#CMD ["npm", "run", "start"]
+#CMD ["npm", "run", "dev"]
