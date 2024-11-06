@@ -135,13 +135,6 @@ export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard)
                                             <Menu.Label>{t('agent_bots_card.table.actions_menu.title')}</Menu.Label>
                                             <Menu.Item
                                                 component={Link}
-                                                leftSection={<IconFileSearch style={{ width: rem(14), height: rem(14) }} />}
-                                                href="/configure"
-                                            >
-                                                {t('agent_bots_card.table.actions_menu.settings_label')}
-                                            </Menu.Item>
-                                            <Menu.Item
-                                                component={Link}
                                                 leftSection={<IconPencilPlus style={{ width: rem(14), height: rem(14) }} />}
                                                 href="/vault/add"
                                             >
