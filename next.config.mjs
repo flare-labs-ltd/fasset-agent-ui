@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    basePath: process.env.BACKEND_URL || '',
+    basePath: process.env.FRONTEND_URL || '',
     reactStrictMode: true,
     i18n: {
         locales: ["en"],
