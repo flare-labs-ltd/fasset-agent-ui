@@ -190,6 +190,9 @@
         "title": "Agent Vault"
     },
     "forms": {
+        "login": {
+            "password_label": "Password"
+        },
         "vault": {
             "address_description_label": "Address description...",
             "address_label": "Address",
@@ -236,6 +239,10 @@
             "telegram_url": "https://t.me/FlareSupport",
             "title": "FAssets Agent"
         }
+    },
+    "login": {
+        "login_button": "Login",
+        "title": "FAssets Agent"
     },
     "management_address_card": {
         "address_not_whitelisted_label": "Address not whitelisted",

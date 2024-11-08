@@ -1,11 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 const apiClient = axios.create({
-    baseURL: process.env.API_URL,
-    // removed atm, all api endpoints are public
-    /*headers: {
-        'X-API-KEY': process.env.FASSET_API_KEY
-    }*/
+    baseURL: process.env.API_URL
 })
+
+if (typeof window !== 'undefined') {
+    const token = window.localStorage.getItem('FASSET_TOKEN');
+    apiClient.defaults.headers.common = { Authorization: `Bearer ${token}`};
+}
 
 export default apiClient;
