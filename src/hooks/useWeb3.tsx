@@ -13,7 +13,6 @@ import { MetaMask } from "@web3-react/metamask";
 import { WalletConnect as WalletConnectV2 } from "@web3-react/walletconnect-v2";
 import { CoinbaseWallet } from "@web3-react/coinbase-wallet";
 import { Network } from "@web3-react/network";
-import { useLogin } from "@/api/auth";
 import { useRouter } from "next/router";
 import { useGlobalStateChainIdWhenNotConnected } from "@/hooks/useNotConnectedChainProvider";
 

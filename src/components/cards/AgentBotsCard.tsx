@@ -10,43 +10,28 @@ import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import {
     useBotStatus,
-    useCollaterals,
     useWorkAddress
 } from "@/api/agent";
 import {
     IconDots,
-    IconFileSearch,
     IconPencilPlus
 } from "@tabler/icons-react";
 import { truncateString } from "@/utils";
 import { useState, useEffect } from "react";
 import CopyIcon from "@/components/icons/CopyIcon";
 import classes from "@/styles/components/cards/AgentBotsCard.module.scss";
-import { ICollateralItem } from "@/types";
+import { IBalance } from "@/types";
 import { UseQueryResult } from "@tanstack/react-query";
 
 interface IAgentBotsCard {
     className?: string;
-    collateral: UseQueryResult<ICollateralItem[], Error>;
+    balances: UseQueryResult<IBalance[], Error>;
 }
 
-export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard) {
-    const [usdcLabel, setUsdcLabel] = useState<string>();
-    const [usdtLabel, setUsdtLabel] = useState<string>();
-    const [flrLabel, setFlrLabel] = useState<string>();
-    const [ethLabel, setEthLabel] = useState<string>();
-
+export default function AgentBotsCard({ className,  balances}: IAgentBotsCard) {
     const { t } = useTranslation();
     const workAddress = useWorkAddress();
     const botStatus = useBotStatus();
-
-    useEffect(() => {
-        if (collateral.data === undefined) return;
-        setUsdcLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdc')?.balance);
-        setUsdtLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testusdt')?.balance);
-        setFlrLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'cflr')?.balance);
-        setEthLabel(collateral.data.find(collateral => collateral.symbol.toLowerCase() === 'testeth')?.balance);
-    }, [collateral]);
 
     let textColorStatus = 'var(--dark-red-default)';
     if (botStatus.data) {
@@ -67,10 +52,11 @@ export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard)
                             <Table.Th className="uppercase">#</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.status_label')}</Table.Th>
                             <Table.Th className="uppercase">{t('agent_bots_card.table.working_address_label')}</Table.Th>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.usdc_label')}</Table.Th>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.usdt_label')}</Table.Th>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.eth_label')}</Table.Th>
-                            <Table.Th className="uppercase">{t('agent_bots_card.table.flr_label')}</Table.Th>
+                            {balances?.data?.map(balance => (
+                                <Table.Th key={balance.symbol}>
+                                    {balance.symbol}
+                                </Table.Th>
+                            ))}
                             <Table.Th
                                 className={`uppercase ${classes.sticky}`}
                             >
@@ -79,7 +65,7 @@ export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard)
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                        {collateral.isPending &&
+                        {balances.isPending &&
                             <Table.Tr>
                                 <Table.Td
                                     colSpan={8}
@@ -88,28 +74,26 @@ export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard)
                                 </Table.Td>
                             </Table.Tr>
                         }
-                        {collateral.data !== undefined &&
+                        {balances.data !== undefined &&
                             <Table.Tr>
                                 <Table.Td>1</Table.Td>
                                 <Table.Td>
-                                    <div>
-                                        <div className="flex items-center mb-1">
-                                            <Badge
+                                    <div className="flex items-center mb-1">
+                                        <Badge
                                             variant="outline"
                                             color={textColorStatus}
                                             radius="xs"
                                             className={`font-normal`}
                                         >
-                                        <div className="flex items-center">
-                                            <span className="status-dot mr-2" style={{ backgroundColor: textColorStatus }}></span>
-                                            <span style={{ color: textColorStatus }}>
-                                                {t(`agent_bots_card.table.agent_${botStatus.data  ? 'live' : 'offline'}_label`)}
-                                            </span>
-                                        </div>
-                                    </Badge>
+                                            <div className="flex items-center">
+                                                <span className="status-dot mr-2"
+                                                      style={{backgroundColor: textColorStatus}}></span>
+                                                <span style={{color: textColorStatus}}>
+                                                        {t(`agent_bots_card.table.agent_${botStatus.data ? 'live' : 'offline'}_label`)}
+                                                    </span>
+                                            </div>
+                                        </Badge>
                                     </div>
-                                </div>
-                                
                                 </Table.Td>
                                 <Table.Td>
                                     <div className="flex items-center">
@@ -119,15 +103,16 @@ export default function AgentBotsCard({ className,  collateral}: IAgentBotsCard)
                                         />
                                     </div>
                                 </Table.Td>
-                                <Table.Td>{usdcLabel}</Table.Td>
-                                <Table.Td>{usdtLabel}</Table.Td>
-                                <Table.Td>{ethLabel}</Table.Td>
-                                <Table.Td>{flrLabel}</Table.Td>
+                                {balances?.data.map(balance => (
+                                    <Table.Td key={balance.symbol}>
+                                        {balance.balance}
+                                    </Table.Td>
+                                ))}
                                 <Table.Td className={classes.sticky}>
                                     <Menu>
                                         <Menu.Target>
                                             <IconDots
-                                                style={{ width: rem(20), height: rem(20) }}
+                                                style={{width: rem(20), height: rem(20)}}
                                                 className="cursor-pointer ml-auto"
                                             />
                                         </Menu.Target>
