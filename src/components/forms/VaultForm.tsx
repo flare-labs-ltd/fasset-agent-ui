@@ -64,6 +64,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
     const [collateralTemplate, setCollateralTemplate] = useState<ICollateralTemplate|null>();
     const [poolTokenSuffixCharCount, setPoolTokenSuffixCharCount] = useState<number>(0);
     const [minAmountDescriptionLabel, setMinAmountDescriptionLabel] = useState<string>();
+    const [faucetUrl, setFaucetUrl] = useState<string>();
     const [minAmount, setMinAmount] = useState<number>();
     const { t } = useTranslation();
     const vaultCollaterals = useVaultCollaterals();
@@ -112,12 +113,15 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                 if (values.fAssetType!.toLowerCase() === 'ftestxrp') {
                     setMinAmountDescriptionLabel('forms.vault.xrp_min_amount_description_label');
                     setMinAmount(MIN_CREATE_VAULT_BALANCE.XRP);
+                    setFaucetUrl('https://test.bithomp.com/faucet');
                 } else if (values.fAssetType!.toLowerCase() === 'ftestbtc') {
                     setMinAmountDescriptionLabel('forms.vault.btc_min_amount_description_label');
                     setMinAmount(MIN_CREATE_VAULT_BALANCE.BTC);
+                    setFaucetUrl('https://bitcoinfaucet.uo1.net/');
                 } else if (values.fAssetType!.toLowerCase() === 'ftestdoge') {
                     setMinAmountDescriptionLabel('forms.vault.doge_min_amount_description_label');
                     setMinAmount(MIN_CREATE_VAULT_BALANCE.DOGE);
+                    setFaucetUrl('https://dogecointf.salmen.website/');
                 }
             }
         },
@@ -423,9 +427,9 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                             size="xs"
                             component="a"
                             target="_blank"
-                            href="https://test.bithomp.com/faucet"
+                            href={faucetUrl}
                             c="primary"
-                            key="https://test.bithomp.com/faucet"
+                            key="faucet"
                         />,
                         <Text
                             size="xs"
@@ -433,7 +437,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                             target="_blank"
                             href="https://faucet.flare.network"
                             c="primary"
-                            key="https://faucet.flare.network"
+                            key="flareFaucet"
                         />
                     ]}
                     values={{

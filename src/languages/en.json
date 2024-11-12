@@ -198,7 +198,7 @@
             "address_label": "Address",
             "buy_fasset_by_agent_factor_description_label": "The factor by which FAsset can be redeemed in case of liquidation",
             "buy_fasset_by_agent_factor_label": "Buy FAsset By Agent Factor",
-            "btc_min_amount_description_label": "You need to have at least {{amount}} BTC on your owner underlying address (faucet: <0>https://bitcoinfaucet.uo1.net/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
+            "btc_min_amount_description_label": "You need to have at least {{amount}} BTC on your owner underlying address (faucet: <0> https://bitcoinfaucet.uo1.net/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "doge_min_amount_description_label": "You need to have at least {{amount}} DOGE on your owner underlying address (faucet: <0>https://dogecointf.salmen.website/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "enter_placeholder": "Enter ...",
             "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault",
