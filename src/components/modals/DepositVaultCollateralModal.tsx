@@ -3,46 +3,45 @@ import {
     Group,
     Button,
     Anchor,
-    TextInput,
     Text,
     Divider,
     rem,
     NumberInput
-} from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
-import { yupResolver } from 'mantine-form-yup-resolver';
-import * as yup from 'yup';
-import { useDepositFLRInPool } from '@/api/poolCollateral';
-import { useRouter } from 'next/router';
-import { modals } from '@mantine/modals';
-import { useState } from 'react';
-import { UseQueryResult } from '@tanstack/react-query';
-import { ICollateralItem } from '@/types';
-import { toNumber } from '@/utils';
-import { IconExclamationCircle } from '@tabler/icons-react';
+} from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useTranslation } from "react-i18next";
+import { yupResolver } from "mantine-form-yup-resolver";
+import { modals } from "@mantine/modals";
+import * as yup from "yup";
+import { useDepositCollateral } from "@/api/agentVault";
+import { useState } from "react";
+import { UseQueryResult } from "@tanstack/react-query";
+import { ICollateralItem } from "@/types";
+import { IconExclamationCircle } from "@tabler/icons-react";
+import { toNumber } from "@/utils";
 
-interface IDepositFLRModal {
+interface IDepositVaultCollateralModal {
     opened: boolean;
-    onClose: () => void;
+    vaultCollateralToken: string;
     fAssetSymbol: string;
     agentVaultAddress: string;
     collateral: UseQueryResult<ICollateralItem[], Error>;
+    onClose: () => void;
 }
+
 interface IFormValues {
-    amount: number|undefined;
+    amount: number | undefined;
 }
 
-export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVaultAddress, collateral }: IDepositFLRModal) {
+export default function DepositVaultCollateralModal({ opened, vaultCollateralToken, fAssetSymbol, agentVaultAddress, onClose, collateral }: IDepositVaultCollateralModal) {
+    const depositCollateral = useDepositCollateral();
     const [errorMessage, setErrorMessage] = useState<string>();
-    const depositFLR = useDepositFLRInPool();
     const { t } = useTranslation();
-    const router = useRouter();
 
-    const amount = toNumber((collateral?.data || []).find(c => c.symbol.toLowerCase() === 'flr' || c.symbol.toLowerCase() === 'cflr')?.balance || '0');
+    const amount = toNumber((collateral?.data || []).find(c => c.symbol.toLowerCase() === vaultCollateralToken.toLowerCase())?.balance || '0');
     const schema = yup.object().shape({
         amount: yup.number()
-        .required(t('validation.messages.required', { field: t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' }) }))
+        .required(t('validation.messages.required', { field: t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken }) }))
         .max(amount, t('validation.custom_messages.balance_to_low'))
         .min(1)
     });
@@ -52,17 +51,28 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
             amount: undefined,
         },
         //@ts-ignore
-        validate: yupResolver(schema)
+        validate: yupResolver(schema),
+        onValuesChange: (values: any) => {
+            if (values?.amount?.length === 0) {
+                form.setFieldValue('amount', undefined);
+            }
+        }
     });
+
+    const handleOnClose = () => {
+        setErrorMessage(undefined);
+        form.reset();
+        onClose();
+    }
 
     const openSuccessModal = () => {
         handleOnClose();
         modals.open({
-            title: t('deposit_flr_in_pool.title'),
+            title: t('deposit_collateral_modal.title'),
             children: (
                 <>
                     <Text>
-                        {t('deposit_flr_in_pool.success_message')}
+                        {t('deposit_collateral_modal.success_message')}
                     </Text>
                     <Divider
                         className="my-8"
@@ -74,8 +84,10 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
                         }}
                     />
                     <div className="flex justify-end mt-4">
-                        <Button onClick={() => modals.closeAll()}>
-                            { t('deposit_flr_in_pool.close_button')}
+                        <Button
+                            onClick={() => modals.closeAll()}
+                        >
+                            { t('deposit_collateral_modal.close_button')}
                         </Button>
                     </div>
                 </>
@@ -84,20 +96,14 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
         });
     }
 
-    const handleOnClose = () => {
-        setErrorMessage(undefined);
-        form.reset();
-        onClose();
-    }
-
     const onDepositCollateralSubmit = async(amount: number) => {
         const status = form.validate();
         if (status.hasErrors) return;
-        
+
         setErrorMessage(undefined);
 
         try {
-            await depositFLR.mutateAsync({
+            await depositCollateral.mutateAsync({
                 fAssetSymbol: fAssetSymbol,
                 agentVaultAddress: agentVaultAddress,
                 amount: amount
@@ -107,17 +113,18 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
             if ((error as any).message) {
                 setErrorMessage((error as any).response.data.message);
             } else {
-                setErrorMessage(t('deposit_flr_in_pool.error_message'));
+                setErrorMessage(t('deposit_collateral_modal.error_message'));
             }
         }
     }
+
     return (
         <Modal
             opened={opened}
             onClose={handleOnClose}
-            title={t('deposit_flr_in_pool.title')}
-            closeOnClickOutside={!depositFLR.isPending}
-            closeOnEscape={!depositFLR.isPending}
+            title={t('deposit_collateral_modal.title')}
+            closeOnClickOutside={!depositCollateral.isPending}
+            closeOnEscape={!depositCollateral.isPending}
             centered
         >
             <form onSubmit={form.onSubmit(form => onDepositCollateralSubmit(form.amount as number))}>
@@ -136,14 +143,13 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
                         </Text>
                     </div>
                 }
-                
                 <NumberInput
                     {...form.getInputProps('amount')}
                     decimalScale={3}
                     min={0}
-                    label={t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' })}
-                    description={t('deposit_flr_in_pool.deposit_amount_description_label', {amount: amount, token: 'FLR'})}
-                    placeholder={t('deposit_flr_in_pool.deposit_amount_placeholder_label')}
+                    label={t('deposit_collateral_modal.deposit_amount_label', { vaultCollateralToken: vaultCollateralToken })}
+                    description={t('deposit_collateral_modal.deposit_amount_description_label', {amount: amount , token: vaultCollateralToken})}
+                    placeholder={t('deposit_collateral_modal.deposit_amount_placeholder_label')}
                     withAsterisk
                 />
                 <Divider
@@ -162,14 +168,14 @@ export default function DepositFLRModal({ opened, onClose, fAssetSymbol, agentVa
                         size="sm"
                         c="gray"
                     >
-                        {t('deposit_flr_in_pool.need_help_label')}
+                        {t('deposit_collateral_modal.need_help_label')}
                     </Anchor>
                     <Button
                         type="submit"
-                        loading={depositFLR.isPending}
+                        loading={depositCollateral.isPending}
                         fw={400}
                     >
-                        {t('deposit_flr_in_pool.confirm_button')}
+                        {t('deposit_collateral_modal.confirm_button')}
                     </Button>
                 </Group>
             </form>

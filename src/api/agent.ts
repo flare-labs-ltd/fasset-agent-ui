@@ -9,14 +9,14 @@ import {
     IBotAlert,
     IAgentSettingsConfig,
     IAgentVault,
-    IAgentVaultInformation,
     IAgentSettingsDTO,
     ISecretsTemplate,
-    IVaultCollateral,
+    IVault,
     INotification,
     ICollateralItem,
     IBalance,
-    IUnderlyingAddress
+    IUnderlyingAddress,
+    IVaultCollateral
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -175,7 +175,7 @@ export function useDeactivateVault() {
 export function useAgentVaultsInformation() {
     return useQuery({
         queryKey: [AGENT_KEY.VAULTS],
-        queryFn: async(): Promise<IAgentVaultInformation[]> => {
+        queryFn: async(): Promise<IVault[]> => {
             const response = await apiClient.get(`${resource}/vaults`);
             return response.data.data;
         }

@@ -58,24 +58,25 @@ export interface INotification {
 
 export interface IVault {
     address: string;
-    freeLots: number;
-    mintedAmount: number;
-    mintedlots: number;
+    freeLots: string;
+    mintedAmount: string;
+    mintedlots: string;
     poolAmount: string;
     poolCR: string;
     status: boolean;
     updating: boolean;
     vaultAmount: number;
     vaultCR: string;
-    agentCPTs: number;
+    agentCPTs: string;
     collateralToken: string;
     numLiquidations: number;
+    createdAt: number;
+    fasset: string;
     health: string;
-    poolFee?: string; 
-    mintCount?: string; 
-    fassetSymbol?: string;
-    poolCollateralUSD: string;
-
+    lotsPoolBacked: string;
+    lotsVaultBacked: string;
+    poolFee: string;
+    mintCount: string;
 }
 
 export interface IAgentVaultInformation {
@@ -174,4 +175,10 @@ export interface IBalance {
 export interface IUnderlyingAddress {
     asset: string;
     address: string;
+}
+
+export interface ICalculateCollateral {
+    amount: string;
+    ownerBalance: string;
+    symbol: string;
 }

@@ -4,7 +4,9 @@ import {
     Paper,
     Button,
     Text,
-    Divider
+    Divider,
+    Anchor, 
+    Group
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation'
@@ -12,7 +14,7 @@ import { modals } from '@mantine/modals';
 import { useState, useRef } from 'react';
 import VaultForm, { FormRef } from '@/components/forms/VaultForm';
 import { useCreateVault, useGetUnderlyingAssetBalance } from '@/api/agent';
-import { showErrorNotification, showSucessNotification } from '@/hooks/useNotifications';
+import { showErrorNotification } from '@/hooks/useNotifications';
 import { IAgentSettingsConfig } from '@/types';
 import BackButton from "@/components/elements/BackButton";
 import { satoshiToBtc, toNumber } from "@/utils";
@@ -20,7 +22,7 @@ import { MIN_CREATE_VAULT_BALANCE } from "@/constants";
 
 export default function AddVault() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [fAssetSymbol, setFAssetType] = useState<string|null>(null);
+    const [fAssetSymbol, setFAssetType] = useState<string | null>(null);
     const { t } = useTranslation();
     const router = useRouter();
     const formRef = useRef<FormRef>(null);
@@ -48,16 +50,23 @@ export default function AddVault() {
                             }
                         }}
                     />
-                    <div className="flex justify-end">
+                    <Group justify="space-between" className="mt-5">
+                        <Anchor
+                            href="https://docs.flare.network/infra/fassets/agent/"
+                            target="_blank"
+                            size="sm"
+                            c="gray"
+                        >
+                            {t('add_agent_vault.confirm_modal.need_help_label')}
+                        </Anchor>
                         <Button
                             onClick={onSubmit}
                             radius="xl"
                             size="md"
-                            color="rgba(189, 34, 34, 1)"
                         >
                             {t('add_agent_vault.confirm_modal.confirm_button')}
                         </Button>
-                    </div>
+                    </Group>
                 </>
 
             ),
@@ -71,32 +80,31 @@ export default function AddVault() {
             setIsLoading(true);
             const form = formRef?.current?.form();
             const data = form?.getValues();
-            
             await setFAssetType(data.fAssetType);
             const response: any = await underlyingAssetBalance.refetch();
             let balance = toNumber(response.data.balance);
 
             const type = data.fAssetType.toLowerCase();
-            if (type === 'ftestbtc') {
+            if (type.includes('btc')) {
                 balance = satoshiToBtc(balance);
             }
 
-            const minLimit = type === 'ftestxrp'
+            const minLimit = type.includes('xrp')
                 ? MIN_CREATE_VAULT_BALANCE.XRP
                 : type === 'ftestbtc'
                     ? MIN_CREATE_VAULT_BALANCE.BTC
                     : MIN_CREATE_VAULT_BALANCE.DOGE;
 
             if (balance < minLimit) {
-                const key = type === 'ftestxrp'
+                const key = type.includes('xrp')
                     ? 'add_agent_vault.xrp_min_limit_error'
                     : type === 'ftestbtc'
                         ? 'add_agent_vault.btc_min_limit_error'
                         : 'add_agent_vault.doge_min_limit_error';
                 showErrorNotification(t(key, {
-                    amount: type === 'ftestxrp'
+                    amount: type.includes('xrp')
                         ? MIN_CREATE_VAULT_BALANCE.XRP
-                        : type === 'ftestbtc' ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
+                        : type.includes('btc') ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
                 }));
                 return;
             }
@@ -114,14 +122,15 @@ export default function AddVault() {
                 poolTopupTokenPriceFactor: data.poolTopUpTokenPriceFactor
             }
 
-            await createVault.mutateAsync({
+            console.log(data.fAssetType);
+            createVault.mutateAsync({
                 fAssetSymbol: data.fAssetType,
                 payload: payload
             });
 
-            showSucessNotification(t('add_agent_vault.success_message'));
-            router.push('/');
+            await router.push('/');
         } catch (error) {
+            console.log(error);
             showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
