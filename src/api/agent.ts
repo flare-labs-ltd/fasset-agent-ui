@@ -90,7 +90,7 @@ export function useSaveWorkAddress() {
     });
 }
 
-export function useCollaterals() {
+export function useCollaterals(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.COLLATERALS],
         queryFn: async(): Promise<ICollateral[]> => {
@@ -110,7 +110,8 @@ export function useCollaterals() {
             });
 
             return collaterals;
-        }
+        },
+        enabled: enabled
     });
 }
 
@@ -310,13 +311,14 @@ export function useSelfClose() {
     })
 }
 
-export function useBalances() {
+export function useBalances(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.BALANCES],
         queryFn: async () => {
             const response = await apiClient.get(`${resource}/balances`);
             return response.data.data as IBalance[];
-        }
+        },
+        enabled: enabled
     })
 }
 

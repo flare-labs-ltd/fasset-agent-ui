@@ -6,13 +6,12 @@ import {
     NumberInput,
     rem,
     Text,
-    Anchor,
-    Group,
     Grid
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
 import { useForm } from "@mantine/form";
+import { modals } from "@mantine/modals";
 import  {yupResolver } from "mantine-form-yup-resolver";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { useCalculateCollaterals, useDepositCollaterals } from "@/api/agentVault";
@@ -24,13 +23,12 @@ import XrpIcon from "@/components/icons/XrpIcon";
 import EthIcon from "@/components/icons/EthIcon";
 import BtcIcon from "@/components/icons/BtcIcon";
 import DogeIcon from "@/components/icons/DogeIcon";
-import { showSucessNotification } from "@/hooks/useNotifications";
 
 interface IDepositCollateralLotsModal {
     opened: boolean;
     fAssetSymbol: string;
     agentVaultAddress: string;
-    onClose: () => void;
+    onClose: (refetch: boolean) => void;
 }
 
 interface IFormValues {
@@ -52,8 +50,8 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
     const { t } = useTranslation();
 
     const schema = yup.object().shape({
-        lots: yup.number().required(t('validation.messages.required')).min(1),
-        multiplier: yup.number().required(t('validation.messages.required')).min(1).max(2),
+        lots: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_lots_modal.form.lots_label') })).min(1),
+        multiplier: yup.number().required(t('validation.messages.required', { field: t('deposit_collateral_lots_modal.form.multiplier_label') })).min(1).max(2),
     });
     const form = useForm<IFormValues>({
         mode: 'uncontrolled',
@@ -97,10 +95,39 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
         }
     }, [calculateCollaterals.data]);
 
-    const handleOnClose = () => {
+    const openSuccessModal = () => {
+        handleOnClose(true);
+        modals.open({
+            title: t('deposit_collateral_lots_modal.title'),
+            children: (
+                <>
+                    <Text>
+                        {t('deposit_collateral_lots_modal.success_message')}
+                    </Text>
+                    <Divider
+                        className="my-8"
+                        styles={{
+                            root: {
+                                marginLeft: '-2rem',
+                                marginRight: '-2rem'
+                            }
+                        }}
+                    />
+                    <div className="flex justify-end mt-4">
+                        <Button onClick={() => modals.closeAll()}>
+                            {t('deposit_collateral_lots_modal.close_button')}
+                        </Button>
+                    </div>
+                </>
+            ),
+            centered: true
+        });
+    }
+
+    const handleOnClose = (refetch: boolean = false) => {
         setErrorMessage(undefined);
         form.reset();
-        onClose();
+        onClose(refetch);
     }
 
     const onCalculate = async (lots: number, multiplier: number) => {
@@ -134,7 +161,7 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
                 lots: lots!,
                 multiplier: multiplier!
             });
-            showSucessNotification(t('deposit_collateral_lots_modal.success_message'));
+            openSuccessModal();
         } catch (error: any) {
             if (error.message) {
                 setErrorMessage((error as any).response.data.message);
