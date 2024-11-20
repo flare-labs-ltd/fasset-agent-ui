@@ -8,3 +8,8 @@
         box-shadow: -4px 0 13px 0px var(--table-border-color);
     }
 }
+.tableScrollContainer {
+    & :global(.mantine-ScrollArea-viewport) {
+        padding-bottom: 0;
+    }
+}

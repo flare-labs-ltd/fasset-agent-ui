@@ -6,8 +6,8 @@ import {
 } from "@mantine/core";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import DepositCollateralModal from "@/components/modals/DepositCollateralModal";
-import DepositFLRModal from "@/components/modals/DepositFLRModal";
+import DepositVaultCollateralModal from "@/components/modals/DepositVaultCollateralModal";
+import DepositPoolCollateralModal from "@/components/modals/DepositPoolCollateralModal";
 import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
 import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
 import { IAgentVault, ICollateralItem } from "@/types";
@@ -24,7 +24,7 @@ interface IAgentVaultOperationsCard {
 
 export default function AgentVaultOperationsCard({ className, agentVault, collateral}: IAgentVaultOperationsCard) {
     const { t } = useTranslation();
-    const [isDepositCollateralModalActive, setIsDepositCollateralModalActive] = useState<boolean>(false);
+    const [isDepositVaultCollateralModalActive, setIsDepositVaultCollateralModalActive] = useState<boolean>(false);
     const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
     const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
     const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
@@ -40,7 +40,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             <Title order={5} className="mb-8">{t('agent_vault_operations_card.title')}</Title>
             <Button
                 variant="gradient"
-                onClick={() => setIsDepositCollateralModalActive(true)}
+                onClick={() => setIsDepositVaultCollateralModalActive(true)}
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.deposit_collateral_button')}
@@ -69,15 +69,15 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             </Button>
             {agentVault &&
                 <>
-                    <DepositCollateralModal
+                    <DepositVaultCollateralModal
                         collateral={collateral}
                         vaultCollateralToken={agentVault.vaultCollateralToken}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
-                        opened={isDepositCollateralModalActive}
-                        onClose={() => setIsDepositCollateralModalActive(false)}
+                        opened={isDepositVaultCollateralModalActive}
+                        onClose={() => setIsDepositVaultCollateralModalActive(false)}
                     />
-                    <DepositFLRModal
+                    <DepositPoolCollateralModal
                         collateral={collateral}
                         opened={isDepositFLRModalActive}
                         fAssetSymbol={fAssetSymbol as string}

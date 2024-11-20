@@ -12,8 +12,9 @@
         "btc_min_limit_error": "You need to have at least {{amount}} BTC on your owner underlying address",
         "confirm_modal": {
             "cancel_button": "Cancel",
-            "confirm_button": "Confirm",
-            "content": "This process can take up to 5 minutes.",
+            "confirm_button": "Execute",
+            "content": "This process can take up to 5 minutes. Vault creation status will be returned by bot in notifications.",
+            "need_help_label": "Need help?",
             "title": "Before you proceed"
         },
         "discard_button": "Discard",
@@ -152,6 +153,28 @@
         "success_message": "Vault successfully deactivated",
         "title": "Deactivate vault"
     },
+    "deposit_collateral_lots_modal": {
+        "calculate_button": "Calculate",
+        "deposit_button": "Deposit",
+        "error_message": "Unable to deposit collateral",
+        "form": {
+            "lots_description_label": "How much lots do you want to add to Vault?",
+            "lots_placeholder_label": "NR. OF LOTS",
+            "lots_label": "Lots",
+            "multiplier_description_label": "Multiplier should be between 1 and 2.",
+            "multiplier_placeholder_label": "MULTIPLIER",
+            "multiplier_label": "Multiplier"
+        },
+        "need_help_label": "Need help?",
+        "success_message": "Succesfully deposited collaterals",
+        "summary": {
+            "deposit_summary_label": "Deposit summary",
+            "pool_collateral_label": "Pool Collateral",
+            "vault_collateral_label": "Vault Collateral",
+            "working_address_balance_label": "Working address balance"
+        },
+        "title": "Deposit Collateral (Lots)"
+    },
     "deposit_collateral_modal": {
         "close_button": "Close",
         "confirm_button": "Deposit",
@@ -161,7 +184,7 @@
         "error_message": "Unable to deposit collateral",
         "need_help_label": "Need help?",
         "success_message": "Collateral successfully deposited",
-        "title": "Deposit Collateral"
+        "title": "Deposit Vault Collateral"
     },
     "deposit_flr_in_pool": {
         "close_button": "Close",
@@ -172,7 +195,7 @@
         "error_message": "Unable to deposit FLR in pool",
         "need_help_label": "Need help?",
         "success_message": "FLR successfully deposited",
-        "title": "Deposit FLR in Pool"
+        "title": "Deposit Pool Collateral"
     },
     "edit_agent_vault": {
         "back_button": "Back to dashboard",
@@ -305,8 +328,9 @@
                 "agent_vault_operations_title": "Agent Vault Operations",
                 "close_vault_label": "Close Vault (Exit)",
                 "deactivate_vault_label": "Deactivate vault",
-                "deposit_collateral_label": "Deposit collateral",
-                "deposit_flr_in_pool_label": "Deposit FLR in Pool",
+                "deposit_collateral_lots_label": "Deposit Collateral (Lots)",
+                "deposit_pool_collateral_label": "Deposit Pool Collateral",
+                "deposit_vault_collateral_label": "Deposit Vault Collateral",
                 "self_close_label": "Self-close",
                 "view_vault_label": "View Vault",
                 "vault_actions_label": "Vault actions",
