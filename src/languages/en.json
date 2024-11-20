@@ -50,10 +50,14 @@
     "agent_vault_operations_card": {
         "activate_vault_button": "Activate Vault (Enter)",
         "close_vault_button": "Close Vault (Exit)",
-        "deposit_collateral_button": "Deposit Collateral",
-        "deposit_flr_in_pool_button": "Deposit FLR in Pool",
-        "description": "Lorem ipsum....",
-        "title": "Agent Vault Operations"
+        "deactivate_vault_button": "Deactivate vault",
+        "deposit_collateral_lots_button": "Deposit Collateral (Lots)",
+        "deposit_pool_collateral_button": "Deposit Pool Collateral",
+        "deposit_vault_collateral_button": "Deposit Vault Collateral",
+        "self_close_label": "Self-close",
+        "title": "Agent Vault Operations",
+        "withdraw_collateral_pool_tokens_label": "Withdraw collateral pool tokens",
+        "withdraw_vault_collateral_label": "Withdraw Vault collateral"
     },
     "alerts_card": {
         "alerts": {

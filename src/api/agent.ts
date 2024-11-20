@@ -90,7 +90,7 @@ export function useSaveWorkAddress() {
     });
 }
 
-export function useCollaterals() {
+export function useCollaterals(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.COLLATERALS],
         queryFn: async(): Promise<ICollateral[]> => {
@@ -110,7 +110,8 @@ export function useCollaterals() {
             });
 
             return collaterals;
-        }
+        },
+        enabled: enabled
     });
 }
 

@@ -19,7 +19,7 @@ import {
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
-import { useAgentVaultsInformation } from "@/api/agent";
+import {useAgentVaultsInformation, useCollaterals} from "@/api/agent";
 import { isMaxCRValue, toNumber, truncateString } from "@/utils";
 import DepositVaultCollateralModal from "@/components/modals/DepositVaultCollateralModal";
 import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
@@ -70,6 +70,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const { t } = useTranslation();
     const agentVaultsInformation = useAgentVaultsInformation();
     const balances = useBalances(false);
+    const collaterals = useCollaterals(false);
 
     useEffect(() => {
         const agentVaultsInformationFetchInterval = setInterval(() => {
@@ -457,6 +458,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsLoading(true);
             await agentVaultsInformation.refetch();
             await balances.refetch();
+            await collaterals.refetch();
         } catch (error) {
 
         } finally {

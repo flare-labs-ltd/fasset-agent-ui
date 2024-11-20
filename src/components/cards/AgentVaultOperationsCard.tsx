@@ -13,7 +13,8 @@ import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
 import { IAgentVault, ICollateralItem } from "@/types";
 import { useRouter } from "next/router";
 import { UseQueryResult } from "@tanstack/react-query";
-
+import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
+import { useAgentVaultsInformation, useBalances, useCollaterals } from "@/api/agent";
 
 interface IAgentVaultOperationsCard {
     className?: string;
@@ -25,11 +26,44 @@ interface IAgentVaultOperationsCard {
 export default function AgentVaultOperationsCard({ className, agentVault, collateral}: IAgentVaultOperationsCard) {
     const { t } = useTranslation();
     const [isDepositVaultCollateralModalActive, setIsDepositVaultCollateralModalActive] = useState<boolean>(false);
-    const [isDepositFLRModalActive, setIsDepositFLRModalActive] = useState<boolean>(false);
+    const [isDepositPoolCollateralModalActive, setIsDepositPoolCollateralModalActive] = useState<boolean>(false);
     const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
     const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
+    const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
+
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
+
+    const agentVaultsInformation = useAgentVaultsInformation();
+    const balances = useBalances(false);
+    const collaterals = useCollaterals(false);
+
+    const refetchData = () => {
+        agentVaultsInformation.refetch();
+        balances.refetch();
+        collaterals.refetch();
+    }
+
+    const onCloseDepositCollateralLotsModal = (refetch: boolean) => {
+        if (refetch) {
+            refetchData();
+        }
+        setIsDepositCollateralLotsModalActive(false);
+    }
+
+    const onCloseDepositPoolCollateralModal = (refetch: boolean) => {
+        if (refetch) {
+            refetchData();
+        }
+        setIsDepositPoolCollateralModalActive(false);
+    }
+
+    const onCloseDepositVaultCollateralModal = (refetch: boolean) => {
+        if (refetch) {
+            refetchData();
+        }
+        setIsDepositVaultCollateralModalActive(false);
+    }
 
     return (
         <Paper
@@ -40,17 +74,24 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             <Title order={5} className="mb-8">{t('agent_vault_operations_card.title')}</Title>
             <Button
                 variant="gradient"
-                onClick={() => setIsDepositVaultCollateralModalActive(true)}
+                onClick={() => setIsDepositCollateralLotsModalActive(true)}
                 className="block mb-3"
             >
-                {t('agent_vault_operations_card.deposit_collateral_button')}
+                {t('agent_vault_operations_card.deposit_collateral_lots_button')}
             </Button>
             <Button
                 variant="gradient"
-                onClick={() => setIsDepositFLRModalActive(true)}
+                onClick={() => setIsDepositVaultCollateralModalActive(true)}
                 className="block mb-3"
             >
-                {t('agent_vault_operations_card.deposit_flr_in_pool_button')}
+                {t('agent_vault_operations_card.deposit_vault_collateral_button')}
+            </Button>
+            <Button
+                variant="gradient"
+                onClick={() => setIsDepositPoolCollateralModalActive(true)}
+                className="block mb-3"
+            >
+                {t('agent_vault_operations_card.deposit_pool_collateral_button')}
             </Button>
             {!agentVault?.publiclyAvailable &&
                 <Button
@@ -69,20 +110,26 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             </Button>
             {agentVault &&
                 <>
+                    <DepositCollateralLotsModal
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        opened={isDepositCollateralLotsModalActive}
+                        onClose={onCloseDepositCollateralLotsModal}
+                    />
                     <DepositVaultCollateralModal
                         collateral={collateral}
                         vaultCollateralToken={agentVault.vaultCollateralToken}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
                         opened={isDepositVaultCollateralModalActive}
-                        onClose={() => setIsDepositVaultCollateralModalActive(false)}
+                        onClose={onCloseDepositVaultCollateralModal}
                     />
                     <DepositPoolCollateralModal
                         collateral={collateral}
-                        opened={isDepositFLRModalActive}
+                        opened={isDepositPoolCollateralModalActive}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
-                        onClose={() => setIsDepositFLRModalActive(false)}
+                        onClose={onCloseDepositPoolCollateralModal}
                     />
                 </>
             }
