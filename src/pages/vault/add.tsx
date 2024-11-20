@@ -5,7 +5,7 @@ import {
     Button,
     Text,
     Divider,
-    Anchor, 
+    Anchor,
     Group
 } from '@mantine/core';
 import { useTranslation } from 'react-i18next';

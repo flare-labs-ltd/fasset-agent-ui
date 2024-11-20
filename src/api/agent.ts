@@ -310,13 +310,14 @@ export function useSelfClose() {
     })
 }
 
-export function useBalances() {
+export function useBalances(enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.BALANCES],
         queryFn: async () => {
             const response = await apiClient.get(`${resource}/balances`);
             return response.data.data as IBalance[];
-        }
+        },
+        enabled: enabled
     })
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
     Table,
     Paper,
@@ -34,6 +34,7 @@ import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
 import CurrencyIcon from "@/components/elements/CurrencyIcon";
+import { useBalances } from "@/api/agent";
 import classes from "@/styles/components/cards/VaultsCard.module.scss";
 
 interface IVaultsCard {
@@ -54,7 +55,7 @@ const MODAL_WITHDRAW_VAULT_COLLATERAL = 'withdraw_vault_collateral';
 const MODAL_SELF_CLOSE = 'self_close';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
-    const [selectedAgentVault, setSelectedAgentVault] = useState<any>();
+    const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
     const [isDepositVaultCollateralModalActive, setIsDepositVaultCollateralModalActive] = useState<boolean>(false);
     const [isDepositPoolCollateralModalActive, setIsDepositPoolCollateralModalActive] = useState<boolean>(false);
     const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
@@ -64,9 +65,11 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isWithdrawCollateralModalActive, setIsWithdrawCollateralModalActive] = useState<boolean>(false);
     const [isSelfCloseModalActive, setIsSelfCloseModalActive] = useState<boolean>(false);
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
     const agentVaultsInformation = useAgentVaultsInformation();
+    const balances = useBalances(false);
 
     useEffect(() => {
         const agentVaultsInformationFetchInterval = setInterval(() => {
@@ -93,11 +96,33 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             label: t('vaults_card.table.vault_address_label'),
             render: (vault: IVault) => {
                 return (
-                    <div className="flex items-center">
-                        {truncateString(vault.address, 5, 5)}
-                        <CopyIcon
-                            text={vault.address}
-                        />
+                    <div>
+                        <div className="flex items-center">
+                            <Text
+                                size="sm"
+                                c="var(--flr-dark)"
+                            >
+                                {truncateString(vault.address, 5, 5)}
+                            </Text>
+                            <CopyIcon
+                                text={vault.address}
+                            />
+                        </div>
+                        <div className="flex">
+                            <Text
+                                size="xs"
+                                c="var(--flr-portal-dark)"
+                                className="mr-2"
+                            >
+                                {vault.fasset}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-portal-dark)"
+                            >
+                                {vault.collateralToken}
+                            </Text>
+                        </div>
                     </div>
                 )
             }
@@ -187,64 +212,130 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             render: (vault: IVault) => `${vault.freeLots}`
         },
         {
-            id: 'vaultCR',
-            label: t('vaults_card.table.cr_label'),
+            id: 'vaultCollateral',
+            label: t('vaults_card.table.vault_collateral_label'),
             render: (vault: IVault) => {
                 let vaultCr = vault.vaultCR;
-                let poolCr = vault.poolCR;
-
                 if (isMaxCRValue(vaultCr)) {
                     vaultCr = '∞'
                 } else {
                     vaultCr = toNumber(vaultCr).toPrecision(3);
                 }
 
-                if (isMaxCRValue(poolCr)) {
-                    poolCr = '∞'
+                return (
+                    <div className="flex items-center">
+                        <div className="mr-5">
+                            <Text
+                                size="sm"
+                            >
+                                {vaultCr}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.cr_label')}
+                            </Text>
+                        </div>
+                        <div className="mr-5">
+                            <Text
+                                size="sm"
+                            >
+                                {vault.vaultAmount}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.amount_label')}
+                            </Text>
+                        </div>
+                        <div>
+                            <Text
+                                size="sm"
+                            >
+                                {vault.lotsVaultBacked}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.lots_label')}
+                            </Text>
+                        </div>
+                    </div>
+                );
+            }
+        },
+        {
+            id: 'poolCollateral',
+            label: t('vaults_card.table.pool_collateral_label'),
+            render: (vault: IVault) => {
+                let poolCR = vault.poolCR;
+                if (isMaxCRValue(poolCR)) {
+                    poolCR = '∞'
                 } else {
-                    poolCr = toNumber(poolCr).toPrecision(3);
+                    poolCR = toNumber(poolCR).toPrecision(3);
                 }
 
-
                 return (
-                    <Grid gutter="xs">
-                        <Grid.Col span={4}>
-
-                            <div className="flex flex-col">
-                                <div style={{ fontSize: vaultCr === '∞' ? 'larger' : '' }}>
-                                    {vaultCr}
-                                </div>
-                                <Text
-                                    size="xs"
-                                    className="mt-1"
-                                >
-                                    <span className="text-gray-400">{t('vaults_card.table.vault_label')}</span>
-                                </Text>
-                            </div>
-                        </Grid.Col>
-                        <Grid.Col span={4}>
-
-                            <div className="flex flex-col">
-                                <div style={{ fontSize: poolCr === '∞' ? 'larger' : '' }}>
-                                    {poolCr}
-                                </div>
-                                <Text
-                                    size="xs"
-                                    className="mt-1"
-                                >
-                                    <span className="text-gray-400">{t('vaults_card.table.pool_label')}</span>
-                                </Text>
-                            </div>
-                        </Grid.Col>
-                    </Grid >
-                )
+                    <div className="flex items-center">
+                        <div className="mr-5">
+                            <Text
+                                size="sm"
+                            >
+                                {poolCR}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.cr_label')}
+                            </Text>
+                        </div>
+                        <div className="mr-5">
+                            <Text
+                                size="sm"
+                            >
+                                {vault.poolAmount}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.amount_label')}
+                            </Text>
+                        </div>
+                        <div>
+                            <Text
+                                size="sm"
+                            >
+                                {vault.lotsPoolBacked}
+                            </Text>
+                            <Text
+                                size="xs"
+                                c="var(--flr-darker-gray)"
+                            >
+                                {t('vaults_card.table.lots_label')}
+                            </Text>
+                        </div>
+                    </div>
+                );
             }
         },
         {
             id: 'pool_fee',
             label: t('vaults_card.table.pool_fee'),
             sorted: true,
-            render: (vault: IVault) => `${vault.poolFee || '0'} %`
+            render: (vault: IVault) => {
+                return (
+                    <Text
+                        size="sm"
+                    >
+                        {vault.poolFee || '0'} <span className="text-[var(--flr-darker-gray)]">%</span>
+                    </Text>
+                );
+            }
         },
         {
             id: 'actions',
@@ -338,7 +429,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         }
     ];
 
-    const onClick = (modal: string, vault: any) => {
+    const onClick = (modal: string, vault: IVault) => {
         if (modal === MODAL_DEPOSIT_VAULT_COLLATERAL) {
             setIsDepositVaultCollateralModalActive(true);
         } else if (modal === MODAL_DEPOSIT_POOL_COLLATERAL) {
@@ -361,6 +452,39 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         setSelectedAgentVault(vault);
     }
 
+    const refetchData = async () => {
+        try {
+            setIsLoading(true);
+            await agentVaultsInformation.refetch();
+            await balances.refetch();
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
+    const onCloseDepositCollateralLotsModal = (refetch: boolean) => {
+        setIsDepositCollateralLotsModalActive(false);
+        if (refetch) {
+            refetchData();
+        }
+    }
+
+    const onCloseDepositPoolCollateralModal = (refetch: boolean) => {
+        setIsDepositPoolCollateralModalActive(false);
+        if (refetch) {
+            refetchData();
+        }
+    }
+
+    const onCloseDepositVaultCollateralModal = (refetch: boolean) => {
+        setIsDepositVaultCollateralModalActive(false);
+        if (refetch) {
+            refetchData();
+        }
+    }
+
     return (
         <Paper
             className={`${className}`}
@@ -374,7 +498,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                     className="fau-hover-row-table"
                     columns={columns}
                     items={agentVaultsInformation.data ?? []}
-                    loading={agentVaultsInformation.isPending}
+                    loading={agentVaultsInformation.isPending || isLoading}
                     emptyLabel={t('vaults_card.empty_vaults_label')}
                 />
             </Table.ScrollContainer>
@@ -384,7 +508,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         opened={isDepositCollateralLotsModalActive}
-                        onClose={() => setIsDepositCollateralLotsModalActive(false)}
+                        onClose={onCloseDepositCollateralLotsModal}
                     />
                     <DepositVaultCollateralModal
                         vaultCollateralToken={selectedAgentVault.collateralToken}
@@ -392,14 +516,14 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         agentVaultAddress={selectedAgentVault.address}
                         opened={isDepositVaultCollateralModalActive}
                         collateral={collateral}
-                        onClose={() => setIsDepositVaultCollateralModalActive(false)}
+                        onClose={onCloseDepositVaultCollateralModal}
                     />
                     <DepositPoolCollateralModal
                         opened={isDepositPoolCollateralModalActive}
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         collateral={collateral}
-                        onClose={() => setIsDepositPoolCollateralModalActive(false)}
+                        onClose={onCloseDepositPoolCollateralModal}
                     />
                     <ActivateVaultModal
                         opened={isActivateVaultModalActive}

@@ -22,7 +22,7 @@ import { IconExclamationCircle } from "@tabler/icons-react";
 
 interface IDepositPoolCollateralModal {
     opened: boolean;
-    onClose: () => void;
+    onClose: (refetch: boolean) => void;
     fAssetSymbol: string;
     agentVaultAddress: string;
     collateral: UseQueryResult<ICollateralItem[], Error>;
@@ -54,7 +54,7 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
     });
 
     const openSuccessModal = () => {
-        handleOnClose();
+        handleOnClose(true);
         modals.open({
             title: t('deposit_flr_in_pool.title'),
             children: (
@@ -82,10 +82,10 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
         });
     }
 
-    const handleOnClose = () => {
+    const handleOnClose = (refetch: boolean = false) => {
         setErrorMessage(undefined);
         form.reset();
-        onClose();
+        onClose(refetch);
     }
 
     const onDepositCollateralSubmit = async(amount: number) => {

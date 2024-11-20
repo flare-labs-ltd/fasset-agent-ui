@@ -195,7 +195,7 @@ const FAssetTable = memo(({ items, columns, loading, className, style, emptyLabe
                         </Table.Tr>
                     </Table.Thead>
                     <Table.Tbody>
-                    {loading &&
+                        {loading &&
                             <Table.Tr>
                                 <Table.Td
                                     colSpan={13}
@@ -211,7 +211,7 @@ const FAssetTable = memo(({ items, columns, loading, className, style, emptyLabe
                                 </Table.Td>
                             </Table.Tr>
                         }
-                        {renderRows()}
+                        {!loading && renderRows()}
                     </Table.Tbody>
                 </Table>
             </Component>

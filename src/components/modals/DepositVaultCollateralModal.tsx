@@ -26,7 +26,7 @@ interface IDepositVaultCollateralModal {
     fAssetSymbol: string;
     agentVaultAddress: string;
     collateral: UseQueryResult<ICollateralItem[], Error>;
-    onClose: () => void;
+    onClose: (refetch: boolean) => void;
 }
 
 interface IFormValues {
@@ -59,14 +59,14 @@ export default function DepositVaultCollateralModal({ opened, vaultCollateralTok
         }
     });
 
-    const handleOnClose = () => {
+    const handleOnClose = (refetch: boolean = false) => {
         setErrorMessage(undefined);
         form.reset();
-        onClose();
+        onClose(refetch);
     }
 
     const openSuccessModal = () => {
-        handleOnClose();
+        handleOnClose(true);
         modals.open({
             title: t('deposit_collateral_modal.title'),
             children: (
