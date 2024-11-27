@@ -20,7 +20,7 @@ jobs:
     - uses: docker/setup-qemu-action@v3
     - uses: docker/setup-buildx-action@v3
 
-    - run: echo "IMAGE_TAG=latest" >> $GITHUB_ENV
+    - run: echo "IMAGE_TAG=latest_staging" >> $GITHUB_ENV
       if: github.ref_name == 'staging-beta'
     - run: echo "IMAGE_TAG=${GITHUB_REF##*/}" >> $GITHUB_ENV
       if: startsWith(github.ref, 'refs/tags/v')
