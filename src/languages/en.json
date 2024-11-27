@@ -232,12 +232,17 @@
             "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault",
             "fasset_type_label": "FAsset type",
             "fasset_type_placeholder": "Select type (FXPR, FBTC, ...)",
+            "handshake_label": "Handshake",
+            "handshake_type_description_label": "Defines which type of handshake will be used",
+            "handshake_type_label": "Handshake type",
+            "handshake_type_placeholder_label": "Select handshake type",
             "minting_fee_description_label": "Defines the fee which is paid by  the user for minting FAsset",
             "minting_fee_label": "Minting fee",
             "minting_pool_collateral_ratio_description_label": "FAssets can be minted only if agents CR is above this threshold",
             "minting_pool_collateral_ratio_label": "Minting Pool Collateral Ratio",
             "minting_vault_collateral_ratio_description_label": "FAssets can be minted only if agent's CR is above this threshold",
             "minting_vault_collateral_ratio_label": "Minting Vault Collateral Ratio",
+            "no_handshake_label": "No handshake",
             "pool_exit_collateral_ratio_description_label": "CPTs can only be redeemed f the agent's CR is above this threshold",
             "pool_exit_collateral_ratio_label": "Pool Exit Collateral Ratio",
             "pool_fee_share_description_label": "Defines how much Vault owner shares with CPT owners",
@@ -347,6 +352,7 @@
             "agent_label": "Agent",
             "amount_label": "Amount",
             "cr_label": "CR",
+            "handshake_label": "Handshake",
             "health_label": "Health",
             "health_status_label": "Health & Status",
             "health_status_ccb_label": "CCB",
@@ -373,7 +379,9 @@
             "status_not_listed_label": "Not listed - live",
             "vault_collateral_label": "Vault collateral"
         },
-        "updating_label": "Updating"
+        "no_label": "No",
+        "updating_label": "Updating",
+        "yes_label": "Yes"
     },
     "validation": {
         "messages": {

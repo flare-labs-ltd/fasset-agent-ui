@@ -77,6 +77,7 @@ export interface IVault {
     lotsVaultBacked: string;
     poolFee: string;
     mintCount: string;
+    handshakeType: number;
 }
 
 export interface IAgentVaultInformation {
@@ -100,6 +101,7 @@ export interface IAgentSettingsConfig {
     buyFAssetByAgentFactor: string;
     poolTopupCollateralRatio: string;
     poolTopupTokenPriceFactor: string;
+    handshakeType: number;
 }
 
 export interface IAgentVault {
@@ -144,6 +146,7 @@ export interface IAgentVault {
     poolTopupCollateralRatioBIPS: string;
     poolTopupTokenPriceFactorBIPS: string;
     poolSuffix: string;
+    handshakeType: number;
 }
 
 export interface IIconProps {

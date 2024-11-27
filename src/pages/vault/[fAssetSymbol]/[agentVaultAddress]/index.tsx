@@ -131,6 +131,7 @@ export default function Vault() {
                 buyFAssetByAgentFactor: Number(vaultInfo.data.buyFAssetByAgentFactorBIPS) / 10000,
                 poolTopUpCollateralRatio: Number(vaultInfo.data.poolTopupCollateralRatioBIPS) / 10000,
                 poolTopUpTokenPriceFactor: Number(vaultInfo.data.poolTopupTokenPriceFactorBIPS) / 10000,
+                handshakeType: vaultInfo.data.handshakeType,
             });
         }
         setIsEditing(false);

@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 import { modals } from '@mantine/modals';
 import { useState, useRef } from 'react';
 import VaultForm, { FormRef } from '@/components/forms/VaultForm';
-import { useCreateVault, useGetUnderlyingAssetBalance } from '@/api/agent';
+import { useBalances, useCreateVault } from '@/api/agent';
 import { showErrorNotification } from '@/hooks/useNotifications';
 import { IAgentSettingsConfig } from '@/types';
 import BackButton from "@/components/elements/BackButton";
@@ -22,12 +22,11 @@ import { MIN_CREATE_VAULT_BALANCE } from "@/constants";
 
 export default function AddVault() {
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [fAssetSymbol, setFAssetType] = useState<string | null>(null);
     const { t } = useTranslation();
     const router = useRouter();
     const formRef = useRef<FormRef>(null);
     const createVault = useCreateVault();
-    const underlyingAssetBalance = useGetUnderlyingAssetBalance(fAssetSymbol, false);
+    const balances = useBalances(false);
 
     const confirmModal = () => {
         const form = formRef?.current?.form();
@@ -80,31 +79,31 @@ export default function AddVault() {
             setIsLoading(true);
             const form = formRef?.current?.form();
             const data = form?.getValues();
-            await setFAssetType(data.fAssetType);
-            const response: any = await underlyingAssetBalance.refetch();
-            let balance = toNumber(response.data.balance);
+            const balancesResponse = await balances.refetch();
+            const type = data.fAssetType.toLowerCase().match(/xrp|doge|btc/)![0];
+            let tokenBalance = balancesResponse.data?.find(balance => balance.symbol.toLowerCase().includes(type));
+            let balance = tokenBalance ? toNumber(tokenBalance.balance) : 0;
 
-            const type = data.fAssetType.toLowerCase();
-            if (type.includes('btc')) {
+            if (type === 'btc') {
                 balance = satoshiToBtc(balance);
             }
 
-            const minLimit = type.includes('xrp')
+            const minLimit = type === 'xrp'
                 ? MIN_CREATE_VAULT_BALANCE.XRP
-                : type === 'ftestbtc'
+                : type === 'btc'
                     ? MIN_CREATE_VAULT_BALANCE.BTC
                     : MIN_CREATE_VAULT_BALANCE.DOGE;
 
             if (balance < minLimit) {
-                const key = type.includes('xrp')
+                const key = type === 'xrp'
                     ? 'add_agent_vault.xrp_min_limit_error'
-                    : type === 'ftestbtc'
+                    : type === 'btc'
                         ? 'add_agent_vault.btc_min_limit_error'
                         : 'add_agent_vault.doge_min_limit_error';
                 showErrorNotification(t(key, {
-                    amount: type.includes('xrp')
+                    amount: type === 'xrop'
                         ? MIN_CREATE_VAULT_BALANCE.XRP
-                        : type.includes('btc') ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
+                        : type === 'btc' ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
                 }));
                 return;
             }
@@ -119,18 +118,19 @@ export default function AddVault() {
                 poolExitCollateralRatio: data.poolExitCollateralRatio,
                 buyFAssetByAgentFactor: data.buyFAssetByAgentFactor,
                 poolTopupCollateralRatio: data.poolTopUpCollateralRatio,
-                poolTopupTokenPriceFactor: data.poolTopUpTokenPriceFactor
+                poolTopupTokenPriceFactor: data.poolTopUpTokenPriceFactor,
+                handshakeType: Number(data.handshakeType)
             }
 
-            console.log(data.fAssetType);
             createVault.mutateAsync({
                 fAssetSymbol: data.fAssetType,
                 payload: payload
+            }).catch(error => {
+                showErrorNotification((error as any).response.data.message);
             });
 
             await router.push('/');
         } catch (error) {
-            console.log(error);
             showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
