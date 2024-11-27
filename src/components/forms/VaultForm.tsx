@@ -37,18 +37,19 @@ interface ICollateralTemplate {
     buyFAssetByAgentFactor: number;
 }
 interface IFormValues {
-    name: string|undefined;
-    fAssetType: string|undefined|null;
-    vaultCollateralToken: string|undefined|null;
-    poolTokenSuffix: string|undefined;
-    fee: number|undefined;
-    poolFeeShare: number|undefined;
-    mintingVaultCollateralRatio: number|undefined;
-    mintingPoolCollateralRatio: number|undefined;
-    poolExitCollateralRatio: number|undefined;
-    buyFAssetByAgentFactor: number|undefined;
-    poolTopUpCollateralRatio: number|undefined;
-    poolTopUpTokenPriceFactor: number|undefined;
+    name: string | undefined;
+    fAssetType: string | undefined | null;
+    vaultCollateralToken: string | undefined | null;
+    poolTokenSuffix: string | undefined;
+    fee: number | undefined;
+    poolFeeShare: number | undefined;
+    mintingVaultCollateralRatio: number | undefined;
+    mintingPoolCollateralRatio: number | undefined;
+    poolExitCollateralRatio: number | undefined;
+    buyFAssetByAgentFactor: number | undefined;
+    poolTopUpCollateralRatio: number | undefined;
+    poolTopUpTokenPriceFactor: number | undefined;
+    handshakeType: string | undefined | null;
 }
 export type FormRef = {
     form: () => UseFormReturnType<any>;
@@ -84,6 +85,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         buyFAssetByAgentFactor: yup.string().required(t('validation.messages.required', { field: t('forms.vault.buy_fasset_by_agent_factor_label') })),
         poolTopUpCollateralRatio: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_collateral_ratio_label') })),
         poolTopUpTokenPriceFactor: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_token_price_factor_label') })),
+        handshakeType: yup.string().required(t('validation.messages.required', { field: t('forms.vault.handshake_type_label') })),
     });
 
     const form = useForm<IFormValues>({
@@ -101,6 +103,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             buyFAssetByAgentFactor: undefined,
             poolTopUpCollateralRatio: undefined,
             poolTopUpTokenPriceFactor: undefined,
+            handshakeType: undefined
         },
         //@ts-ignore
         validate: yupResolver(schema),
@@ -127,6 +130,17 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
         },
     });
 
+    const handshakeTypeOptions = [
+        {
+            value: "0",
+            label: t('forms.vault.no_handshake_label')
+        },
+        {
+            value: "1",
+            label: t('forms.vault.handshake_label')
+        }
+    ]
+
     useEffect(() => {
         const fAssetTypes = vaultCollaterals?.data?.map(item => item.fassetSymbol);
         if (fAssetTypes) {
@@ -148,12 +162,14 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             }
         }
     }, [vaultCollaterals.data]);
+
     useEffect(() => {
         if (!vault || vaultCollateralTokens.length === 0) return;
         form.setValues({
             vaultCollateralToken: vault.vaultCollateralToken
         });
     }, [vaultCollateralTokens]);
+
     useEffect(() => {
         if (!vault) return;
 
@@ -169,8 +185,10 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             buyFAssetByAgentFactor: Number(vault.buyFAssetByAgentFactorBIPS) / 10000,
             poolTopUpCollateralRatio: Number(vault.poolTopupCollateralRatioBIPS) / 10000,
             poolTopUpTokenPriceFactor: Number(vault.poolTopupTokenPriceFactorBIPS) / 10000,
+            handshakeType: vault.handshakeType.toString()
         });
     }, [vault]);
+
     useEffect(() => {
         if (vault || !collateralTemplate) return;
         form.setValues({
@@ -184,13 +202,14 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             buyFAssetByAgentFactor: Number(collateralTemplate.buyFAssetByAgentFactor),
         });
     }, [collateralTemplate]);
+
     useImperativeHandle(ref, () => ({
         form: () => {
             return form;
         }
     }));
 
-    const onFAssetTypeChange = (value: string|null, option: any) => {
+    const onFAssetTypeChange = (value: string | null, option: any) => {
         form.setValues({
             fAssetType: value
         });
@@ -199,7 +218,8 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             setVaultCollateralTokens(vault.collaterals.map(collateral => collateral.symbol));
         }
     }
-    const onVaultCollateralTokenChange = (value: string|null, option: any) => {
+
+    const onVaultCollateralTokenChange = (value: string | null, option: any) => {
         form.setValues({
             vaultCollateralToken: value
         });
@@ -211,6 +231,12 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                 setCollateralTemplate(JSON.parse(collateral.template));
             }
         }
+    }
+
+    const onHandshakeTypeChange = (value: string | null, option: any) => {
+        form.setValues({
+            handshakeType: value
+        });
     }
 
     const onKeyDownCapture = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -285,21 +311,32 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                     <Divider
                         my="xl"
                     />
-                    <div>
-                        <TextInput
-                            {...form.getInputProps('poolTokenSuffix')}
-                            //@ts-ignore
-                            key={form.key('poolTokenSuffix')}
-                            label={t('forms.vault.pool_token_suffix_label')}
-                            description={t('forms.vault.pool_token_suffix_description_label')}
-                            placeholder={t('forms.vault.enter_placeholder')}
-                            maxLength={20}
-                            withAsterisk
-                            disabled={isHiddenInputDisabled || vault != null}
-                            rightSection={<div className="text-xs">{poolTokenSuffixCharCount}/{POOL_TOKEN_SUFFIX_MAX_LENGTH}</div>}
-                        />
-
-                    </div>
+                    <TextInput
+                        {...form.getInputProps('poolTokenSuffix')}
+                        //@ts-ignore
+                        key={form.key('poolTokenSuffix')}
+                        label={t('forms.vault.pool_token_suffix_label')}
+                        description={t('forms.vault.pool_token_suffix_description_label')}
+                        placeholder={t('forms.vault.enter_placeholder')}
+                        maxLength={20}
+                        withAsterisk
+                        disabled={isHiddenInputDisabled || vault != null}
+                        rightSection={<div className="text-xs">{poolTokenSuffixCharCount}/{POOL_TOKEN_SUFFIX_MAX_LENGTH}</div>}
+                    />
+                    <Select
+                        {...form.getInputProps('handshakeType')}
+                        //@ts-ignore
+                        key={form.key('handshakeType')}
+                        data={handshakeTypeOptions}
+                        onChange={(value, option) => onHandshakeTypeChange(value, option)}
+                        label={t('forms.vault.handshake_type_label')}
+                        description={t('forms.vault.handshake_type_description_label')}
+                        placeholder={t('forms.vault.handshake_type_placeholder_label')}
+                        withAsterisk
+                        className="mt-4 font-normal"
+                        disabled={disabled || vault != null}
+                        allowDeselect={false}
+                    />
                     <NumberInput
                         {...form.getInputProps('fee')}
                         //@ts-ignore

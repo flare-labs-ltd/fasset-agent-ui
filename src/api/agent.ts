@@ -244,7 +244,7 @@ export function useUpdateVault() {
     });
 }
 
-export function useGetUnderlyingAssetBalance(fAssetSymbol: string|null, enabled: boolean = true) {
+export function useGetUnderlyingAssetBalance(fAssetSymbol: string | null, enabled: boolean = true) {
     return useQuery({
         queryKey: [AGENT_KEY.UNDERLYING_ASSET_BALANCE, fAssetSymbol],
         queryFn: async() => {
