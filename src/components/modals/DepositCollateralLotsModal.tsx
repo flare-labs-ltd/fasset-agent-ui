@@ -23,6 +23,7 @@ import XrpIcon from "@/components/icons/XrpIcon";
 import EthIcon from "@/components/icons/EthIcon";
 import BtcIcon from "@/components/icons/BtcIcon";
 import DogeIcon from "@/components/icons/DogeIcon";
+import SgbIcon from "@/components/icons/SgbIcon";
 
 interface IDepositCollateralLotsModal {
     opened: boolean;
@@ -72,15 +73,15 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
         agentVaultAddress,
         lots ?? 0,
         multiplier ?? 0,
-        lots !== undefined && multiplier !== undefined
+        opened && lots !== undefined && multiplier !== undefined
     );
 
     useEffect(() => {
         if (!calculateCollaterals.data) return;
 
-        const pool: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(c => c.symbol.toLowerCase() === 'flr' || c.symbol.toLowerCase() === 'cflr');
-        const vault: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(c => c.symbol.toLowerCase().includes('usd'));
-
+        const pool: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(collateral => collateral.symbol.toLowerCase().includes('flr') || collateral.symbol.toLowerCase().includes('sgb'));
+        const vault: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(collateral => collateral.symbol.toLowerCase().includes('eth') || collateral.symbol.toLowerCase().includes('usd'));
+        
         if (vault) {
             vault.icon = getIcon(vault.symbol);
             setVaultCollateral(vault);
@@ -127,6 +128,10 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
     const handleOnClose = (refetch: boolean = false) => {
         setErrorMessage(undefined);
         form.reset();
+        setPoolCollateral(undefined);
+        setVaultCollateral(undefined);
+        setLots(undefined);
+        setMultiplier(undefined);
         onClose(refetch);
     }
 
@@ -150,6 +155,8 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
             return <BtcIcon width="16" height="16" className="flex-shrink-0" />;
         } else if (token.toLowerCase().includes('doge')) {
             return <DogeIcon width="16" height="16" className="flex-shrink-0" />;
+        } else if (token.toLowerCase().includes('sgb')) {
+            return <SgbIcon width="16" height="16" className="flex-shrink-0" />;
         }
     }
 
