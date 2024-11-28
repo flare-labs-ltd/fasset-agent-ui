@@ -6,6 +6,7 @@ import EthIcon from "@/components/icons/EthIcon";
 import FTestDogeIcon from "@/components/icons/FTestDogeIcon";
 import FTestXrpIcon from "@/components/icons/FTestXrpIcon";
 import FTestBtcIcon from "@/components/icons/FTestBtcIcon";
+import SgbIcon from "@/components/icons/SgbIcon";
 
 export default function CurrencyIcon({ currency, width = '40', height = '40', className }: { currency: string, width?: string, height?: string, className?: string, style?: any }) {
     if (!currency) {
@@ -27,7 +28,8 @@ export default function CurrencyIcon({ currency, width = '40', height = '40', cl
             return <FTestBtcIcon width={width} height={height} className={className} />;
         case 'ftestdoge':
             return <FTestDogeIcon width={width} height={height} className={className} />;
-
+        case 'sgb':
+            return <SgbIcon width={width} height={height} className={className} />;
     }
 
     return null;
