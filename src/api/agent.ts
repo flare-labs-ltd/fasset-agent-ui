@@ -3,10 +3,11 @@ import {
     useQueryClient,
     useMutation,
 } from "@tanstack/react-query";
+import qs from "qs";
 import apiClient from "@/api/apiClient";
 import {
     ICollateral,
-    IBotAlert,
+    IBotAlerts,
     IAgentSettingsConfig,
     IAgentVault,
     IAgentSettingsDTO,
@@ -266,16 +267,34 @@ export function useIsWhitelisted(enabled: boolean = true) {
     });
 }
 
-export function useBotAlert() {
+export function useBotAlert(limit: number, offset: number, types: string[], enabled: boolean = true) {
+    const params: { limit: number; offset: number; types?: string } = {
+        limit,
+        offset,
+    };
+
+    if (types.length > 0) {
+        params.types = types.join(',');
+    }
+
+    const config = {
+        params,
+        paramsSerializer: (params: any) => {
+            return qs.stringify(params);
+        },
+    };
+
     return useQuery({
-        queryKey: [AGENT_KEY.BOT_ALERT],
-        queryFn: async(): Promise<IBotAlert[]> => {
-            const response = await apiClient.get(`${resource}/botAlert`);
+        queryKey: [AGENT_KEY.BOT_ALERT, config.params.limit, config.params.offset, config.params?.types],
+        queryFn: async(): Promise<IBotAlerts> => {
+            const response = await apiClient.get(`${resource}/botAlert`, config);
             return response.data.data
         },
-        select: (data: IBotAlert[]) => {
-            return orderBy(data, 'date', 'desc');
-        }
+        select: (data: IBotAlerts) => {
+            data.alerts = orderBy(data.alerts, 'date', 'desc')
+            return data;
+        },
+        enabled: enabled
     });
 }
 

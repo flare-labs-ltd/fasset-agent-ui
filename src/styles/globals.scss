@@ -110,6 +110,14 @@ body {
     background-color: rgba(36, 36, 37, 0.06);
 }
 
+// Pagination
+.mantine-Pagination-control {
+    &[data-active="true"] {
+        background-color: var(--flr-gray);
+        border-color: var(--flr-gray);
+    }
+}
+
 .status-dot {
     height: 10px;
     width: 10px;

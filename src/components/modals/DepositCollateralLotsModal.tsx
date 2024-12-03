@@ -81,7 +81,7 @@ export default function DepositCollateralLotsModal({ opened, fAssetSymbol, agent
 
         const pool: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(collateral => collateral.symbol.toLowerCase().includes('flr') || collateral.symbol.toLowerCase().includes('sgb'));
         const vault: ILocalCalculateCollateral | undefined = calculateCollaterals.data.find(collateral => collateral.symbol.toLowerCase().includes('eth') || collateral.symbol.toLowerCase().includes('usd'));
-        
+
         if (vault) {
             vault.icon = getIcon(vault.symbol);
             setVaultCollateral(vault);
