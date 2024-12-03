@@ -4,7 +4,7 @@
         "confirm_button": "Confirm",
         "description_label": "Are you sure you want to activate vault?",
         "minimal_collateral_for_minting_label": "Agent must have at least 1 lot of collateral for minting",
-        "success_message": "Vault successfully activated",
+        "success_message": "Vault successfully activated.",
         "title": "Activate vault"
     },
     "add_agent_vault": {
@@ -20,7 +20,7 @@
         "discard_button": "Discard",
         "doge_min_limit_error": "You need to have at least {{amount}} DOGE on your owner underlying address",
         "save_button": "Save and execute",
-        "success_message": "Agent Vault successfully created",
+        "success_message": "Agent Vault successfully created.",
         "title": "New Agent Vault",
         "xrp_min_limit_error": "You need to have at least {{amount}} XRP on your owner underlying address"
     },
@@ -49,6 +49,7 @@
     },
     "agent_vault_operations_card": {
         "activate_vault_button": "Activate Vault (Enter)",
+        "claim_rewards_button": "Claim Rewards",
         "close_vault_button": "Close Vault (Exit)",
         "deactivate_vault_button": "Deactivate vault",
         "deposit_collateral_lots_button": "Deposit Collateral (Lots)",
@@ -88,7 +89,7 @@
             },
             "error_message": "Unable to create new secret file",
             "secrets_label": "Secrets",
-            "success_message": "New secret file successfully created",
+            "success_message": "New secret file successfully created.",
             "title": "Edit secret file"
         },
         "confirm_modal": {
@@ -102,7 +103,7 @@
             "drag_file_label": "Drag secret file here or click to select file",
             "error_message": "Unable to create new secret file",
             "file_size_label": "File should not exceed 5mb",
-            "success_message": "New secret file successfully created",
+            "success_message": "New secret file successfully created.",
             "subtitle": "Create new secret file from template or upload it from computer",
             "title": "Secret file",
             "upload_button": "Upload"
@@ -112,17 +113,29 @@
             "change_button": "Change",
             "not_whitelisted_title": "Not whitelisted",
             "not_whitelisted_text": "To get your Agent (Management address) on whitelist please contact us via email agent.onboarding@flare.network and we will walk you through the process.",
-            "success_message": "Working address successfully changed",
+            "success_message": "Working address successfully changed.",
             "subtitle": "Working address can be changed if needed",
             "title": "Working address"
         }
+    },
+    "claim_rewards_modal": {
+        "close_button": "Close",
+        "error_message": "Unable to claim rewards",
+        "form": {
+            "amount_description_label": "You can claim up to {{amount}} {{fAssetSymbol}}",
+            "amount_label": "Amount {{fAssetSymbol}}",
+            "amount_placeholder_label": "How much do you want to claim?"
+        },
+        "submit_button": "Claim",
+        "success_message": "Rewards successfully claimed.",
+        "title": "Claim rewards"
     },
     "close_vault_modal": {
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
         "description_label": "Are you sure you want to close vault? Vault will be closed by agent-bot after some time.",
         "error_message": "Unable to close vault",
-        "success_message": "Vault successfully closed",
+        "success_message": "Vault successfully closed.",
         "title": "Close vault"
     },
     "collaterals_card": {
@@ -154,7 +167,7 @@
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
         "description_label": "Are you sure you want to deactivate vault? \n Vault will be deactivated by agent-bot after some time.",
-        "success_message": "Vault successfully deactivated",
+        "success_message": "Vault successfully deactivated.",
         "title": "Deactivate vault"
     },
     "deposit_collateral_lots_modal": {
@@ -171,7 +184,7 @@
             "multiplier_label": "Multiplier"
         },
         "need_help_label": "Need help?",
-        "success_message": "Succesfully deposited collaterals",
+        "success_message": "Succesfully deposited collaterals.",
         "summary": {
             "deposit_summary_label": "Deposit summary",
             "pool_collateral_label": "Pool Collateral",
@@ -188,7 +201,7 @@
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
         "error_message": "Unable to deposit collateral",
         "need_help_label": "Need help?",
-        "success_message": "Collateral successfully deposited",
+        "success_message": "Collateral successfully deposited.",
         "title": "Deposit Vault Collateral"
     },
     "deposit_flr_in_pool": {
@@ -199,7 +212,7 @@
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
         "error_message": "Unable to deposit FLR in pool",
         "need_help_label": "Need help?",
-        "success_message": "FLR successfully deposited",
+        "success_message": "FLR successfully deposited.",
         "title": "Deposit Pool Collateral"
     },
     "edit_agent_vault": {
@@ -214,7 +227,7 @@
         "discard_button": "Discard",
         "edit_button": "Edit",
         "save_button": "Save and execute",
-        "success_message": "Agent Vault successfully updated",
+        "success_message": "Agent Vault successfully updated.",
         "title": "Agent Vault"
     },
     "forms": {
@@ -336,8 +349,9 @@
             "actions_menu": {
                 "activate_vault_label": "Activate Vault (Enter)",
                 "agent_vault_operations_title": "Agent Vault Operations",
+                "claim_rewards_label": "Claim Rewards",
                 "close_vault_label": "Close Vault (Exit)",
-                "deactivate_vault_label": "Deactivate vault",
+                "deactivate_vault_label": "Deactivate Vault",
                 "deposit_collateral_lots_label": "Deposit Collateral (Lots)",
                 "deposit_pool_collateral_label": "Deposit Pool Collateral",
                 "deposit_vault_collateral_label": "Deposit Vault Collateral",
@@ -346,8 +360,8 @@
                 "view_vault_label": "View Vault",
                 "vault_actions_label": "Vault actions",
                 "vault_collateral_label": "Vault collateral",
-                "withdraw_collateral_pool_tokens_label": "Withdraw collateral pool tokens",
-                "withdraw_vault_collateral_label": "Withdraw Vault collateral"
+                "withdraw_collateral_pool_tokens_label": "Withdraw Collateral pool tokens",
+                "withdraw_vault_collateral_label": "Withdraw Vault Collateral"
             },
             "agent_label": "Agent",
             "amount_label": "Amount",
@@ -429,7 +443,7 @@
         "description_label": "Collateral pool tokens will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral pool tokens.",
         "error_message": "Unable to withdraw collateral pool tokens",
         "need_help_label": "Need help?",
-        "success_message": "Collateral successfully withdrawn",
+        "success_message": "Collateral successfully withdrawn.",
         "title": "Withdraw collateral pool tokens",
         "withdraw_amount_label": "Withdraw amount"
     },
@@ -440,7 +454,7 @@
         "description_label": "Vault collateral will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral.",
         "error_message": "Unable to withdraw vault collateral",
         "need_help_label": "Need help?",
-        "success_message": "Vault Collateral successfully withdrawn",
+        "success_message": "Vault Collateral successfully withdrawn.",
         "title": "Withdraw vault collateral",
         "withdraw_amount_label": "Withdraw amount"
     }

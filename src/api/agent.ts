@@ -23,21 +23,21 @@ import { orderBy } from "lodash";
 
 const resource = 'agent';
 const AGENT_KEY = {
-    WORK_ADDRESS: 'agentWorkAddress',
-    COLLATERALS: 'agentCollaterals',
-    SECRET_EXISTS: 'agentSecretExists',
-    WHITELISTED: 'agentWhitelisted',
-    BOT_ALERT: 'agentBotAlert',
-    VAULTS: 'agentVaults',
-    VAULT_COLLATERALS: 'agentVaultCollaterals',
-    BOT_STATUS: 'agentBotStatus',
-    VAULT_INFO: 'agentVaultInfo',
-    SECRETS_TEMPLATE: 'agentSecretsTemplate',
-    UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance',
-    NOTIFICATIONS: 'notifications',
-    MANAGEMENT_ADDRESS: 'managementAddress',
-    BALANCES: 'balances',
-    UNDERLYING_ADDRESSES: 'underlyingAddresses'
+    WORK_ADDRESS: 'agent.workAddress',
+    COLLATERALS: 'agent.collaterals',
+    SECRET_EXISTS: 'agent.secretExists',
+    WHITELISTED: 'agent.whitelisted',
+    BOT_ALERT: 'agent.botAlert',
+    VAULTS: 'agent.vaults',
+    VAULT_COLLATERALS: 'agent.vaultCollaterals',
+    BOT_STATUS: 'agent.botStatus',
+    VAULT_INFO: 'agent.vaultInfo',
+    SECRETS_TEMPLATE: 'agent.secretsTemplate',
+    UNDERLYING_ASSET_BALANCE: 'agent.getUderlyingAssetBalance',
+    NOTIFICATIONS: 'agent.notifications',
+    MANAGEMENT_ADDRESS: 'agent.managementAddress',
+    BALANCES: 'agent.balances',
+    UNDERLYING_ADDRESSES: 'agent.underlyingAddresses'
 }
 
 export function useWorkAddress(enabled: boolean = true) {

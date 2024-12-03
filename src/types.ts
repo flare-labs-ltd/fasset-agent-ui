@@ -190,3 +190,7 @@ export interface ICalculateCollateral {
     ownerBalance: string;
     symbol: string;
 }
+
+export interface IFeeBalance {
+    balance: string;
+}

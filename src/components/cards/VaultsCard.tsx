@@ -15,7 +15,8 @@ import {
     IconBookUpload,
     IconBookDownload,
     IconDashboard,
-    IconDashboardOff
+    IconDashboardOff,
+    IconGift
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
@@ -30,6 +31,7 @@ import CloseVaultModal from "@/components/modals/CloseVaultModal";
 import WithdrawCollateralPoolTokensModal from "@/components/modals/WithdrawCollateralPoolTokensModal";
 import WithdrawVaultCollateralModal from "@/components/modals/WithdrawVaultCollateralModal";
 import SelfCloseModal from "@/components/modals/SelfCloseModal";
+import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
@@ -53,6 +55,7 @@ const MODAL_CLOSE_VAULT = 'close_vault';
 const MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS = 'withdraw_cr_tokens';
 const MODAL_WITHDRAW_VAULT_COLLATERAL = 'withdraw_vault_collateral';
 const MODAL_SELF_CLOSE = 'self_close';
+const MODAL_CLAIM_REWARDS = 'claim_rewards';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -65,6 +68,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isWithdrawCollateralModalActive, setIsWithdrawCollateralModalActive] = useState<boolean>(false);
     const [isSelfCloseModalActive, setIsSelfCloseModalActive] = useState<boolean>(false);
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
+    const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -398,6 +402,12 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
                             </Menu.Item>
                             <Menu.Item
+                                leftSection={<IconGift style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_CLAIM_REWARDS, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.claim_rewards_label')}
+                            </Menu.Item>
+                            <Menu.Item
                                 leftSection={<IconBookDownload style={{ width: rem(14), height: rem(14) }} />}
                                 onClick={() => onClick(MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS, vault)}
                             >
@@ -463,6 +473,8 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsSelfCloseModalActive(true);
         } else if (modal === MODAL_DEPOSIT_COLLATERAL_LOTS) {
             setIsDepositCollateralLotsModalActive(true);
+        } else if (modal === MODAL_CLAIM_REWARDS) {
+            setIsClaimRewardsModalActive(true);
         }
         setSelectedAgentVault(vault);
     }
@@ -576,6 +588,12 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={() => setIsSelfCloseModalActive(false)}
+                    />
+                    <ClaimRewardsModal
+                        opened={isClaimRewardsModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={() => setIsClaimRewardsModalActive(false)}
                     />
                 </>
             }
