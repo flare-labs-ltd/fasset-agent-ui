@@ -43,7 +43,7 @@ export default function AlertsCard({ className }: IAlertCard) {
     const [alerts, setAlerts] = useState<IBotAlert[]>([]);
     const [alertsOffset, setAlertsOffset] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState<number>();
-    const [activeTab, setActiveTab] = useState<string>(TAB_ALERTS);
+    const [activeTab, setActiveTab] = useState<string | null>(TAB_ALERTS);
     const [hasUnreadNotifications, setHasUnreadNotifications] = useState<boolean>(false);
 
     const botAlerts = useBotAlert(ALERTS_PER_PAGE, alertsOffset, selectedFilter, currentPage !== undefined);
