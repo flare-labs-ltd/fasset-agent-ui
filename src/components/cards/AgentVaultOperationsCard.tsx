@@ -10,6 +10,7 @@ import DepositVaultCollateralModal from "@/components/modals/DepositVaultCollate
 import DepositPoolCollateralModal from "@/components/modals/DepositPoolCollateralModal";
 import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
 import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
+import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
 import { IAgentVault, ICollateralItem } from "@/types";
 import { useRouter } from "next/router";
 import { UseQueryResult } from "@tanstack/react-query";
@@ -20,7 +21,6 @@ interface IAgentVaultOperationsCard {
     className?: string;
     agentVault: IAgentVault|undefined;
     collateral: UseQueryResult<ICollateralItem[], Error>;
-
 }
 
 export default function AgentVaultOperationsCard({ className, agentVault, collateral}: IAgentVaultOperationsCard) {
@@ -30,6 +30,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
     const [isActivateVaultModalActive, setIsActivateVaultModalActive] = useState<boolean>(false);
     const [isDeactivateVaultModalActive, setIsDeactivateVaultModalActive] = useState<boolean>(false);
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
+    const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
 
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
@@ -93,6 +94,13 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             >
                 {t('agent_vault_operations_card.deposit_pool_collateral_button')}
             </Button>
+            <Button
+                variant="gradient"
+                onClick={() => setIsClaimRewardsModalActive(true)}
+                className="block mb-3"
+            >
+                {t('agent_vault_operations_card.claim_rewards_button')}
+            </Button>
             {!agentVault?.publiclyAvailable &&
                 <Button
                     variant="gradient"
@@ -144,6 +152,12 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 fAssetSymbol={fAssetSymbol as string}
                 agentVaultAddress={agentVaultAddress as string}
                 onClose={() => setIsDeactivateVaultModalActive(false)}
+            />
+            <ClaimRewardsModal
+                opened={isClaimRewardsModalActive}
+                fAssetSymbol={fAssetSymbol as string}
+                agentVaultAddress={agentVaultAddress as string}
+                onClose={() => setIsClaimRewardsModalActive(false)}
             />
         </Paper>
     );

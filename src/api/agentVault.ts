@@ -5,9 +5,9 @@ import { ICalculateCollateral, IFreeVaultBalance } from "@/types";
 const resource = 'agentVault';
 
 const AGENT_VAULT_KEY = {
-    FREE_VAULT_BALANCE: 'freeVaultBalance',
-    BACKED_AMOUNT: 'backedAmount',
-    CALCULATE_COLLATERALS: 'calculateCollaterals'
+    FREE_VAULT_BALANCE: 'agentVault.freeVaultBalance',
+    BACKED_AMOUNT: 'agentVault.backedAmount',
+    CALCULATE_COLLATERALS: 'agentVault.calculateCollaterals'
 }
 
 export function useDepositCollateral() {

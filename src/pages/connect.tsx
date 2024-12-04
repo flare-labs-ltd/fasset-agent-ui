@@ -22,7 +22,6 @@ export default function Connect() {
             router.push('/');
         } else {
             openConnectWalletModal((wallet: string) => {
-                console.log('wallet', wallet)
                 if (wallet) router.push('/');
             });
         }

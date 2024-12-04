@@ -40,14 +40,19 @@ export interface ICollateral {
 }
 
 export interface IBotAlert {
+    id: number;
+    bot_type: string;
+    address: string;
+    level: string;
+    title: string;
+    description: string;
+    expiration: number;
     date: string;
-    alert: {
-        bot_type: string;
-        address: string;
-        level: string;
-        title: string;
-        description: string;
-    }
+}
+
+export interface IBotAlerts {
+    alerts: IBotAlert[];
+    count: number;
 }
 
 export interface INotification {
@@ -184,4 +189,8 @@ export interface ICalculateCollateral {
     amount: string;
     ownerBalance: string;
     symbol: string;
+}
+
+export interface IFeeBalance {
+    balance: string;
 }
