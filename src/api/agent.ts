@@ -3,10 +3,11 @@ import {
     useQueryClient,
     useMutation,
 } from "@tanstack/react-query";
+import qs from "qs";
 import apiClient from "@/api/apiClient";
 import {
     ICollateral,
-    IBotAlert,
+    IBotAlerts,
     IAgentSettingsConfig,
     IAgentVault,
     IAgentSettingsDTO,
@@ -22,21 +23,21 @@ import { orderBy } from "lodash";
 
 const resource = 'agent';
 const AGENT_KEY = {
-    WORK_ADDRESS: 'agentWorkAddress',
-    COLLATERALS: 'agentCollaterals',
-    SECRET_EXISTS: 'agentSecretExists',
-    WHITELISTED: 'agentWhitelisted',
-    BOT_ALERT: 'agentBotAlert',
-    VAULTS: 'agentVaults',
-    VAULT_COLLATERALS: 'agentVaultCollaterals',
-    BOT_STATUS: 'agentBotStatus',
-    VAULT_INFO: 'agentVaultInfo',
-    SECRETS_TEMPLATE: 'agentSecretsTemplate',
-    UNDERLYING_ASSET_BALANCE: 'agentGetUderlyingAssetBalance',
-    NOTIFICATIONS: 'notifications',
-    MANAGEMENT_ADDRESS: 'managementAddress',
-    BALANCES: 'balances',
-    UNDERLYING_ADDRESSES: 'underlyingAddresses'
+    WORK_ADDRESS: 'agent.workAddress',
+    COLLATERALS: 'agent.collaterals',
+    SECRET_EXISTS: 'agent.secretExists',
+    WHITELISTED: 'agent.whitelisted',
+    BOT_ALERT: 'agent.botAlert',
+    VAULTS: 'agent.vaults',
+    VAULT_COLLATERALS: 'agent.vaultCollaterals',
+    BOT_STATUS: 'agent.botStatus',
+    VAULT_INFO: 'agent.vaultInfo',
+    SECRETS_TEMPLATE: 'agent.secretsTemplate',
+    UNDERLYING_ASSET_BALANCE: 'agent.getUderlyingAssetBalance',
+    NOTIFICATIONS: 'agent.notifications',
+    MANAGEMENT_ADDRESS: 'agent.managementAddress',
+    BALANCES: 'agent.balances',
+    UNDERLYING_ADDRESSES: 'agent.underlyingAddresses'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -266,16 +267,34 @@ export function useIsWhitelisted(enabled: boolean = true) {
     });
 }
 
-export function useBotAlert() {
+export function useBotAlert(limit: number, offset: number, types: string[], enabled: boolean = true) {
+    const params: { limit: number; offset: number; types?: string } = {
+        limit,
+        offset,
+    };
+
+    if (types.length > 0) {
+        params.types = types.join(',');
+    }
+
+    const config = {
+        params,
+        paramsSerializer: (params: any) => {
+            return qs.stringify(params);
+        },
+    };
+
     return useQuery({
-        queryKey: [AGENT_KEY.BOT_ALERT],
-        queryFn: async(): Promise<IBotAlert[]> => {
-            const response = await apiClient.get(`${resource}/botAlert`);
+        queryKey: [AGENT_KEY.BOT_ALERT, config.params.limit, config.params.offset, config.params?.types],
+        queryFn: async(): Promise<IBotAlerts> => {
+            const response = await apiClient.get(`${resource}/botAlert`, config);
             return response.data.data
         },
-        select: (data: IBotAlert[]) => {
-            return orderBy(data, 'date', 'desc');
-        }
+        select: (data: IBotAlerts) => {
+            data.alerts = orderBy(data.alerts, 'date', 'desc')
+            return data;
+        },
+        enabled: enabled
     });
 }
 

@@ -13,6 +13,7 @@
     --green-default: #116622;
     --orange-default: #F19D70;
     --dark-red-default: #BD2222;
+    --flr-lighter-gray: #CED4DA;
     --flr-gray: #777777;
     --flr-darker-gray: #888888;
     --flr-border: #E7E7E7;
@@ -108,6 +109,17 @@ body {
     border-radius: var(--mantine-radius-xs);
     text-transform: uppercase;
     background-color: rgba(36, 36, 37, 0.06);
+}
+
+// Pagination
+.mantine-Pagination-control {
+    background-color: transparent;
+    border-color: var(--flr-lighter-gray);
+
+    &[data-active="true"] {
+        background-color: var(--flr-gray);
+        border-color: var(--flr-gray);
+    }
 }
 
 .status-dot {
