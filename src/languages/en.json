@@ -179,7 +179,7 @@
             "lots_description_label": "How much lots do you want to add to Vault?",
             "lots_placeholder_label": "NR. OF LOTS",
             "lots_label": "Lots",
-            "multiplier_description_label": "Multiplier should be between 1 and 2.",
+            "multiplier_description_label": "Multiplier is the number to multiply the amount with, to compensate for price changes, and account for FAssets minted as collateral pool fees. Multiplier should be between 1 and 2.",
             "multiplier_placeholder_label": "MULTIPLIER",
             "multiplier_label": "Multiplier"
         },
