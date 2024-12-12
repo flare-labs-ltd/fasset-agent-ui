@@ -37,10 +37,11 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
     const depositFLR = useDepositFLRInPool();
     const { t } = useTranslation();
 
-    const amount = toNumber((collateral?.data || []).find(c => c.symbol.toLowerCase() === 'flr' || c.symbol.toLowerCase() === 'cflr')?.balance || '0');
+    const collateralToken = (collateral?.data || []).find(collateral => 'wrapped' in collateral);
+    const amount = toNumber(collateralToken?.balance || '0');
     const schema = yup.object().shape({
         amount: yup.number()
-        .required(t('validation.messages.required', { field: t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' }) }))
+        .required(t('validation.messages.required', { field: t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: collateralToken?.symbol }) }))
         .max(amount, t('validation.custom_messages.balance_to_low'))
         .min(1)
     });
@@ -139,8 +140,8 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
                     {...form.getInputProps('amount')}
                     decimalScale={3}
                     min={0}
-                    label={t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: 'FLR' })}
-                    description={t('deposit_flr_in_pool.deposit_amount_description_label', {amount: amount, token: 'FLR'})}
+                    label={t('deposit_flr_in_pool.deposit_amount_label', { vaultCollateralToken: collateralToken?.symbol })}
+                    description={t('deposit_flr_in_pool.deposit_amount_description_label', {amount: amount, token: collateralToken?.symbol})}
                     placeholder={t('deposit_flr_in_pool.deposit_amount_placeholder_label')}
                     withAsterisk
                 />
