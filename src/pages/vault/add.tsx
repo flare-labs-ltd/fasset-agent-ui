@@ -17,7 +17,7 @@ import { useBalances, useCreateVault } from '@/api/agent';
 import { showErrorNotification } from '@/hooks/useNotifications';
 import { IAgentSettingsConfig } from '@/types';
 import BackButton from "@/components/elements/BackButton";
-import { satoshiToBtc, toNumber } from "@/utils";
+import { toNumber } from "@/utils";
 import { MIN_CREATE_VAULT_BALANCE } from "@/constants";
 
 export default function AddVault() {
@@ -81,12 +81,8 @@ export default function AddVault() {
             const data = form?.getValues();
             const balancesResponse = await balances.refetch();
             const type = data.fAssetType.toLowerCase().match(/xrp|doge|btc/)![0];
-            let tokenBalance = balancesResponse.data?.find(balance => balance.symbol.toLowerCase().includes(type));
-            let balance = tokenBalance ? toNumber(tokenBalance.balance) : 0;
-
-            if (type === 'btc') {
-                balance = satoshiToBtc(balance);
-            }
+            const tokenBalance = balancesResponse.data?.find(balance => balance.symbol.toLowerCase().includes(type));
+            const balance = tokenBalance ? toNumber(tokenBalance.balance) : 0;
 
             const minLimit = type === 'xrp'
                 ? MIN_CREATE_VAULT_BALANCE.XRP
@@ -101,7 +97,7 @@ export default function AddVault() {
                         ? 'add_agent_vault.btc_min_limit_error'
                         : 'add_agent_vault.doge_min_limit_error';
                 showErrorNotification(t(key, {
-                    amount: type === 'xrop'
+                    amount: type === 'xrp'
                         ? MIN_CREATE_VAULT_BALANCE.XRP
                         : type === 'btc' ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
                 }));

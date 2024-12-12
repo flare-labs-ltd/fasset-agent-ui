@@ -102,6 +102,10 @@ export default function Vault() {
                 {
                     name: 'poolTopupTokenPriceFactorBIPS',
                     value: (data.poolTopUpTokenPriceFactor * 10000).toString()
+                },
+                {
+                    name: 'handshakeType',
+                    value: data.handshakeType
                 }
             ];
 

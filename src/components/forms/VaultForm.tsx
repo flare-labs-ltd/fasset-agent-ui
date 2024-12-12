@@ -334,7 +334,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         placeholder={t('forms.vault.handshake_type_placeholder_label')}
                         withAsterisk
                         className="mt-4 font-normal"
-                        disabled={disabled || vault != null}
+                        disabled={disabled}
                         allowDeselect={false}
                     />
                     <NumberInput
