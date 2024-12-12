@@ -68,7 +68,7 @@ export default function Login() {
                 shadow="sm"
                 className="mt-8 w-full"
             >
-                <form className="flex flex-col">
+                <form className="flex flex-col" onSubmit={e => { e.preventDefault(); }}>
                     <PasswordInput
                         {...form.getInputProps('password')}
                         //@ts-ignore
@@ -81,6 +81,7 @@ export default function Login() {
                         fw={300}
                         loading={login.isPending}
                         className="mt-5 mx-auto px-12"
+                        type="submit"
                     >
                         {t('login.login_button')}
                     </Button>
