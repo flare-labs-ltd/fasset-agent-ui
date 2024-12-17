@@ -14,7 +14,6 @@ import { WalletConnect as WalletConnectV2 } from "@web3-react/walletconnect-v2";
 import { CoinbaseWallet } from "@web3-react/coinbase-wallet";
 import { Network } from "@web3-react/network";
 import { useRouter } from "next/router";
-import { useGlobalStateChainIdWhenNotConnected } from "@/hooks/useNotConnectedChainProvider";
 
 /**
  * Extended base web3react provider to support other functionality as well
@@ -38,7 +37,6 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
     const web3React = useWeb3React<BaseWeb3Provider>();
     const { chainId } = web3React;
     const supportedChainId = isChainSupported(chainId);
-    const { notConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
     const router = useRouter();
 
     /**
@@ -71,8 +69,7 @@ export const ExtendedWeb3Provider = ({ children }: React.PropsWithChildren<{ chi
 
                     if (data.wallet == 'MetaMask') {
                         if (accounts.length > 0) {
-                            const desiredChainId = notConnectedChainId || appChainParams.desiredChainID;
-                            await connect(enabledWallets.metamask.connector, desiredChainId);
+                            await connect(enabledWallets.metamask.connector);
                             await router.push('/');
                         } else {
                             await router.push('/connect');
