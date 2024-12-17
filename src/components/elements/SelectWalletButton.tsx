@@ -8,31 +8,26 @@ import { MetaMask } from '@web3-react/metamask';
 import { Network } from '@web3-react/network';
 import { WalletConnect as WalletConnectV2 } from '@web3-react/walletconnect-v2';
 import { CoinbaseWallet } from '@web3-react/coinbase-wallet';
-import { useGlobalStateChainIdWhenNotConnected } from '@/hooks/useNotConnectedChainProvider';
 import { IEnabledWallet } from '@/connectors/connectors';
-import { AllSupportedChainsType, appChainParams } from '@/chains/chains';
 import { useWeb3 } from '@/hooks/useWeb3';
 import { useConnectWalletModal } from '@/hooks/useEthereumLogin';
 import classes from '@/styles/components/elements/SelectWalletButton.module.scss';
 
 export default function SelectWalletButton({ wallet, disabled = false }: { wallet: IEnabledWallet, disabled?: boolean }) {
     const { connector, hooks } = wallet;
-    const { supportedChainId, connect, disconnect } = useWeb3();
+    const { connect, disconnect } = useWeb3();
     const { useIsActive } = hooks;
     const { t } = useTranslation();
     const [error, setError] = useState<boolean>(false);
-    const { notConnectedChainId, setNotConnectedChainId } = useGlobalStateChainIdWhenNotConnected();
     const { closeConnectWalletModal, openConnectWalletModalCallback } = useConnectWalletModal();
     const router = useRouter();
 
-    const desiredChainId = notConnectedChainId || appChainParams.desiredChainID;
     const isActive = useIsActive();
     const isMetamaskAndNotInstalled = connector instanceof MetaMask && !window.ethereum;
     const isMetamaskAndOnMobile = connector instanceof MetaMask && isMobile && !window.ethereum;
 
     const deactivateConnector = async() => {
         await disconnect(connector);
-        setNotConnectedChainId(supportedChainId as AllSupportedChainsType);
         closeConnectWalletModal();
         await router.push('/connect');
     };
@@ -71,7 +66,7 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
             );
 
             try {
-                await connect(connector, desiredChainId);
+                await connect(connector);
             } catch (error: any) {
                 notifications.show({
                     title: t('select_wallet_button.error_title'),
@@ -144,12 +139,9 @@ export default function SelectWalletButton({ wallet, disabled = false }: { walle
     }, [
         closeConnectWalletModal,
         connector,
-        desiredChainId,
         isActive,
         isMetamaskAndNotInstalled,
         isMetamaskAndOnMobile,
-        setNotConnectedChainId,
-        supportedChainId
     ]);
 
     return (
