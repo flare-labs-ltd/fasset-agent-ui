@@ -27,7 +27,3 @@ export const getChainExplorerUrl = (chainId: number) => {
     if (!chainId || !(chainId in networkParams)) return;
     return networkParams[chainId].blockExplorerUrls[0];
 };
-
-export const fallBackChainId = () => {
-    return appChainParams.desiredChainID;
-};
