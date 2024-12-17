@@ -1,7 +1,6 @@
 import { MantineProvider } from '@mantine/core';
 import type { AppProps } from 'next/app';
 import { defaultThemeOverride } from '@/config/theme';
-import { GlobalStateChainIdWhenNotConnected } from '@/hooks/useNotConnectedChainProvider';
 import { Web3Provider } from '@/hooks/useWeb3';
 import { EthereumLoginProvider } from '@/hooks/useEthereumLogin';
 import MainLayout from "@/components/layouts/MainLayout";
@@ -36,10 +35,9 @@ export default function App({ Component, pageProps }: CustomAppProps) {
             <ModalsProvider>
                 <Notifications />
                 <QueryClientProvider client={queryClient}>
-                    <GlobalStateChainIdWhenNotConnected>
-                        <Web3Provider>
-                            <EthereumLoginProvider>
-                                <MainLayout>
+                    <Web3Provider>
+                        <EthereumLoginProvider>
+                            <MainLayout>
                                     {Component.protected
                                         ? <RouteGuard>
                                             <Component {...pageProps} />
@@ -49,7 +47,6 @@ export default function App({ Component, pageProps }: CustomAppProps) {
                                 </MainLayout>
                             </EthereumLoginProvider>
                         </Web3Provider>
-                    </GlobalStateChainIdWhenNotConnected>
                 </QueryClientProvider>
             </ModalsProvider>
         </MantineProvider>

@@ -16,11 +16,9 @@ export type AllSupportedChainsType =
     | ChainIdName.Coston2;
 
 export const appChainParams: {
-    desiredChainID: AllSupportedChainsType;
     supportedChains: AllSupportedChainsType[];
 } = {
-    desiredChainID: 16,
-    supportedChains: [16],
+    supportedChains: [16, 19],
 };
 
 export const networkParams: INetworkParams = {
