@@ -210,9 +210,9 @@
         "deposit_amount_description_label": "Your current balance on working address: {{amount}} {{token}}.",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
-        "error_message": "Unable to deposit FLR in pool",
+        "error_message": "Unable to deposit {{token}} in pool",
         "need_help_label": "Need help?",
-        "success_message": "FLR successfully deposited.",
+        "success_message": "{{token}} successfully deposited.",
         "title": "Deposit Pool Collateral"
     },
     "edit_agent_vault": {
