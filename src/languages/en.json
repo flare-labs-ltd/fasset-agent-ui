@@ -244,7 +244,7 @@
             "enter_placeholder": "Enter ...",
             "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault",
             "fasset_type_label": "FAsset type",
-            "fasset_type_placeholder": "Select type (FXPR, FBTC, ...)",
+            "fasset_type_placeholder": "Select type (FXRP, FBTC, ...)",
             "handshake_label": "Handshake",
             "handshake_type_description_label": "Defines which type of handshake will be used",
             "handshake_type_label": "Handshake type",
