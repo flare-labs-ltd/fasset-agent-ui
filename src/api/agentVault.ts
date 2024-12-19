@@ -33,7 +33,7 @@ export function useFreeVaultBalance(fAssetSymbol: string, agentVaultAddress: str
         queryKey: [AGENT_VAULT_KEY.FREE_VAULT_BALANCE, fAssetSymbol, agentVaultAddress],
         queryFn: async() => {
             const response = await apiClient.get(`${resource}/collateral/freeVaultBalance/${fAssetSymbol}/${agentVaultAddress}`);
-            return response.data.data as IFreeVaultBalance;
+            return response.data as IFreeVaultBalance;
         },
         enabled: enabled
     })

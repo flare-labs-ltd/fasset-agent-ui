@@ -22,7 +22,7 @@ export function usePoolBalance(fAssetSymbol: string, agentVaultAddress: string, 
     return useQuery({
         queryKey: [POOL_COLLATERAL_KEY.POOL_BALANCE, fAssetSymbol, agentVaultAddress],
         queryFn: async () => {
-            const response = await apiClient.get(`${resource}/collateral/poolBalance/${fAssetSymbol}/${agentVaultAddress}`);
+            const response = await apiClient.get(`${resource}/collateral/freePoolBalance/${fAssetSymbol}/${agentVaultAddress}`);
             return response.data as IPoolBalance;
         },
         enabled: enabled
