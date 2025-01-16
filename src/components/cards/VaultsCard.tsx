@@ -6,7 +6,6 @@ import {
     Badge,
     Menu,
     Text,
-    Grid
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import {
@@ -32,12 +31,14 @@ import WithdrawCollateralPoolTokensModal from "@/components/modals/WithdrawColla
 import WithdrawVaultCollateralModal from "@/components/modals/WithdrawVaultCollateralModal";
 import SelfCloseModal from "@/components/modals/SelfCloseModal";
 import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
+import DelegatePoolCollateralModal from "@/components/modals/DelegatePoolCollateralModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
 import CurrencyIcon from "@/components/elements/CurrencyIcon";
 import { useBalances } from "@/api/agent";
 import classes from "@/styles/components/cards/VaultsCard.module.scss";
+import { showErrorNotification } from "@/hooks/useNotifications";
 
 interface IVaultsCard {
     className?: string,
@@ -56,6 +57,7 @@ const MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS = 'withdraw_cr_tokens';
 const MODAL_WITHDRAW_VAULT_COLLATERAL = 'withdraw_vault_collateral';
 const MODAL_SELF_CLOSE = 'self_close';
 const MODAL_CLAIM_REWARDS = 'claim_rewards';
+const MODAL_DELEGATE_POOL_COLLATERAL = 'delegate_pool_collateral';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -69,6 +71,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isSelfCloseModalActive, setIsSelfCloseModalActive] = useState<boolean>(false);
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
     const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
+    const [isDelegatePoolCollateralModalActive, setIsDelegatePoolCollateralModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -78,7 +81,9 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
 
     useEffect(() => {
         const agentVaultsInformationFetchInterval = setInterval(() => {
-            agentVaultsInformation.refetch();
+            agentVaultsInformation.refetch({
+                cancelRefetch: false
+            });
         }, VAULTS_REFETCH_INTERVAL);
 
         return () => clearInterval(agentVaultsInformationFetchInterval);
@@ -105,7 +110,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         <div className="flex items-center">
                             <Text
                                 size="sm"
-                                c="var(--flr-dark)"
+                                c="var(--flr-black)"
                             >
                                 {truncateString(vault.address, 5, 5)}
                             </Text>
@@ -329,7 +334,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             }
         },
         {
-            id: 'pool_fee',
+            id: 'poolFee',
             label: t('vaults_card.table.pool_fee'),
             sorted: true,
             render: (vault: IVault) => {
@@ -352,6 +357,20 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         size="sm"
                     >
                         {vault.handshakeType === 0 ? t('vaults_card.no_label') : t('vaults_card.yes_label')}
+                    </Text>
+                );
+            }
+        },
+        {
+            id: 'delegationPercentage',
+            label: t('vaults_card.table.delegated_label'),
+            sorted: true,
+            render: (vault: IVault) => {
+                return (
+                    <Text
+                        size="sm"
+                    >
+                        {vault.delegationPercentage} <span className="text-[var(--flr-darker-gray)]">%</span>
                     </Text>
                 );
             }
@@ -400,6 +419,12 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 onClick={() => onClick(MODAL_DEPOSIT_POOL_COLLATERAL, vault)}
                             >
                                 {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_DELEGATE_POOL_COLLATERAL, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.delegate_pool_collateral_label')}
                             </Menu.Item>
                             <Menu.Item
                                 leftSection={<IconGift style={{ width: rem(14), height: rem(14) }} />}
@@ -475,6 +500,8 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsDepositCollateralLotsModalActive(true);
         } else if (modal === MODAL_CLAIM_REWARDS) {
             setIsClaimRewardsModalActive(true);
+        } else if (modal === MODAL_DELEGATE_POOL_COLLATERAL) {
+            setIsDelegatePoolCollateralModalActive(true);
         }
         setSelectedAgentVault(vault);
     }
@@ -486,7 +513,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             await balances.refetch();
             await collaterals.refetch();
         } catch (error) {
-
+            showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
         }
@@ -510,6 +537,21 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         setIsDepositVaultCollateralModalActive(false);
         if (refetch) {
             refetchData();
+        }
+    }
+
+    const onCloseDelegatePoolCollateralModal = async (refetch: boolean = false) => {
+        setIsDelegatePoolCollateralModalActive(false);
+        
+        if (refetch) {
+            try {
+                setIsLoading(true);
+                await agentVaultsInformation.refetch();
+            } catch (error) {
+                showErrorNotification((error as any).response.data.message);
+            } finally {
+                setIsLoading(false);
+            }
         }
     }
 
@@ -594,6 +636,13 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={() => setIsClaimRewardsModalActive(false)}
+                    />
+                    <DelegatePoolCollateralModal
+                        opened={isDelegatePoolCollateralModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        delegates={selectedAgentVault.delegates}
+                        onClose={onCloseDelegatePoolCollateralModal}
                     />
                 </>
             }

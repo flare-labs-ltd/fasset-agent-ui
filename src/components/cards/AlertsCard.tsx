@@ -306,9 +306,9 @@ export default function AlertsCard({ className }: IAlertCard) {
                                                 {moment(notification.time).format('DD.MM.YYYY HH:mm')}
                                             </Text>
                                             <Badge
-                                                color="rgba(36, 36, 37, 0.06)"
+                                                color="var(--flr-lightest-gray)"
                                                 radius="xs"
-                                                className="uppercase text-black"
+                                                className="uppercase text-[var(--flr-black)] dark:text-[var(--flr-white)]"
                                                 fw={400}
                                             >
                                                 {t('alerts_card.notifications.all_agents_label')}

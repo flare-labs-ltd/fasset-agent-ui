@@ -159,62 +159,66 @@ const FAssetTable = memo(({ items, columns, loading, className, style, emptyLabe
     }, [localItems]);
 
     return (
-        <div className={className} style={style}>
-            <Component scrollContainerWidth={scrollContainerWidth}>
-                <Table verticalSpacing="md">
-                    <Table.Thead className="text-xs">
-                        <Table.Tr>
-                            {columns.map(column => (
-                                <Table.Th
-                                    key={column.id}
-                                    className={`text-xs uppercase ${column.sorted ? 'cursor-pointer' : ''} ${column.className ?? ''} ${column.headerClassName || ''}`}
-                                    onClick={() => onSort(column)}
-                                >
-                                    <div className={(column.colClass ? column.colClass : '') + ' ' + 'flex'}>
-                                        {!React.isValidElement(column.label) &&
-                                            <Text size="sm">{column.label}</Text>
-                                        }
-                                        {React.isValidElement(column.label) &&
-                                            <div>{column.label}</div>
-                                        }
-                                        {sortStatus.column === column.id &&
-                                            <IconArrowUp
-                                                style={{ width: rem(15), height: rem(15) }}
-                                                className={`${classes.sortIcon} ${sortStatus.direction === 'desc' ? classes.isReversed : ''} ml-1 flex-shrink-0`}
-                                            />
-                                        }
-                                        {sortStatus.column !== column.id && column.sorted &&
-                                            <IconArrowsMoveVertical
-                                                style={{ width: rem(15), height: rem(15) }}
-                                                className="ml-1 flex-shrink-0"
-                                            />
-                                        }
-                                    </div>
-                                </Table.Th>
-                            ))}
-                        </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>
-                        {loading &&
+        <>
+            <div className={className} style={style}>
+                <Component
+                    scrollContainerWidth={scrollContainerWidth}
+                >
+                    <Table verticalSpacing="md">
+                        <Table.Thead className="text-xs">
                             <Table.Tr>
-                                <Table.Td
-                                    colSpan={13}
-                                >
-                                    <Loader className="flex mx-auto mt-2" />
-                                </Table.Td>
+                                {columns.map(column => (
+                                    <Table.Th
+                                        key={column.id}
+                                        className={`text-xs text-[var(--flr-gray)] uppercase ${column.sorted ? 'cursor-pointer' : ''} ${column.className ?? ''} ${column.headerClassName || ''}`}
+                                        onClick={() => onSort(column)}
+                                    >
+                                        <div className={(column.colClass ? column.colClass : '') + ' ' + 'flex'}>
+                                            {!React.isValidElement(column.label) &&
+                                                <Text size="sm">{column.label}</Text>
+                                            }
+                                            {React.isValidElement(column.label) &&
+                                                <div>{column.label}</div>
+                                            }
+                                            {sortStatus.column === column.id &&
+                                                <IconArrowUp
+                                                    style={{width: rem(15), height: rem(15)}}
+                                                    className={`${classes.sortIcon} ${sortStatus.direction === 'desc' ? classes.isReversed : ''} ml-1 flex-shrink-0`}
+                                                />
+                                            }
+                                            {sortStatus.column !== column.id && column.sorted &&
+                                                <IconArrowsMoveVertical
+                                                    style={{width: rem(15), height: rem(15)}}
+                                                    className="ml-1 flex-shrink-0"
+                                                />
+                                            }
+                                        </div>
+                                    </Table.Th>
+                                ))}
                             </Table.Tr>
-                        }
-                        {localItems.length === 0 && !loading &&
-                            <Table.Tr>
-                                <Table.Td colSpan={13} className="text-center">
-                                    <Text>{emptyLabel ?? t('fasset_table.empty_label')}</Text>
-                                </Table.Td>
-                            </Table.Tr>
-                        }
-                        {!loading && renderRows()}
-                    </Table.Tbody>
-                </Table>
-            </Component>
+                        </Table.Thead>
+                        <Table.Tbody>
+                            {loading &&
+                                <Table.Tr>
+                                    <Table.Td
+                                        colSpan={13}
+                                    >
+                                        <Loader className="flex mx-auto mt-2"/>
+                                    </Table.Td>
+                                </Table.Tr>
+                            }
+                            {localItems.length === 0 && !loading &&
+                                <Table.Tr>
+                                    <Table.Td colSpan={13} className="text-center">
+                                        <Text>{emptyLabel ?? t('fasset_table.empty_label')}</Text>
+                                    </Table.Td>
+                                </Table.Tr>
+                            }
+                            {!loading && renderRows()}
+                        </Table.Tbody>
+                    </Table>
+                </Component>
+            </div>
             {pagination && localItems.length > 0 &&
                 <div className="flex text-xs justify-end">
                     <Pagination
@@ -226,7 +230,7 @@ const FAssetTable = memo(({ items, columns, loading, className, style, emptyLabe
                     />
                 </div>
             }
-        </div>
+        </>
     );
 });
 
@@ -234,7 +238,10 @@ FAssetTable.displayName = 'FAssetTable';
 
 export default FAssetTable;
 
-function Component({ children, scrollContainerWidth }: { children: React.ReactNode, scrollContainerWidth: number|undefined }) {
+function Component({children, scrollContainerWidth}: {
+    children: React.ReactNode,
+    scrollContainerWidth: number | undefined
+}) {
     return scrollContainerWidth !== undefined
         ? <Table.ScrollContainer minWidth={scrollContainerWidth}>{children}</Table.ScrollContainer>
         : <div>{children}</div>

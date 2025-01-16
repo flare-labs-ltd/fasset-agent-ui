@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 interface INotificationState {
-    latestNotificationId: number|undefined;
+    latestNotificationId: number | undefined;
     setLatestNotificationId: (id: number) => void;
 }
 

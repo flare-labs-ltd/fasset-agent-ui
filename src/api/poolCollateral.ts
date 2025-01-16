@@ -57,3 +57,29 @@ export function useFeeWithdraw() {
         }
     });
 }
+
+export function useDelegateAll() {
+    return useMutation({
+        mutationFn: async ({
+           fAssetSymbol,
+           agentVaultAddress,
+           payload
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string,
+            payload: { address: string, bips: number}[]
+        }) => {
+            const response = await apiClient.post(`${resource}/delegateAll/${fAssetSymbol}/${agentVaultAddress}`, payload);
+            return response.data;
+        }
+    })
+}
+
+export function useUndelegate() {
+    return useMutation({
+        mutationFn: async({ fAssetSymbol, agentVaultAddress }: { fAssetSymbol: string, agentVaultAddress: string }) => {
+            const response = await apiClient.post(`${resource}/undelegate/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data;
+        }
+    })
+}

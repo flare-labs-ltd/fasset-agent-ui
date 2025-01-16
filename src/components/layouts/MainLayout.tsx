@@ -5,19 +5,20 @@ import {
     Text,
     Menu,
     Button,
-    rem
+    rem,
 } from "@mantine/core";
 import Head from "next/head";
 import { useTranslation } from "react-i18next";
-import ConnectWalletButton from "@/components/elements/ConnectWalletButton";
-import LogoIcon from "@/components/icons/LogoIcon";
-import FlrIcon from "@/components/icons/FlrIcon";
 import Link from "next/link";
 import {
     IconLifebuoy,
     IconAt,
-    IconBrandTelegram
+    IconBrandTelegram,
 } from "@tabler/icons-react";
+import ConnectWalletButton from "@/components/elements/ConnectWalletButton";
+import LogoIcon from "@/components/icons/LogoIcon";
+import FlrIcon from "@/components/icons/FlrIcon";
+import SiteMode from "@/components/elements/SiteMode";
 import { useWeb3 } from "@/hooks/useWeb3";
 
 export interface ILayout {
@@ -45,7 +46,7 @@ export default function Layout({ children, ...props }: ILayout) {
                 <AppShell.Main className="flex flex-col">
                     <Container
                         fluid
-                        className="flex flex-wrap justify-between p-1 bg-white px-4 sm:px-8 w-full items-center mb-8"
+                        className="flex flex-wrap justify-between p-1 px-4 sm:px-8 w-full items-center mb-8 bg-[var(--flr-white)]"
                     >
                         <div className="flex items-center">
                             <LogoIcon width="60" height="60" />
@@ -62,7 +63,8 @@ export default function Layout({ children, ...props }: ILayout) {
                                 </div>
                             </div>
                         </div>
-                        <div className="flex mt-2 ml-auto">
+                        <div className="flex items-center mt-2 ml-auto">
+                            <SiteMode className="mr-3" />
                             <Menu
                                 radius={16}
                             >
@@ -70,7 +72,7 @@ export default function Layout({ children, ...props }: ILayout) {
                                     <Button
                                         variant="outline"
                                         size="md"
-                                        className="mr-3 text-black border-gray-200"
+                                        className="mr-3 border-gray-200 dark:border-[var(--flr-black)]"
                                         fw={400}
                                         leftSection={<IconLifebuoy style={{ width: rem(20), height: rem(20) }} />}
                                     >
@@ -95,9 +97,6 @@ export default function Layout({ children, ...props }: ILayout) {
                                     </Menu.Item>
                                 </Menu.Dropdown>
                             </Menu>
-                            {isAuthenticated &&
-                                <ConnectWalletButton />
-                            }
                         </div>
                     </Container>
                     <Container fluid className="flex flex-1 w-full">
@@ -107,11 +106,11 @@ export default function Layout({ children, ...props }: ILayout) {
                     </Container>
                     <Container
                         fluid
-                        className="flex p-3 px-8 w-full mt-2"
+                        className="flex p-3 px-5 sm:px-[2.5rem] w-full mt-2"
                     >
                         <Text
                             size="sm"
-                            c="var(--mantine-color-black)"
+                            c="var(--flr-black)"
                             className="mr-4"
                         >
                             {t('layout.footer.title')}
@@ -119,7 +118,7 @@ export default function Layout({ children, ...props }: ILayout) {
                         {version &&
                             <Text
                                 size="sm"
-                                c="rgba(119, 119, 119, 1)"
+                                c="var(--flr-gray)"
                             >
                                 v{version}
                             </Text>

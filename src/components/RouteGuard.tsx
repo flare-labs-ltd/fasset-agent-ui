@@ -14,15 +14,17 @@ export default function AuthGuard({ children }: { children: React.ReactNode}) {
 
         if (!isAuthenticated) {
             await router.push('/login');
-        } else if (isAuthenticated && !isConnected && router.pathname !== '/connect') {
-            await router.push('/connect');
         }
+        /*
+        else if (isAuthenticated && !isConnected && router.pathname !== '/connect') {
+            await router.push('/connect');
+        }*/
         setIsLoading(false);
     };
 
     useEffect(() => {
         isWalletConnected(undefined);
-    }, [isInitializing, isConnected, isAuthenticated]);
+    }, [isInitializing, /*isConnected*/, isAuthenticated]);
 
     useEffect(() =>     {
         router.events.on('routeChangeComplete', isWalletConnected)

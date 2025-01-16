@@ -83,11 +83,11 @@ export interface IVault {
     poolFee: string;
     mintCount: string;
     handshakeType: number;
-}
-
-export interface IAgentVaultInformation {
-    fassetSymbol: string;
-    vaults: IVault[];
+    delegationPercentage: string;
+    delegates: {
+        address: string;
+        delegation: string;
+    }[];
 }
 
 export interface IAgentSettingsDTO {
@@ -152,6 +152,10 @@ export interface IAgentVault {
     poolTopupTokenPriceFactorBIPS: string;
     poolSuffix: string;
     handshakeType: number;
+    delegates: {
+        address: string;
+        delegation: string;
+    }[];
 }
 
 export interface IIconProps {
