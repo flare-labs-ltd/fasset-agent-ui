@@ -1,13 +1,24 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import apiClient from '@/api/apiClient';
-import { ICalculateCollateral, IFreeVaultBalance } from "@/types";
+import {
+    IAmountForSelfMint,
+    IAmountForSelfMintFreeUnderlying,
+    ICalculateCollateral,
+    IFreeVaultBalance,
+    ISelfMintBalance,
+    ISelfMintUnderlyingBalance
+} from "@/types";
 
 const resource = 'agentVault';
 
 const AGENT_VAULT_KEY = {
     FREE_VAULT_BALANCE: 'agentVault.freeVaultBalance',
     BACKED_AMOUNT: 'agentVault.backedAmount',
-    CALCULATE_COLLATERALS: 'agentVault.calculateCollaterals'
+    CALCULATE_COLLATERALS: 'agentVault.calculateCollaterals',
+    SELF_MINT_BALANCES: 'agentVault.selfMintBalances',
+    SELF_MINT_FREE_UNDERLYING_BALANCES: 'agentVault.selfMintFreeUnderlyingBalances',
+    AMOUNT_FOR_SELF_MINT: 'agentVault.amountForSelfMint',
+    AMOUNT_FOR_SELF_MINT_FREE_UNDERLYING: 'agentVault.amountForSelfMintFreeUnderlying',
 }
 
 export function useDepositCollateral() {
@@ -61,7 +72,7 @@ export function useBackedAmount(fAssetSymbol: string, agentVaultAddress: string,
 
 export function useCalculateCollaterals(fAssetSymbol: string, agentVaultAddress: string, lots: number, multiplier: number, enabled: boolean = true) {
     return useQuery({
-        queryKey: [AGENT_VAULT_KEY.CALCULATE_COLLATERALS, false, agentVaultAddress, lots, multiplier],
+        queryKey: [AGENT_VAULT_KEY.CALCULATE_COLLATERALS, fAssetSymbol, agentVaultAddress, lots, multiplier],
         queryFn: async() => {
             const response = await apiClient.get(`${resource}/calculateCollaterals/${fAssetSymbol}/${agentVaultAddress}/${lots}/${multiplier}`);
             return response.data.data as ICalculateCollateral[];
@@ -84,6 +95,84 @@ export function useDepositCollaterals() {
             multiplier: number
         }) => {
             const response = await apiClient.get(`${resource}/depositCollaterals/${fAssetSymbol}/${agentVaultAddress}/${lots}/${multiplier}`);
+            return response.data;
+        }
+    })
+}
+
+export function useGetSelfMintBalances(fAssetSymbol: string, agentVaultAddress: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_VAULT_KEY.SELF_MINT_BALANCES, fAssetSymbol, agentVaultAddress],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/getSelfMintBalances/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data.data as ISelfMintBalance;
+        },
+        enabled: enabled
+    })
+}
+
+export function useAmountForSelfMint(fAssetSymbol: string, agentVaultAddress: string, lots: number, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_VAULT_KEY.AMOUNT_FOR_SELF_MINT, fAssetSymbol, agentVaultAddress, lots],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/amountForSelfMint/${fAssetSymbol}/${agentVaultAddress}/${lots}`);
+            return response.data.data as IAmountForSelfMint;
+        },
+        enabled: enabled
+    })
+}
+
+export function useSelfMint() {
+    return useMutation({
+        mutationFn: async({
+              fAssetSymbol,
+              agentVaultAddress,
+              lots
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string,
+            lots: number
+        }) => {
+            const response = await apiClient.get(`${resource}/selfMint/${fAssetSymbol}/${agentVaultAddress}/${lots}`);
+            return response.data;
+        }
+    })
+}
+
+export function useGetSelfMintUnderlyingBalances(fAssetSymbol: string, agentVaultAddress: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_VAULT_KEY.SELF_MINT_FREE_UNDERLYING_BALANCES, fAssetSymbol, agentVaultAddress],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/getSelfMintFreeUnderlyingBalances/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data.data as ISelfMintUnderlyingBalance;
+        },
+        enabled: enabled
+    })
+}
+
+export function useAmountForSelfMintFromFreeUnderlying(fAssetSymbol: string, agentVaultAddress: string, lots: number, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_VAULT_KEY.AMOUNT_FOR_SELF_MINT_FREE_UNDERLYING, fAssetSymbol, agentVaultAddress, lots],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/amountForSelfMintFromFreeUnderlying/${fAssetSymbol}/${agentVaultAddress}/${lots}`);
+            return response.data.data as IAmountForSelfMintFreeUnderlying;
+        },
+        enabled: enabled
+    })
+}
+
+export function useSelfMintFromFreeUnderlying() {
+    return useMutation({
+        mutationFn: async({
+          fAssetSymbol,
+          agentVaultAddress,
+          lots
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string,
+            lots: number
+        }) => {
+            const response = await apiClient.get(`${resource}/selfMintFromFreeUnderlying/${fAssetSymbol}/${agentVaultAddress}/${lots}`);
             return response.data;
         }
     })

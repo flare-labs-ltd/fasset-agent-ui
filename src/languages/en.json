@@ -56,10 +56,12 @@
         "deposit_collateral_lots_button": "Deposit Collateral (Lots)",
         "deposit_pool_collateral_button": "Deposit Pool Collateral",
         "deposit_vault_collateral_button": "Deposit Vault Collateral",
-        "self_close_label": "Self-close",
+        "self_close_button": "Self-close",
+        "self_mint_button": "Self-Mint",
+        "self_mint_underlying_button": "Self-Mint from Underlying",
         "title": "Agent Vault Operations",
-        "withdraw_collateral_pool_tokens_label": "Withdraw collateral pool tokens",
-        "withdraw_vault_collateral_label": "Withdraw Vault collateral"
+        "withdraw_collateral_pool_tokens_button": "Withdraw collateral pool tokens",
+        "withdraw_vault_collateral_button": "Withdraw Vault collateral"
     },
     "alerts_card": {
         "alerts": {
@@ -339,6 +341,46 @@
         "title": "Self-close",
         "withdraw_amount_label": "Amount"
     },
+    "self_mint_modal": {
+        "agent_description_label": "Agent doesn't need to be publicly available to self-mint. Make sure the agent process is running to complete self-minting.",
+        "available_lots_label": "Available lots",
+        "calculate_button": "Calculate",
+        "close_button": "Close",
+        "error_message": "Unable to self-mint",
+        "self_mint_button": "Self-Mint",
+        "success_message": "Successfully completed self-mint.",
+        "summary": {
+            "amount_to_pay_label": "Amount to pay",
+            "nr_lots_label": "Number of lots",
+            "self_mint_summary_label": "Self-mint summary"
+        },
+        "lots_description_label": "How much lots do you want to add to Vault?",
+        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
+        "lots_label": "Lots",
+        "lots_placeholder_label": "NR. OF LOTS",
+        "owner_balance_label": "Owner balance",
+        "title": "Self-Mint"
+    },
+    "self_mint_underlying_modal": {
+        "agent_description_label": "Agent doesn't need to be publicly available to self-mint. Make sure the agent process is running to complete self-minting.",
+        "available_lots_label": "Available lots",
+        "calculate_button": "Calculate",
+        "close_button": "Close",
+        "error_message": "Unable to self-mint",
+        "free_underlying_balance_label": "Free underlying balance",
+        "self_mint_button": "Self-Mint from Underlying",
+        "success_message": "Successfully completed self-mint.",
+        "summary": {
+            "amount_to_pay_label": "Amount to pay",
+            "nr_lots_label": "Number of lots",
+            "self_mint_summary_label": "Self-mint summary"
+        },
+        "lots_description_label": "How much lots do you want to add to Vault?",
+        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
+        "lots_label": "Lots",
+        "lots_placeholder_label": "NR. OF LOTS",
+        "title": "Self-Mint from Underlying"
+    },
     "select_wallet_button": {
         "connect_label": "Connect",
         "disconnect_label": "Disconnect",
@@ -380,6 +422,8 @@
                 "deposit_vault_collateral_label": "Deposit Vault Collateral",
                 "pool_collateral_label": "Pool collateral",
                 "self_close_label": "Self-close",
+                "self_mint_label": "Self-Mint",
+                "self_mint_underlying_label": "Self-Mint from Underlying",
                 "view_vault_label": "View Vault",
                 "vault_actions_label": "Vault actions",
                 "vault_collateral_label": "Vault collateral",

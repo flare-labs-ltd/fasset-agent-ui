@@ -14,6 +14,8 @@ import ActivateVaultModal from "@/components/modals/ActivateVaultModal";
 import DeactivateVaultModal from "@/components/modals/DeactivateVaultModal";
 import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
 import DelegatePoolCollateralModal from "@/components/modals/DelegatePoolCollateralModal";
+import SelfMintModal from "@/components/modals/SelfMintModal";
+import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal";
 import { IAgentVault, ICollateralItem } from "@/types";
 import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
 import { useAgentVaultsInformation, useBalances, useCollaterals } from "@/api/agent";
@@ -33,6 +35,8 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
     const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
     const [isDelegatePoolCollateralModalActive, setIsDelegatePoolCollateralModalActive] = useState<boolean>(false);
+    const [isSelfMintModalActive, setIsSelfMintModalActive] = useState<boolean>(false);
+    const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
 
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
@@ -75,6 +79,14 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
         setIsDelegatePoolCollateralModalActive(false);
     }
 
+    const onCloseSelfMintModal = () => {
+        setIsSelfMintModalActive(false);
+    }
+
+    const onCloseSelfMintUnderlyingModal = async () => {
+        setIsSelfMintUnderlyingModalActive(false);
+    }
+
     return (
         <Paper
             className={`relative p-4 ${className}`}
@@ -102,6 +114,20 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 className="block mb-3"
             >
                 {t('agent_vault_operations_card.deposit_pool_collateral_button')}
+            </Button>
+            <Button
+                variant="gradient"
+                onClick={() => setIsSelfMintModalActive(true)}
+                className="block mb-3"
+            >
+                {t('agent_vault_operations_card.self_mint_button')}
+            </Button>
+            <Button
+                variant="gradient"
+                onClick={() => setIsSelfMintUnderlyingModalActive(true)}
+                className="block mb-3"
+            >
+                {t('agent_vault_operations_card.self_mint_underlying_button')}
             </Button>
             <Button
                 variant="gradient"
@@ -155,34 +181,46 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                         agentVaultAddress={agentVaultAddress as string}
                         onClose={onCloseDepositPoolCollateralModal}
                     />
+                    <ActivateVaultModal
+                        opened={isActivateVaultModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={() => setIsActivateVaultModalActive(false)}
+                    />
+                    <DeactivateVaultModal
+                        opened={isDeactivateVaultModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={() => setIsDeactivateVaultModalActive(false)}
+                    />
+                    <ClaimRewardsModal
+                        opened={isClaimRewardsModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={() => setIsClaimRewardsModalActive(false)}
+                    />
+                    <DelegatePoolCollateralModal
+                        opened={isDelegatePoolCollateralModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        delegates={agentVault?.delegates ?? []}
+                        onClose={onCloseDelegatePoolCollateralModal}
+                    />
+                    <SelfMintModal
+                        opened={isSelfMintModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        redirect
+                        onClose={onCloseSelfMintModal}
+                    />
+                    <SelfMintUnderlyingModal
+                        opened={isSelfMintUnderlyingModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        redirect
+                        onClose={onCloseSelfMintUnderlyingModal}
+                    />
                 </>
-            }
-            <ActivateVaultModal
-                opened={isActivateVaultModalActive}
-                fAssetSymbol={fAssetSymbol as string}
-                agentVaultAddress={agentVaultAddress as string}
-                onClose={() => setIsActivateVaultModalActive(false)}
-            />
-            <DeactivateVaultModal
-                opened={isDeactivateVaultModalActive}
-                fAssetSymbol={fAssetSymbol as string}
-                agentVaultAddress={agentVaultAddress as string}
-                onClose={() => setIsDeactivateVaultModalActive(false)}
-            />
-            <ClaimRewardsModal
-                opened={isClaimRewardsModalActive}
-                fAssetSymbol={fAssetSymbol as string}
-                agentVaultAddress={agentVaultAddress as string}
-                onClose={() => setIsClaimRewardsModalActive(false)}
-            />
-            {agentVault &&
-                <DelegatePoolCollateralModal
-                    opened={isDelegatePoolCollateralModalActive}
-                    fAssetSymbol={fAssetSymbol as string}
-                    agentVaultAddress={agentVaultAddress as string}
-                    delegates={agentVault?.delegates ?? []}
-                    onClose={onCloseDelegatePoolCollateralModal}
-                />
             }
         </Paper>
     );

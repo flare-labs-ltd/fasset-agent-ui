@@ -72,7 +72,7 @@ export default function Layout({ children, ...props }: ILayout) {
                                     <Button
                                         variant="outline"
                                         size="md"
-                                        className="mr-3 border-gray-200 dark:border-[var(--flr-black)]"
+                                        className="border-gray-200 dark:border-[var(--flr-black)]"
                                         fw={400}
                                         leftSection={<IconLifebuoy style={{ width: rem(20), height: rem(20) }} />}
                                     >

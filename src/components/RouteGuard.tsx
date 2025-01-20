@@ -7,7 +7,7 @@ import {useWeb3} from "@/hooks/useWeb3";
 export default function AuthGuard({ children }: { children: React.ReactNode}) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
-    const { isConnected, isInitializing, isAuthenticated } = useWeb3();
+    const { isInitializing, isAuthenticated } = useWeb3();
 
     const isWalletConnected = async(url?: string) => {
         if (isInitializing) return;

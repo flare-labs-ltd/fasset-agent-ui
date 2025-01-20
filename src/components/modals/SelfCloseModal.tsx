@@ -28,7 +28,7 @@ interface ISelfCloseModal {
 }
 
 interface IFormValues {
-    amount: number|undefined;
+    amount: number | undefined;
 }
 
 export default function SelfCloseModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: ISelfCloseModal) {

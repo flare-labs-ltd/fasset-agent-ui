@@ -198,3 +198,31 @@ export interface ICalculateCollateral {
 export interface IFeeBalance {
     balance: string;
 }
+
+export interface ISelfMintBalance {
+    ownerbalance: string;
+    assetSymbol: string;
+    lotSize: number;
+    freeLots: string;
+}
+
+export interface IAmountForSelfMint {
+    amountToPay: string;
+    ownerBalance: string;
+    assetSymbol: string;
+    freeLots: string;
+}
+
+export interface ISelfMintUnderlyingBalance {
+    assetSymbol: string;
+    lotSize: number;
+    freeUnderlyingBalance: string;
+    freeLots: string;
+}
+
+export interface IAmountForSelfMintFreeUnderlying {
+    amountToPay: string;
+    agentFreeUnderlying: string;
+    assetSymbol: string;
+    freeLots: string;
+}

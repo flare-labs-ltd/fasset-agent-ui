@@ -15,7 +15,8 @@ import {
     IconBookDownload,
     IconDashboard,
     IconDashboardOff,
-    IconGift
+    IconGift,
+    IconBrandZapier
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
@@ -32,6 +33,8 @@ import WithdrawVaultCollateralModal from "@/components/modals/WithdrawVaultColla
 import SelfCloseModal from "@/components/modals/SelfCloseModal";
 import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
 import DelegatePoolCollateralModal from "@/components/modals/DelegatePoolCollateralModal";
+import SelfMintModal from "@/components/modals/SelfMintModal";
+import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
@@ -58,6 +61,8 @@ const MODAL_WITHDRAW_VAULT_COLLATERAL = 'withdraw_vault_collateral';
 const MODAL_SELF_CLOSE = 'self_close';
 const MODAL_CLAIM_REWARDS = 'claim_rewards';
 const MODAL_DELEGATE_POOL_COLLATERAL = 'delegate_pool_collateral';
+const MODAL_SELF_MINT = 'self_mint';
+const MODAL_SELF_MINT_UNDERLYING = 'self_mint_underlying';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -72,6 +77,8 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
     const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
     const [isDelegatePoolCollateralModalActive, setIsDelegatePoolCollateralModalActive] = useState<boolean>(false);
+    const [isSelfMintModalActive, setIsSelfMintModalActive] = useState<boolean>(false);
+    const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -421,6 +428,18 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
                             </Menu.Item>
                             <Menu.Item
+                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_SELF_MINT, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.self_mint_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_SELF_MINT_UNDERLYING, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.self_mint_underlying_label')}
+                            </Menu.Item>
+                            <Menu.Item
                                 leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
                                 onClick={() => onClick(MODAL_DELEGATE_POOL_COLLATERAL, vault)}
                             >
@@ -502,6 +521,10 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsClaimRewardsModalActive(true);
         } else if (modal === MODAL_DELEGATE_POOL_COLLATERAL) {
             setIsDelegatePoolCollateralModalActive(true);
+        } else if (modal === MODAL_SELF_MINT) {
+            setIsSelfMintModalActive(true);
+        } else if (modal === MODAL_SELF_MINT_UNDERLYING) {
+            setIsSelfMintUnderlyingModalActive(true);
         }
         setSelectedAgentVault(vault);
     }
@@ -553,6 +576,14 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                 setIsLoading(false);
             }
         }
+    }
+
+    const onCloseSelfMintModal = () => {
+        setIsSelfMintModalActive(false);
+    }
+
+    const onCloseSelfMintUnderlyingModal = () => {
+        setIsSelfMintUnderlyingModalActive(false);
     }
 
     return (
@@ -643,6 +674,18 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         agentVaultAddress={selectedAgentVault.address}
                         delegates={selectedAgentVault.delegates}
                         onClose={onCloseDelegatePoolCollateralModal}
+                    />
+                    <SelfMintModal
+                        opened={isSelfMintModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseSelfMintModal}
+                    />
+                    <SelfMintUnderlyingModal
+                        opened={isSelfMintUnderlyingModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseSelfMintUnderlyingModal}
                     />
                 </>
             }
