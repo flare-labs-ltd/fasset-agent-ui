@@ -16,8 +16,10 @@ import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
 import DelegatePoolCollateralModal from "@/components/modals/DelegatePoolCollateralModal";
 import SelfMintModal from "@/components/modals/SelfMintModal";
 import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal";
-import { IAgentVault, ICollateralItem } from "@/types";
+import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
+import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
 import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
+import { IAgentVault, ICollateralItem } from "@/types";
 import { useAgentVaultsInformation, useBalances, useCollaterals } from "@/api/agent";
 
 interface IAgentVaultOperationsCard {
@@ -37,6 +39,8 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
     const [isDelegatePoolCollateralModalActive, setIsDelegatePoolCollateralModalActive] = useState<boolean>(false);
     const [isSelfMintModalActive, setIsSelfMintModalActive] = useState<boolean>(false);
     const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
+    const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
+    const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
 
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
@@ -98,6 +102,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsDepositCollateralLotsModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.deposit_collateral_lots_button')}
             </Button>
@@ -105,6 +110,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsDepositVaultCollateralModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.deposit_vault_collateral_button')}
             </Button>
@@ -112,6 +118,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsDepositPoolCollateralModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.deposit_pool_collateral_button')}
             </Button>
@@ -119,6 +126,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsSelfMintModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.self_mint_button')}
             </Button>
@@ -126,13 +134,31 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsSelfMintUnderlyingModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.self_mint_underlying_button')}
             </Button>
             <Button
                 variant="gradient"
+                onClick={() => setIsUnderlyingTopUpModalActive(true)}
+                className="block mb-3"
+                fw={400}
+            >
+                {t('agent_vault_operations_card.underlying_top_up_button')}
+            </Button>
+            <Button
+                variant="gradient"
+                onClick={() => setIsUnderlyingWithdrawalModalActive(true)}
+                className="block mb-3"
+                fw={400}
+            >
+                {t('agent_vault_operations_card.underlying_withdrawal_button')}
+            </Button>
+            <Button
+                variant="gradient"
                 onClick={() => setIsDelegatePoolCollateralModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.delegate_button')}
             </Button>
@@ -140,6 +166,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                 variant="gradient"
                 onClick={() => setIsClaimRewardsModalActive(true)}
                 className="block mb-3"
+                fw={400}
             >
                 {t('agent_vault_operations_card.claim_rewards_button')}
             </Button>
@@ -148,6 +175,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                     variant="gradient"
                     onClick={() => setIsActivateVaultModalActive(true)}
                     className="block mb-3"
+                    fw={400}
                 >
                     {t('agent_vault_operations_card.activate_vault_button')}
                 </Button>
@@ -155,6 +183,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             <Button
                 variant="gradient"
                 onClick={() => setIsDeactivateVaultModalActive(true)}
+                fw={400}
             >
                 {t('agent_vault_operations_card.close_vault_button')}
             </Button>
@@ -219,6 +248,18 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                         agentVaultAddress={agentVaultAddress as string}
                         redirect
                         onClose={onCloseSelfMintUnderlyingModal}
+                    />
+                    <UnderlyingTopUpModal
+                        opened={isUnderlyingTopUpModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={() => setIsUnderlyingTopUpModalActive(false)}
+                    />
+                    <UnderlyingWithdrawalModal
+                        opened={isUnderlyingWithdrawalModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={() => setIsUnderlyingWithdrawalModalActive(false)}
                     />
                 </>
             }

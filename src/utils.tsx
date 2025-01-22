@@ -107,3 +107,11 @@ export const getIcon = (token: string, size: string) => {
         return <SgbIcon width={size} height={size} className="flex-shrink-0" />;
     }
 }
+
+export function formatNumber(value: string | number, fractionDigits: number = 2, locale = 'en-US') {
+    if (typeof value === 'number') {
+        return value.toLocaleString(locale, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits });
+    }
+
+    return toNumber(value).toLocaleString(locale, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits });
+}

@@ -60,6 +60,8 @@
         "self_mint_button": "Self-Mint",
         "self_mint_underlying_button": "Self-Mint from Underlying",
         "title": "Agent Vault Operations",
+        "underlying_top_up_button": "Underlying Top-Up",
+        "underlying_withdrawal_button": "Underlying Withdrawal",
         "withdraw_collateral_pool_tokens_button": "Withdraw collateral pool tokens",
         "withdraw_vault_collateral_button": "Withdraw Vault collateral"
     },
@@ -90,7 +92,7 @@
                 "save_button": "Save",
                 "title": "Secrets file .json"
             },
-            "error_message": "Unable to create new secret file",
+            "error_message": "Unable to create new secret file.",
             "secrets_label": "Secrets",
             "success_message": "New secret file successfully created.",
             "title": "Edit secret file"
@@ -104,7 +106,7 @@
         "secret_card": {
             "create_button": "Create",
             "drag_file_label": "Drag secret file here or click to select file",
-            "error_message": "Unable to create new secret file",
+            "error_message": "Unable to create new secret file.",
             "file_size_label": "File should not exceed 5mb",
             "success_message": "New secret file successfully created.",
             "subtitle": "Create new secret file from template or upload it from computer",
@@ -123,7 +125,7 @@
     },
     "claim_rewards_modal": {
         "close_button": "Close",
-        "error_message": "Unable to claim rewards",
+        "error_message": "Unable to claim rewards.",
         "form": {
             "amount_description_label": "You can claim up to {{amount}} {{fAssetSymbol}}",
             "amount_label": "Amount {{fAssetSymbol}}",
@@ -137,7 +139,7 @@
         "cancel_button": "Cancel",
         "confirm_button": "Confirm",
         "description_label": "Are you sure you want to close vault? Vault will be closed by agent-bot after some time.",
-        "error_message": "Unable to close vault",
+        "error_message": "Unable to close vault.",
         "success_message": "Vault successfully closed.",
         "title": "Close vault"
     },
@@ -198,7 +200,7 @@
         "calculate_button": "Calculate",
         "deposit_button": "Deposit",
         "close_button": "Close",
-        "error_message": "Unable to deposit collateral",
+        "error_message": "Unable to deposit collateral.",
         "form": {
             "lots_description_label": "How much lots do you want to add to Vault?",
             "lots_placeholder_label": "NR. OF LOTS",
@@ -223,7 +225,7 @@
         "deposit_amount_description_label": "Your current balance on working address: {{amount}} {{token}}.",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
-        "error_message": "Unable to deposit collateral",
+        "error_message": "Unable to deposit collateral.",
         "need_help_label": "Need help?",
         "success_message": "Collateral successfully deposited.",
         "title": "Deposit Vault Collateral"
@@ -234,7 +236,7 @@
         "deposit_amount_description_label": "Your current balance on working address: {{amount}} {{token}}.",
         "deposit_amount_label": "Amount {{vaultCollateralToken}}",
         "deposit_amount_placeholder_label": "How much do you want to deposit?",
-        "error_message": "Unable to deposit {{token}} in pool",
+        "error_message": "Unable to deposit {{token}} in pool.",
         "need_help_label": "Need help?",
         "success_message": "{{token}} successfully deposited.",
         "title": "Deposit Pool Collateral"
@@ -335,7 +337,7 @@
         "close_button": "Close",
         "confirm_button": "Confirm",
         "description_label": "Agent is backing {{amount}} {{fAssetSymbol}}.",
-        "error_message": "Unable to self-close",
+        "error_message": "Unable to self-close.",
         "need_help_label": "Need help?",
         "success_message": "FAssets successfully self-closed.",
         "title": "Self-close",
@@ -404,6 +406,30 @@
         "test_usdt_label": "TestUSDT",
         "test_xrp_label": "testXRP"
     },
+    "underlying_top_up_modal": {
+        "amount_description_label": "Owner underlying balance is {{balance}} {{token}}.",
+        "amount_label": "Amount ({{token}})",
+        "close_button": "Close",
+        "error_message": "Unable to top-up  vault.",
+        "max_button": "Max",
+        "success_message": "Top-up vault successfully completed.",
+        "title": "Underlying Top-Up",
+        "top_up_button": "Top-Up",
+        "top_up_description_label": "Top-up vault underlying account with funds from the owner's underlying account. Please ensure the Agent Bot is running to complete the underlying top-up."
+    },
+    "underlying_withdrawal_modal": {
+        "address_description_label": "Underlying address for withdrawal.",
+        "address_label": "Address",
+        "amount_description_label": "Free underlying balance is {{balance}} {{token}}.",
+        "amount_label": "Amount ({{token}})",
+        "close_button": "Close",
+        "error_message": "Unable to withdraw",
+        "max_button": "Max",
+        "success_message": "Withdraw successfully completed.",
+        "title": "Underlying Withdrawal",
+        "withdraw_button": "Withdraw",
+        "withdrawal_description_label": "Withdraw free underlying funds from the vault. Please ensure that Agent Bot is running to complete the withdrawal."
+    },
     "vaults_card": {
         "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
         "not_listed_label": "Not listed - live",
@@ -424,6 +450,8 @@
                 "self_close_label": "Self-close",
                 "self_mint_label": "Self-Mint",
                 "self_mint_underlying_label": "Self-Mint from Underlying",
+                "underlying_top_up_label": "Underlying Top-Up",
+                "underlying_withdrawal_label": "Underlying withdrawal",
                 "view_vault_label": "View Vault",
                 "vault_actions_label": "Vault actions",
                 "vault_collateral_label": "Vault collateral",
@@ -509,7 +537,7 @@
         "close_button": "Close",
         "confirm_button": "Confirm",
         "description_label": "Collateral pool tokens will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral pool tokens.",
-        "error_message": "Unable to withdraw collateral pool tokens",
+        "error_message": "Unable to withdraw collateral pool tokens.",
         "need_help_label": "Need help?",
         "success_message": "Collateral successfully withdrawn.",
         "title": "Withdraw collateral pool tokens",
@@ -520,7 +548,7 @@
         "close_button": "Close",
         "confirm_button": "Confirm",
         "description_label": "Vault collateral will be withdrawn by agent-bot after some time. Vault has {{amount}} of collateral.",
-        "error_message": "Unable to withdraw vault collateral",
+        "error_message": "Unable to withdraw vault collateral.",
         "need_help_label": "Need help?",
         "success_message": "Vault Collateral successfully withdrawn.",
         "title": "Withdraw vault collateral",

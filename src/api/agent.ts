@@ -17,7 +17,8 @@ import {
     ICollateralItem,
     IBalance,
     IUnderlyingAddress,
-    IVaultCollateral
+    IVaultCollateral,
+    IOwnerUnderlyingBalance
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -37,7 +38,8 @@ const AGENT_KEY = {
     NOTIFICATIONS: 'agent.notifications',
     MANAGEMENT_ADDRESS: 'agent.managementAddress',
     BALANCES: 'agent.balances',
-    UNDERLYING_ADDRESSES: 'agent.underlyingAddresses'
+    UNDERLYING_ADDRESSES: 'agent.underlyingAddresses',
+    OWNER_UNDERLYING_BALANCE: 'agent.ownerUnderlyingBalance'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -348,5 +350,16 @@ export function useUnderlyingAddresses() {
             const response = await apiClient.get(`${resource}/underlyingAddresses`);
             return response.data.data as IUnderlyingAddress[];
         }
+    })
+}
+
+export function useOwnerUnderlyingBalance(fAssetSymbol: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_KEY.OWNER_UNDERLYING_BALANCE, fAssetSymbol],
+        queryFn: async () => {
+            const response = await apiClient.get(`${resource}/ownerUnderlyingBalance/${fAssetSymbol}`);
+            return response.data.data as IOwnerUnderlyingBalance;
+        },
+        enabled: enabled
     })
 }

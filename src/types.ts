@@ -226,3 +226,13 @@ export interface IAmountForSelfMintFreeUnderlying {
     assetSymbol: string;
     freeLots: string;
 }
+
+export interface IOwnerUnderlyingBalance {
+    balance: string;
+    symbol: string;
+}
+
+export interface ISafeFreeUnderlyingBalance {
+    balance: string;
+    symbol: string;
+}
