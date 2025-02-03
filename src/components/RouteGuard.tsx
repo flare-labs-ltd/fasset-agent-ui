@@ -7,22 +7,24 @@ import {useWeb3} from "@/hooks/useWeb3";
 export default function AuthGuard({ children }: { children: React.ReactNode}) {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const router = useRouter();
-    const { isConnected, isInitializing, isAuthenticated } = useWeb3();
+    const { isInitializing, isAuthenticated } = useWeb3();
 
     const isWalletConnected = async(url?: string) => {
         if (isInitializing) return;
 
         if (!isAuthenticated) {
             await router.push('/login');
-        } else if (isAuthenticated && !isConnected && router.pathname !== '/connect') {
-            await router.push('/connect');
         }
+        /*
+        else if (isAuthenticated && !isConnected && router.pathname !== '/connect') {
+            await router.push('/connect');
+        }*/
         setIsLoading(false);
     };
 
     useEffect(() => {
         isWalletConnected(undefined);
-    }, [isInitializing, isConnected, isAuthenticated]);
+    }, [isInitializing, /*isConnected*/, isAuthenticated]);
 
     useEffect(() =>     {
         router.events.on('routeChangeComplete', isWalletConnected)

@@ -22,7 +22,7 @@ export function usePoolBalance(fAssetSymbol: string, agentVaultAddress: string, 
     return useQuery({
         queryKey: [POOL_COLLATERAL_KEY.POOL_BALANCE, fAssetSymbol, agentVaultAddress],
         queryFn: async () => {
-            const response = await apiClient.get(`${resource}/collateral/poolBalance/${fAssetSymbol}/${agentVaultAddress}`);
+            const response = await apiClient.get(`${resource}/collateral/freePoolBalance/${fAssetSymbol}/${agentVaultAddress}`);
             return response.data as IPoolBalance;
         },
         enabled: enabled
@@ -56,4 +56,30 @@ export function useFeeWithdraw() {
             return response.data;
         }
     });
+}
+
+export function useDelegateAll() {
+    return useMutation({
+        mutationFn: async ({
+           fAssetSymbol,
+           agentVaultAddress,
+           payload
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string,
+            payload: { address: string, bips: number}[]
+        }) => {
+            const response = await apiClient.post(`${resource}/delegateAll/${fAssetSymbol}/${agentVaultAddress}`, payload);
+            return response.data;
+        }
+    })
+}
+
+export function useUndelegate() {
+    return useMutation({
+        mutationFn: async({ fAssetSymbol, agentVaultAddress }: { fAssetSymbol: string, agentVaultAddress: string }) => {
+            const response = await apiClient.post(`${resource}/undelegate/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data;
+        }
+    })
 }

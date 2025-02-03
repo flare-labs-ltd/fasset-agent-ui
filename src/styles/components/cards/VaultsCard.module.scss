@@ -3,9 +3,13 @@
         position: sticky;
         right: 0;
         z-index: 2;
-        background-color: #fff;
+        background-color: var(--flr-white);
         border-left: 1px solid var(--table-border-color);
         box-shadow: -4px 0 13px 0px var(--table-border-color);
+
+        :where([data-mantine-color-scheme=dark]) {
+            box-shadow: -4px 0 13px 0px #3b3b3b;
+        }
     }
 }
 .tableScrollContainer {

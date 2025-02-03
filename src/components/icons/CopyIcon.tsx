@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 
 interface ICopyIcon {
     text: string;
+    color?: string;
 }
 
-export default function CopyIcon({ text }: ICopyIcon) {
+export default function CopyIcon({ text, color = 'var(--flr-black)' }: ICopyIcon) {
     const { t } = useTranslation();
     const [isPopoverActive, setIsPopoverActive] = useState<boolean>(false);
 
@@ -28,7 +29,7 @@ export default function CopyIcon({ text }: ICopyIcon) {
         >
             <Popover.Target>
                 <IconCopy
-                    color="black"
+                    color={color}
                     style={{ width: rem(15), height: rem(15) }}
                     onClick={() => onClick(text)}
                     className="ml-2 cursor-pointer"

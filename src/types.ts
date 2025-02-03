@@ -83,11 +83,11 @@ export interface IVault {
     poolFee: string;
     mintCount: string;
     handshakeType: number;
-}
-
-export interface IAgentVaultInformation {
-    fassetSymbol: string;
-    vaults: IVault[];
+    delegationPercentage: string;
+    delegates: {
+        address: string;
+        delegation: string;
+    }[];
 }
 
 export interface IAgentSettingsDTO {
@@ -152,6 +152,10 @@ export interface IAgentVault {
     poolTopupTokenPriceFactorBIPS: string;
     poolSuffix: string;
     handshakeType: number;
+    delegates: {
+        address: string;
+        delegation: string;
+    }[];
 }
 
 export interface IIconProps {
@@ -193,4 +197,42 @@ export interface ICalculateCollateral {
 
 export interface IFeeBalance {
     balance: string;
+}
+
+export interface ISelfMintBalance {
+    ownerbalance: string;
+    assetSymbol: string;
+    lotSize: number;
+    freeLots: string;
+}
+
+export interface IAmountForSelfMint {
+    amountToPay: string;
+    ownerBalance: string;
+    assetSymbol: string;
+    freeLots: string;
+}
+
+export interface ISelfMintUnderlyingBalance {
+    assetSymbol: string;
+    lotSize: number;
+    freeUnderlyingBalance: string;
+    freeLots: string;
+}
+
+export interface IAmountForSelfMintFreeUnderlying {
+    amountToPay: string;
+    agentFreeUnderlying: string;
+    assetSymbol: string;
+    freeLots: string;
+}
+
+export interface IOwnerUnderlyingBalance {
+    balance: string;
+    symbol: string;
+}
+
+export interface ISafeFreeUnderlyingBalance {
+    balance: string;
+    symbol: string;
 }

@@ -61,7 +61,7 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
             children: (
                 <>
                     <Text>
-                        {t('deposit_flr_in_pool.success_message')}
+                        {t('deposit_flr_in_pool.success_message', { token: collateralToken?.symbol })}
                     </Text>
                     <Divider
                         className="my-8"
@@ -106,7 +106,7 @@ export default function DepositPoolCollateralModal({ opened, onClose, fAssetSymb
             if ((error as any).message) {
                 setErrorMessage((error as any).response.data.message);
             } else {
-                setErrorMessage(t('deposit_flr_in_pool.error_message'));
+                setErrorMessage(t('deposit_flr_in_pool.error_message', { token: collateralToken?.symbol }));
             }
         }
     }

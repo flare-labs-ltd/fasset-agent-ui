@@ -2,12 +2,11 @@ import {
     Modal,
     Stack,
     Text,
-    Group,
-    useMantineTheme
-} from '@mantine/core';
-import { useTranslation, Trans } from 'react-i18next';
-import { enabledWallets } from '@/connectors/connectors';
-import SelectWalletButton from '@/components/elements/SelectWalletButton';
+    Group
+} from "@mantine/core";
+import { useTranslation, Trans } from "react-i18next";
+import { enabledWallets } from "@/connectors/connectors";
+import SelectWalletButton from "@/components/elements/SelectWalletButton";
 
 interface IConnectWalletModal {
     opened: boolean;
@@ -16,7 +15,6 @@ interface IConnectWalletModal {
 
 export default function ConnectWalletModal({ opened, onClose }: IConnectWalletModal) {
     const { t } = useTranslation();
-    const theme = useMantineTheme();
 
     let showBifrostWallet = false;
     if (typeof window !== 'undefined') {
@@ -51,7 +49,7 @@ export default function ConnectWalletModal({ opened, onClose }: IConnectWalletMo
                         i18nKey="connect_wallet_modal.term_of_service_label"
                         parent={Text}
                         size="xs"
-                        c={theme.colors.flare[6]}
+                        c="var(--flr-black)"
                         components={[
                             <Text
                                 size="xs"

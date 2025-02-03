@@ -6,7 +6,6 @@ import {
     Badge,
     Menu,
     Text,
-    Grid
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import {
@@ -16,7 +15,10 @@ import {
     IconBookDownload,
     IconDashboard,
     IconDashboardOff,
-    IconGift
+    IconGift,
+    IconBrandZapier,
+    IconLayoutNavbarExpand,
+    IconLayoutNavbarCollapse
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
@@ -32,12 +34,18 @@ import WithdrawCollateralPoolTokensModal from "@/components/modals/WithdrawColla
 import WithdrawVaultCollateralModal from "@/components/modals/WithdrawVaultCollateralModal";
 import SelfCloseModal from "@/components/modals/SelfCloseModal";
 import ClaimRewardsModal from "@/components/modals/ClaimRewardsModal";
+import DelegatePoolCollateralModal from "@/components/modals/DelegatePoolCollateralModal";
+import SelfMintModal from "@/components/modals/SelfMintModal";
+import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal";
+import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
+import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
 import CurrencyIcon from "@/components/elements/CurrencyIcon";
 import { useBalances } from "@/api/agent";
 import classes from "@/styles/components/cards/VaultsCard.module.scss";
+import { showErrorNotification } from "@/hooks/useNotifications";
 
 interface IVaultsCard {
     className?: string,
@@ -56,6 +64,11 @@ const MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS = 'withdraw_cr_tokens';
 const MODAL_WITHDRAW_VAULT_COLLATERAL = 'withdraw_vault_collateral';
 const MODAL_SELF_CLOSE = 'self_close';
 const MODAL_CLAIM_REWARDS = 'claim_rewards';
+const MODAL_DELEGATE_POOL_COLLATERAL = 'delegate_pool_collateral';
+const MODAL_SELF_MINT = 'self_mint';
+const MODAL_SELF_MINT_UNDERLYING = 'self_mint_underlying';
+const MODAL_UNDERLYING_TOP_UP = 'underlying_top_up';
+const MODAL_UNDERLYING_WITHDRAWAL = 'underlying_withdrawal';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -69,6 +82,11 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isSelfCloseModalActive, setIsSelfCloseModalActive] = useState<boolean>(false);
     const [isDepositCollateralLotsModalActive, setIsDepositCollateralLotsModalActive] = useState<boolean>(false);
     const [isClaimRewardsModalActive, setIsClaimRewardsModalActive] = useState<boolean>(false);
+    const [isDelegatePoolCollateralModalActive, setIsDelegatePoolCollateralModalActive] = useState<boolean>(false);
+    const [isSelfMintModalActive, setIsSelfMintModalActive] = useState<boolean>(false);
+    const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
+    const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
+    const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -78,7 +96,9 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
 
     useEffect(() => {
         const agentVaultsInformationFetchInterval = setInterval(() => {
-            agentVaultsInformation.refetch();
+            agentVaultsInformation.refetch({
+                cancelRefetch: false
+            });
         }, VAULTS_REFETCH_INTERVAL);
 
         return () => clearInterval(agentVaultsInformationFetchInterval);
@@ -105,7 +125,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         <div className="flex items-center">
                             <Text
                                 size="sm"
-                                c="var(--flr-dark)"
+                                c="var(--flr-black)"
                             >
                                 {truncateString(vault.address, 5, 5)}
                             </Text>
@@ -329,7 +349,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             }
         },
         {
-            id: 'pool_fee',
+            id: 'poolFee',
             label: t('vaults_card.table.pool_fee'),
             sorted: true,
             render: (vault: IVault) => {
@@ -352,6 +372,20 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         size="sm"
                     >
                         {vault.handshakeType === 0 ? t('vaults_card.no_label') : t('vaults_card.yes_label')}
+                    </Text>
+                );
+            }
+        },
+        {
+            id: 'delegationPercentage',
+            label: t('vaults_card.table.delegated_label'),
+            sorted: true,
+            render: (vault: IVault) => {
+                return (
+                    <Text
+                        size="sm"
+                    >
+                        {vault.delegationPercentage} <span className="text-[var(--flr-darker-gray)]">%</span>
                     </Text>
                 );
             }
@@ -400,6 +434,36 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 onClick={() => onClick(MODAL_DEPOSIT_POOL_COLLATERAL, vault)}
                             >
                                 {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_SELF_MINT, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.self_mint_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_SELF_MINT_UNDERLYING, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.self_mint_underlying_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconLayoutNavbarCollapse style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_UNDERLYING_TOP_UP, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.underlying_top_up_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconLayoutNavbarExpand style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_UNDERLYING_WITHDRAWAL, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.underlying_withdrawal_label')}
+                            </Menu.Item>
+                            <Menu.Item
+                                leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
+                                onClick={() => onClick(MODAL_DELEGATE_POOL_COLLATERAL, vault)}
+                            >
+                                {t('vaults_card.table.actions_menu.delegate_pool_collateral_label')}
                             </Menu.Item>
                             <Menu.Item
                                 leftSection={<IconGift style={{ width: rem(14), height: rem(14) }} />}
@@ -475,6 +539,16 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsDepositCollateralLotsModalActive(true);
         } else if (modal === MODAL_CLAIM_REWARDS) {
             setIsClaimRewardsModalActive(true);
+        } else if (modal === MODAL_DELEGATE_POOL_COLLATERAL) {
+            setIsDelegatePoolCollateralModalActive(true);
+        } else if (modal === MODAL_SELF_MINT) {
+            setIsSelfMintModalActive(true);
+        } else if (modal === MODAL_SELF_MINT_UNDERLYING) {
+            setIsSelfMintUnderlyingModalActive(true);
+        } else if (modal === MODAL_UNDERLYING_TOP_UP) {
+            setIsUnderlyingTopUpModalActive(true);
+        } else if (modal === MODAL_UNDERLYING_WITHDRAWAL) {
+            setIsUnderlyingWithdrawalModalActive(true);
         }
         setSelectedAgentVault(vault);
     }
@@ -486,7 +560,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             await balances.refetch();
             await collaterals.refetch();
         } catch (error) {
-
+            showErrorNotification((error as any).response.data.message);
         } finally {
             setIsLoading(false);
         }
@@ -511,6 +585,37 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         if (refetch) {
             refetchData();
         }
+    }
+
+    const onCloseDelegatePoolCollateralModal = async (refetch: boolean = false) => {
+        setIsDelegatePoolCollateralModalActive(false);
+        
+        if (refetch) {
+            try {
+                setIsLoading(true);
+                await agentVaultsInformation.refetch();
+            } catch (error) {
+                showErrorNotification((error as any).response.data.message);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+    }
+
+    const onCloseSelfMintModal = () => {
+        setIsSelfMintModalActive(false);
+    }
+
+    const onCloseSelfMintUnderlyingModal = () => {
+        setIsSelfMintUnderlyingModalActive(false);
+    }
+
+    const onCloseUnderlyingTopUpModal = () => {
+        setIsUnderlyingTopUpModalActive(false);
+    }
+
+    const onCloseUnderlyingWithdrawalModal = () => {
+        setIsUnderlyingWithdrawalModalActive(false);
     }
 
     return (
@@ -594,6 +699,37 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={() => setIsClaimRewardsModalActive(false)}
+                    />
+                    <DelegatePoolCollateralModal
+                        opened={isDelegatePoolCollateralModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        delegates={selectedAgentVault.delegates}
+                        onClose={onCloseDelegatePoolCollateralModal}
+                    />
+                    <SelfMintModal
+                        opened={isSelfMintModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseSelfMintModal}
+                    />
+                    <SelfMintUnderlyingModal
+                        opened={isSelfMintUnderlyingModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseSelfMintUnderlyingModal}
+                    />
+                    <UnderlyingTopUpModal
+                        opened={isUnderlyingTopUpModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseUnderlyingTopUpModal}
+                    />
+                    <UnderlyingWithdrawalModal
+                        opened={isUnderlyingWithdrawalModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseUnderlyingWithdrawalModal}
                     />
                 </>
             }
