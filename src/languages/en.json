@@ -339,6 +339,7 @@
         "description_label": "Agent is backing {{amount}} {{fAssetSymbol}}.",
         "error_message": "Unable to self-close.",
         "need_help_label": "Need help?",
+        "owner_balance_label": "Owner balance is {{amount}} {{fAssetSymbol}}.",
         "success_message": "FAssets successfully self-closed.",
         "title": "Self-close",
         "withdraw_amount_label": "Amount"

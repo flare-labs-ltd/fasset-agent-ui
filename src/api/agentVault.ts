@@ -64,7 +64,7 @@ export function useBackedAmount(fAssetSymbol: string, agentVaultAddress: string,
         queryKey: [AGENT_VAULT_KEY.BACKED_AMOUNT, fAssetSymbol, agentVaultAddress],
         queryFn: async() => {
             const response = await apiClient.get(`${resource}/backedAmount/${fAssetSymbol}/${agentVaultAddress}`);
-            return response.data.data as IFreeVaultBalance;
+            return response.data.data as string;
         },
         enabled: enabled
     })

@@ -236,3 +236,8 @@ export interface ISafeFreeUnderlyingBalance {
     balance: string;
     symbol: string;
 }
+
+export interface IOwnerFassetBalance {
+    balance: string;
+    symbol: string;
+}
