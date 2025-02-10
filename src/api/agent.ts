@@ -18,7 +18,8 @@ import {
     IBalance,
     IUnderlyingAddress,
     IVaultCollateral,
-    IOwnerUnderlyingBalance
+    IOwnerUnderlyingBalance,
+    IOwnerFassetBalance
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -39,7 +40,8 @@ const AGENT_KEY = {
     MANAGEMENT_ADDRESS: 'agent.managementAddress',
     BALANCES: 'agent.balances',
     UNDERLYING_ADDRESSES: 'agent.underlyingAddresses',
-    OWNER_UNDERLYING_BALANCE: 'agent.ownerUnderlyingBalance'
+    OWNER_UNDERLYING_BALANCE: 'agent.ownerUnderlyingBalance',
+    OWNER_FASSET_BALANCE: 'agent.ownerFassetBalance'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -359,6 +361,17 @@ export function useOwnerUnderlyingBalance(fAssetSymbol: string, enabled: boolean
         queryFn: async () => {
             const response = await apiClient.get(`${resource}/ownerUnderlyingBalance/${fAssetSymbol}`);
             return response.data.data as IOwnerUnderlyingBalance;
+        },
+        enabled: enabled
+    })
+}
+
+export function useOwnerFassetBalance(fAssetSymbol: string, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_KEY.OWNER_FASSET_BALANCE, fAssetSymbol],
+        queryFn: async () => {
+            const response = await apiClient.get(`${resource}/ownerFassetBalance/${fAssetSymbol}`);
+            return response.data.data as IOwnerFassetBalance;
         },
         enabled: enabled
     })

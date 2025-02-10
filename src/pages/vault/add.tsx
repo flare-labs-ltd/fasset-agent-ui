@@ -79,30 +79,6 @@ export default function AddVault() {
             setIsLoading(true);
             const form = formRef?.current?.form();
             const data = form?.getValues();
-            const balancesResponse = await balances.refetch();
-            const type = data.fAssetType.toLowerCase().match(/xrp|doge|btc/)![0];
-            const tokenBalance = balancesResponse.data?.find(balance => balance.symbol.toLowerCase().includes(type));
-            const balance = tokenBalance ? toNumber(tokenBalance.balance) : 0;
-
-            const minLimit = type === 'xrp'
-                ? MIN_CREATE_VAULT_BALANCE.XRP
-                : type === 'btc'
-                    ? MIN_CREATE_VAULT_BALANCE.BTC
-                    : MIN_CREATE_VAULT_BALANCE.DOGE;
-
-            if (balance < minLimit) {
-                const key = type === 'xrp'
-                    ? 'add_agent_vault.xrp_min_limit_error'
-                    : type === 'btc'
-                        ? 'add_agent_vault.btc_min_limit_error'
-                        : 'add_agent_vault.doge_min_limit_error';
-                showErrorNotification(t(key, {
-                    amount: type === 'xrp'
-                        ? MIN_CREATE_VAULT_BALANCE.XRP
-                        : type === 'btc' ? MIN_CREATE_VAULT_BALANCE.BTC : MIN_CREATE_VAULT_BALANCE.DOGE
-                }));
-                return;
-            }
 
             const payload: IAgentSettingsConfig = {
                 poolTokenSuffix: data.poolTokenSuffix.toUpperCase(),
