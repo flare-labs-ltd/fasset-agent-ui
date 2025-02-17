@@ -31,9 +31,9 @@ export default function ConnectWalletButton() {
                     size="md"
                     onClick={() => openConnectWalletModal()}
                     rightSection={<CflrIcon width="30" height="30" />}
-                    className="h-auto text-black border-gray-200 pr-1"
+                    className="h-auto border-gray-200 dark:border-[var(--flr-black)] pr-1"
                     classNames={{
-                        section: 'my-1 border-l border-gray-200 pl-3'
+                        section: 'my-1 border-l border-gray-200 dark:border-[var(--flr-black)] pl-3'
                     }}
                     fw={400}
                 >

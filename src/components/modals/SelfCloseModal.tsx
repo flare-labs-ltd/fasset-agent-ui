@@ -18,7 +18,7 @@ import { IconExclamationCircle } from "@tabler/icons-react";
 import { modals } from "@mantine/modals";
 import { toNumber } from "@/utils";
 import { useBackedAmount } from "@/api/agentVault";
-import { useSelfClose } from "@/api/agent";
+import { useSelfClose, useOwnerFassetBalance } from "@/api/agent";
 
 interface ISelfCloseModal {
     opened: boolean;
@@ -28,16 +28,17 @@ interface ISelfCloseModal {
 }
 
 interface IFormValues {
-    amount: number|undefined;
+    amount: number | undefined;
 }
 
 export default function SelfCloseModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: ISelfCloseModal) {
     const [errorMessage, setErrorMessage] = useState<string>();
     const backedAmount = useBackedAmount(fAssetSymbol, agentVaultAddress, opened);
     const selfClose = useSelfClose();
+    const ownerFassetBalance = useOwnerFassetBalance(fAssetSymbol, opened);
     const { t } = useTranslation();
 
-    const amount = toNumber(backedAmount?.data?.data?.balance ?? '0');
+    const amount = toNumber(backedAmount?.data ?? '0');
     const schema = yup.object().shape({
         amount: yup.number()
             .required(t('validation.messages.required', { field: t('self_close_modal.withdraw_amount_label') }))
@@ -120,7 +121,7 @@ export default function SelfCloseModal({ opened, onClose, fAssetSymbol, agentVau
             closeOnEscape={!selfClose.isPending}
             centered
         >
-            <LoadingOverlay visible={backedAmount.isPending} />
+            <LoadingOverlay visible={backedAmount.isPending || ownerFassetBalance.isPending} />
             <form onSubmit={form.onSubmit(form => onSelfCloseClick(form.amount as number))}>
                 {errorMessage &&
                     <div className="flex items-center mb-5 border border-red-700 p-3 bg-red-100">
@@ -137,7 +138,8 @@ export default function SelfCloseModal({ opened, onClose, fAssetSymbol, agentVau
                         </Text>
                     </div>
                 }
-                <Text>{t('self_close_modal.description_label', { amount: amount, fAssetSymbol: fAssetSymbol })}</Text>
+                <Text>{t('self_close_modal.description_label', { amount: backedAmount?.data, fAssetSymbol: fAssetSymbol })}</Text>
+                <Text>{t('self_close_modal.owner_balance_label', { amount: ownerFassetBalance.data?.balance, fAssetSymbol: fAssetSymbol })}</Text>
                 <NumberInput
                     {...form.getInputProps('amount')}
                     min={0}

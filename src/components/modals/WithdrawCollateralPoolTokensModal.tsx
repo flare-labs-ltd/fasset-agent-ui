@@ -27,7 +27,7 @@ interface IWithdrawCollateralPoolTokensModal {
 }
 
 interface IFormValues {
-    amount: number|undefined;
+    amount: number | undefined;
 }
 
 export default function WithdrawCollateralPoolTokensModal({ opened, onClose, fAssetSymbol, agentVaultAddress }: IWithdrawCollateralPoolTokensModal) {
@@ -126,7 +126,7 @@ export default function WithdrawCollateralPoolTokensModal({ opened, onClose, fAs
                         <IconExclamationCircle
                             style={{ width: rem(25), height: rem(25) }}
                             color="var(--flr-red)"
-                            className="mr-3"
+                            className="mr-3 flex-shrink-0"
                         />
                         <Text
                             size="sm"
@@ -174,5 +174,5 @@ export default function WithdrawCollateralPoolTokensModal({ opened, onClose, fAs
                 </Group>
             </form>
         </Modal>
-)
+    )
 }

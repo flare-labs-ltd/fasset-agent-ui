@@ -75,11 +75,24 @@ export default function VaultDetails() {
                 className="mt-5 p-4"
                 withBorder
             >
-                <Textarea
-                    value={details}
-                    minRows={3}
-                    autosize={true}
-                />
+                <div className="p-4 border border-[var(--flr-border)] rounded-md">
+                    {vaultInfo.data && Object.entries(vaultInfo.data)
+                        .filter(([key, value]) => typeof value !== "object")
+                        .map(([key, value]) => (
+                            <div
+                                key={key}
+                                className="flex mb-1"
+                            >
+                                <Text
+                                    fw={600}
+                                    className="mr-1"
+                                >
+                                    {key}:
+                                </Text>
+                                <Text>{value}</Text>
+                            </div>
+                    ))}
+                </div>
             </Paper>
         </Container>
     );

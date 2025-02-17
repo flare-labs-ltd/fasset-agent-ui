@@ -47,7 +47,8 @@ export default function Login() {
             window.localStorage.setItem('FASSET_TOKEN', response.data);
             apiClient.defaults.headers.common = { Authorization: `Bearer ${response.data}`};
             setAuthenticated(true);
-            await router.push('/connect');
+            await router.push('/');
+           // await router.push('/connect');
         } catch (error: any) {
             form.setFieldError('password', error.response.data.message);
         }

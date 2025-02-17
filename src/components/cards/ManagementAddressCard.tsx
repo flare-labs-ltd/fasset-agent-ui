@@ -30,7 +30,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                 <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap items-center">
                     <Text
                         className="mr-3"
-                        c="var(--mantine-color-gray-7)"
+                        c="var(--flr-darkest-gray)"
                         size="sm"
                     >
                         {t('management_address_card.management_address_label')}
@@ -54,9 +54,9 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                 {!isWhitelisted.isPending &&
                     <Badge
                         variant="filled"
-                        color={isWhitelisted.data ? 'rgba(36, 36, 37, 0.06)' : 'var(--mantine-color-red-1)'}
+                        color={isWhitelisted.data ? 'var(--flr-lightest-gray)' : 'var(--mantine-color-red-1)'}
                         radius="xs"
-                        className={`uppercase font-normal flex-shrink-0 ml-0 mt-2 md:mt-0 md:ml-3 ${isWhitelisted.data ? 'text-black' : 'text-red-700'}`}
+                        className={`uppercase font-normal flex-shrink-0 ml-0 mt-2 md:mt-0 md:ml-3 ${isWhitelisted.data ? 'text-[var(--flr-black)] dark:text-[var(--flr-white)]' : 'text-red-700'}`}
                     >
                         {t(`management_address_card.${isWhitelisted.data ? 'address_whitelisted_label' : 'address_not_whitelisted_label'}`)}
                     </Badge>
@@ -66,7 +66,7 @@ export default function ManagementAddressCard({ className }: IManagementAddressC
                 <div className="flex justify-between sm:justify-normal w-full sm:w-auto flex-wrap">
                     <Text
                         className="mr-3"
-                        c="var(--mantine-color-gray-7)"
+                        c="var(--flr-darkest-gray)"
                         size="sm"
                     >
                         {t('management_address_card.underlying_addresses_label')}

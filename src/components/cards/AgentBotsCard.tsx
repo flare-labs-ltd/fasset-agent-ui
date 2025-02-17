@@ -17,7 +17,6 @@ import {
     IconPencilPlus
 } from "@tabler/icons-react";
 import { truncateString } from "@/utils";
-import { useState, useEffect } from "react";
 import CopyIcon from "@/components/icons/CopyIcon";
 import classes from "@/styles/components/cards/AgentBotsCard.module.scss";
 import { IBalance } from "@/types";

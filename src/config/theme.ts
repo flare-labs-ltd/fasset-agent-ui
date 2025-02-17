@@ -50,19 +50,14 @@ export const defaultThemeOverride: MantineThemeOverride = {
     components: {
         Button: Button.extend({
             defaultProps: {
-                color: 'black',
+                color: 'var(--flr-black)',
                 radius: 'xl'
             },
         }),
         Input: Input.extend({
             defaultProps: {
                 variant: 'filled',
-            },
-            styles: {
-                input: {
-                    backgroundColor: '#FAFAFA'
-                }
-            },
+            }
         }),
         InputWrapper: Input.Wrapper.extend({
             defaultProps: {
@@ -113,9 +108,7 @@ export const defaultThemeOverride: MantineThemeOverride = {
             },
             styles: {
                 th: {
-                    color: 'rgba(119, 119, 119, 1)',
                     paddingTop: '1.5rem',
-                    backgroundColor: 'rgba(251, 251, 251, 1)'
                 },
                 table: {
                     borderCollapse: 'separate',
