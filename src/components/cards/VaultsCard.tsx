@@ -18,7 +18,8 @@ import {
     IconGift,
     IconBrandZapier,
     IconLayoutNavbarExpand,
-    IconLayoutNavbarCollapse
+    IconLayoutNavbarCollapse,
+    IconTransform
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
@@ -39,6 +40,8 @@ import SelfMintModal from "@/components/modals/SelfMintModal";
 import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal";
 import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
 import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
+import TransferToCoreVaultModal from "@/components/modals/TransferToCoreVaultModal";
+import ReturnFromCoreVaultModal from "@/components/modals/ReturnFromCoreVaultModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
@@ -69,6 +72,8 @@ const MODAL_SELF_MINT = 'self_mint';
 const MODAL_SELF_MINT_UNDERLYING = 'self_mint_underlying';
 const MODAL_UNDERLYING_TOP_UP = 'underlying_top_up';
 const MODAL_UNDERLYING_WITHDRAWAL = 'underlying_withdrawal';
+const MODAL_TRANSFER_TO_CORE_VAULT = 'transfer_to_core_vault';
+const MODAL_RETURN_FROM_CORE_VAULT = 'return_from_core_vault';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -87,6 +92,8 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
     const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
     const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
+     const [isTransferToCoreVaultModalActive, setIsTransferToCoreVaultModalActive] = useState<boolean>(false);
+    const [isReturnFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -234,7 +241,14 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         {
             id: 'freeLots',
             label: t('vaults_card.table.free_lots_label'),
-            render: (vault: IVault) => `${vault.freeLots}`
+            render: (vault: IVault) => {
+                return <div>
+                    <Text size="sm">
+                        {vault.freeLots}/{vault.allLots}
+                        <span className="ml-1 lowercase text-[var(--flr-darker-gray)]">{t('vaults_card.table.lots_label')}</span>
+                    </Text>
+                </div>
+            }
         },
         {
             id: 'vaultCollateral',
@@ -323,6 +337,8 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 size="sm"
                             >
                                 {vault.poolAmount}
+                                <span className="mx-1 text-[var(--flr-darker-gray)]">{t('vaults_card.table.flr_label')}</span>
+                                ({vault?.poolCollateralUSD} <span className="ml-1 text-[var(--flr-darker-gray)]">$</span>)
                             </Text>
                             <Text
                                 size="xs"
@@ -447,6 +463,22 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                             >
                                 {t('vaults_card.table.actions_menu.self_mint_underlying_label')}
                             </Menu.Item>
+                            {vault.fasset.toLowerCase().includes('xrp') &&
+                                <>
+                                    <Menu.Item
+                                        leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_TRANSFER_TO_CORE_VAULT, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.transfer_to_core_vault_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_RETURN_FROM_CORE_VAULT, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.return_from_core_vault_label')}
+                                    </Menu.Item>
+                                </>
+                            }
                             <Menu.Item
                                 leftSection={<IconLayoutNavbarCollapse style={{ width: rem(14), height: rem(14) }} />}
                                 onClick={() => onClick(MODAL_UNDERLYING_TOP_UP, vault)}
@@ -549,6 +581,10 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsUnderlyingTopUpModalActive(true);
         } else if (modal === MODAL_UNDERLYING_WITHDRAWAL) {
             setIsUnderlyingWithdrawalModalActive(true);
+        } else if (modal === MODAL_TRANSFER_TO_CORE_VAULT) {
+            setIsTransferToCoreVaultModalActive(true);
+        } else if (modal === MODAL_RETURN_FROM_CORE_VAULT) {
+            setIsReturnFromCoreVaultModalActive(true);
         }
         setSelectedAgentVault(vault);
     }
@@ -616,6 +652,14 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
 
     const onCloseUnderlyingWithdrawalModal = () => {
         setIsUnderlyingWithdrawalModalActive(false);
+    }
+
+    const onCloseTransferToCoreVaultModal = () => {
+        setIsTransferToCoreVaultModalActive(false);
+    }
+
+    const onCloseReturnFromCoreVaultModal = () => {
+        setIsReturnFromCoreVaultModalActive(false);
     }
 
     return (
@@ -730,6 +774,18 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={onCloseUnderlyingWithdrawalModal}
+                    />
+                    <TransferToCoreVaultModal
+                        opened={isTransferToCoreVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseTransferToCoreVaultModal}
+                    />
+                    <ReturnFromCoreVaultModal
+                        opened={isReturnFromCoreVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseReturnFromCoreVaultModal}
                     />
                 </>
             }

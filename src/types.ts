@@ -63,11 +63,13 @@ export interface INotification {
 
 export interface IVault {
     address: string;
+    allLots: string;
     freeLots: string;
     mintedAmount: string;
     mintedlots: string;
     poolAmount: string;
     poolCR: string;
+    poolCollateralUSD: string;
     status: boolean;
     updating: boolean;
     vaultAmount: number;
@@ -240,4 +242,14 @@ export interface ISafeFreeUnderlyingBalance {
 export interface IOwnerFassetBalance {
     balance: string;
     symbol: string;
+}
+
+export interface ITransferableCVData {
+    underlyingBalance: string;
+    transferableBalance: string;
+}
+
+export interface IRequestableCVData {
+    underlyingBalance: string;
+    requestableBalance: string;
 }

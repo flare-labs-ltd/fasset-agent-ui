@@ -19,8 +19,10 @@ import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal
 import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
 import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
 import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
+import TransferToCoreVaultModal from "@/components/modals/TransferToCoreVaultModal";
 import { IAgentVault, ICollateralItem } from "@/types";
 import { useAgentVaultsInformation, useBalances, useCollaterals } from "@/api/agent";
+import ReturnFromCoreVaultModal from "@/components/modals/ReturnFromCoreVaultModal";
 
 interface IAgentVaultOperationsCard {
     className?: string;
@@ -41,6 +43,8 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
     const [isSelfMintUnderlyingModalActive, setIsSelfMintUnderlyingModalActive] = useState<boolean>(false);
     const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
     const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
+    const [isTransferToCoreVaultModalActive, setIsTransferToCoreVaultModalActive] = useState<boolean>(false);
+    const [isReturnFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
 
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
@@ -91,6 +95,18 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
         setIsSelfMintUnderlyingModalActive(false);
     }
 
+    const onCloseTransferToCoreVaultModal = () => {
+        setIsTransferToCoreVaultModalActive(false);
+    }
+
+    const onCloseReturnFromCoreVaultModal = () => {
+        setIsReturnFromCoreVaultModalActive(false);
+    }
+
+    const onCloseClaimRewardsModal = () => {
+        setIsClaimRewardsModalActive(false);
+    }
+
     return (
         <Paper
             className={`relative p-4 ${className}`}
@@ -130,6 +146,26 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
             >
                 {t('agent_vault_operations_card.self_mint_button')}
             </Button>
+            {(fAssetSymbol as string)?.toLowerCase()?.includes('xrp') &&
+                <>
+                    <Button
+                        variant="gradient"
+                        onClick={() => setIsTransferToCoreVaultModalActive(true)}
+                        className="block mb-3"
+                        fw={400}
+                    >
+                        {t('agent_vault_operations_card.transfer_to_core_vault_button')}
+                    </Button>
+                    <Button
+                        variant="gradient"
+                        onClick={() => setIsReturnFromCoreVaultModalActive(true)}
+                        className="block mb-3"
+                        fw={400}
+                    >
+                        {t('agent_vault_operations_card.return_from_core_vault_button')}
+                    </Button>
+                </>
+            }
             <Button
                 variant="gradient"
                 onClick={() => setIsSelfMintUnderlyingModalActive(true)}
@@ -226,7 +262,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                         opened={isClaimRewardsModalActive}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
-                        onClose={() => setIsClaimRewardsModalActive(false)}
+                        onClose={onCloseClaimRewardsModal}
                     />
                     <DelegatePoolCollateralModal
                         opened={isDelegatePoolCollateralModalActive}
@@ -260,6 +296,20 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
                         onClose={() => setIsUnderlyingWithdrawalModalActive(false)}
+                    />
+                    <TransferToCoreVaultModal
+                        opened={isTransferToCoreVaultModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={onCloseTransferToCoreVaultModal}
+                        redirect
+                    />
+                    <ReturnFromCoreVaultModal
+                        opened={isReturnFromCoreVaultModalActive}
+                        fAssetSymbol={fAssetSymbol as string}
+                        agentVaultAddress={agentVaultAddress as string}
+                        onClose={onCloseReturnFromCoreVaultModal}
+                        redirect
                     />
                 </>
             }
