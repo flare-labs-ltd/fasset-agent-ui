@@ -19,7 +19,8 @@ import {
     IUnderlyingAddress,
     IVaultCollateral,
     IOwnerUnderlyingBalance,
-    IOwnerFassetBalance
+    IOwnerFassetBalance,
+    IRedemptionQueueData
 } from "@/types";
 import { orderBy } from "lodash";
 
@@ -41,7 +42,8 @@ const AGENT_KEY = {
     BALANCES: 'agent.balances',
     UNDERLYING_ADDRESSES: 'agent.underlyingAddresses',
     OWNER_UNDERLYING_BALANCE: 'agent.ownerUnderlyingBalance',
-    OWNER_FASSET_BALANCE: 'agent.ownerFassetBalance'
+    OWNER_FASSET_BALANCE: 'agent.ownerFassetBalance',
+    REDEMPTION_QUEUE_DATA: 'agent.redemptionQueueData'
 }
 
 export function useWorkAddress(enabled: boolean = true) {
@@ -372,6 +374,17 @@ export function useOwnerFassetBalance(fAssetSymbol: string, enabled: boolean = t
         queryFn: async () => {
             const response = await apiClient.get(`${resource}/ownerFassetBalance/${fAssetSymbol}`);
             return response.data.data as IOwnerFassetBalance;
+        },
+        enabled: enabled
+    })
+}
+
+export function useRedemptionQueueData(enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_KEY.REDEMPTION_QUEUE_DATA],
+        queryFn: async () => {
+            const response = await apiClient.get(`${resource}/getRedemptionQueueData`);
+            return response.data.data as IRedemptionQueueData;
         },
         enabled: enabled
     })

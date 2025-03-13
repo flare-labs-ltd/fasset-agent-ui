@@ -109,6 +109,13 @@ export default function Vault() {
                 }
             ];
 
+            if (agentVaultAddress) {
+                payload.push({
+                    name: 'redemptionPoolFeeShareBIPS',
+                    value: (data.redemptionPoolFeeShareBIPS * 100).toString()
+                })
+            }
+
             await updateVault.mutateAsync({
                 fAssetSymbol: fAssetSymbol as string,
                 agentVaultAddress: agentVaultAddress as string,

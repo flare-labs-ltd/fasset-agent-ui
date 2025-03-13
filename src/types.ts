@@ -109,6 +109,7 @@ export interface IAgentSettingsConfig {
     poolTopupCollateralRatio: string;
     poolTopupTokenPriceFactor: string;
     handshakeType: number;
+    redemptionPoolFeeShareBIPS?: string;
 }
 
 export interface IAgentVault {
@@ -145,6 +146,7 @@ export interface IAgentVault {
     liquidationPaymentFactorVaultBIPS: string;
     liquidationPaymentFactorPoolBIPS: string;
     underlyingBalanceUBA: string;
+    redemptionPoolFeeShareBIPS: string;
     requiredUnderlyingBalanceUBA: string;
     freeUnderlyingBalanceUBA: string;
     announcedUnderlyingWithdrawalId: string;
@@ -259,4 +261,9 @@ export interface ICvFee {
     fee: string;
     symbol: string;
     feeUSD: string;
+}
+
+export interface IRedemptionQueueData {
+    mintedLots: number;
+    redemptionQueueLots: number;
 }

@@ -168,7 +168,8 @@
         "agent_title": "Agent Bots",
         "alerts_title": "Alerts & Notifications",
         "title": "Overview",
-        "vaults_title": "Vaults"
+        "vaults_title": "Vaults",
+        "xrp_supply_title": "{{token}} Supply"
     },
     "deactivate_vault_modal": {
         "cancel_button": "Cancel",
@@ -294,6 +295,8 @@
             "pool_top_up_collateral_ratio_label": "Pool Top Up Collateral Ratio",
             "pool_top_up_token_price_factor_description_label": "The factor by which CPTs are bought in case of liquidation.",
             "pool_top_up_token_price_factor_label": "Pool Top Up Token Price Factor",
+            "redemption_pool_fee_share_description_label": "Defines how much Vault owner shares Redemption fees with CPT owners.",
+            "redemption_pool_fee_share_label": "Redemption pool fee share",
             "vault_collateral_token_description_label": "Defines which type of collateral will be used, only one type per Vault.",
             "vault_collateral_token_label": "Vault collateral token",
             "vault_collateral_token_placeholder": "Select your currency (USDC, USDT, ...)",
@@ -590,5 +593,10 @@
     },
     "working_address_card": {
         "title": "Working address"
+    },
+    "xrp_supply_card": {
+        "current_redemption_queue_label": "Current redemption queue",
+        "lots_label": "lots",
+        "total_minted_label": "Total minted"
     }
 }
