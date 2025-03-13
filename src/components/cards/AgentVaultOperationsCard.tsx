@@ -22,7 +22,7 @@ import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLot
 import TransferToCoreVaultModal from "@/components/modals/TransferToCoreVaultModal";
 import { IAgentVault, ICollateralItem } from "@/types";
 import { useAgentVaultsInformation, useBalances, useCollaterals } from "@/api/agent";
-import ReturnFromCoreVaultModal from "@/components/modals/ReturnFromCoreVaultModal";
+import WithdrawFromCoreVaultModal from "@/components/modals/WithdrawFromCoreVaultModal";
 
 interface IAgentVaultOperationsCard {
     className?: string;
@@ -44,7 +44,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
     const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
     const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
     const [isTransferToCoreVaultModalActive, setIsTransferToCoreVaultModalActive] = useState<boolean>(false);
-    const [isReturnFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
+    const [isWithdrawFromCoreVaultModalActive, setIsWithdrawFromCoreVaultModalActive] = useState<boolean>(false);
 
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
@@ -99,8 +99,8 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
         setIsTransferToCoreVaultModalActive(false);
     }
 
-    const onCloseReturnFromCoreVaultModal = () => {
-        setIsReturnFromCoreVaultModalActive(false);
+    const onCloseWithdrawFromCoreVaultModal = () => {
+        setIsWithdrawFromCoreVaultModalActive(false);
     }
 
     const onCloseClaimRewardsModal = () => {
@@ -158,7 +158,7 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                     </Button>
                     <Button
                         variant="gradient"
-                        onClick={() => setIsReturnFromCoreVaultModalActive(true)}
+                        onClick={() => setIsWithdrawFromCoreVaultModalActive(true)}
                         className="block mb-3"
                         fw={400}
                     >
@@ -304,11 +304,11 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                         onClose={onCloseTransferToCoreVaultModal}
                         redirect
                     />
-                    <ReturnFromCoreVaultModal
-                        opened={isReturnFromCoreVaultModalActive}
+                    <WithdrawFromCoreVaultModal
+                        opened={isWithdrawFromCoreVaultModalActive}
                         fAssetSymbol={fAssetSymbol as string}
                         agentVaultAddress={agentVaultAddress as string}
-                        onClose={onCloseReturnFromCoreVaultModal}
+                        onClose={onCloseWithdrawFromCoreVaultModal}
                         redirect
                     />
                 </>

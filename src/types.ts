@@ -250,6 +250,13 @@ export interface ITransferableCVData {
 }
 
 export interface IRequestableCVData {
-    underlyingBalance: string;
-    requestableBalance: string;
+    lotSize: number;
+    requestableLotsCV: number;
+    requestableLotsVault: number;
+}
+
+export interface ICvFee {
+    fee: string;
+    symbol: string;
+    feeUSD: string;
 }

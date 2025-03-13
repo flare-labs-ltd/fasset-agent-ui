@@ -41,7 +41,7 @@ import SelfMintUnderlyingModal from "@/components/modals/SelfMintUnderylingModal
 import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
 import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
 import TransferToCoreVaultModal from "@/components/modals/TransferToCoreVaultModal";
-import ReturnFromCoreVaultModal from "@/components/modals/ReturnFromCoreVaultModal";
+import WithdrawFromCoreVaultModal from "@/components/modals/WithdrawFromCoreVaultModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
@@ -93,7 +93,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isUnderlyingTopUpModalActive, setIsUnderlyingTopUpModalActive] = useState<boolean>(false);
     const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
      const [isTransferToCoreVaultModalActive, setIsTransferToCoreVaultModalActive] = useState<boolean>(false);
-    const [isReturnFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
+    const [isWithdrawFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -658,7 +658,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
         setIsTransferToCoreVaultModalActive(false);
     }
 
-    const onCloseReturnFromCoreVaultModal = () => {
+    const onCloseWithdrawFromCoreVaultModal = () => {
         setIsReturnFromCoreVaultModalActive(false);
     }
 
@@ -781,11 +781,11 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={onCloseTransferToCoreVaultModal}
                     />
-                    <ReturnFromCoreVaultModal
-                        opened={isReturnFromCoreVaultModalActive}
+                    <WithdrawFromCoreVaultModal
+                        opened={isWithdrawFromCoreVaultModalActive}
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
-                        onClose={onCloseReturnFromCoreVaultModal}
+                        onClose={onCloseWithdrawFromCoreVaultModal}
                     />
                 </>
             }

@@ -96,7 +96,7 @@
         "deposit_collateral_lots_button": "Deposit Collateral (Lots)",
         "deposit_pool_collateral_button": "Deposit Pool Collateral",
         "deposit_vault_collateral_button": "Deposit Vault Collateral",
-        "return_from_core_vault_button": "Return from Core Vault",
+        "return_from_core_vault_button": "Withdraw from Core Vault",
         "self_close_button": "Self-close",
         "self_mint_button": "Self-Mint",
         "self_mint_underlying_button": "Self-Mint from Underlying",
@@ -334,20 +334,6 @@
         "show_all_button": "Show all",
         "title": "Notifications from Flare"
     },
-    "return_from_core_vault_modal": {
-        "amount_description_label": "How much underlying {{token}} do you want to return to the Core Vault?",
-        "amount_label": "Amount ({{token}})",
-        "amount_placeholder_label": "AMOUNT TO RETURN",
-        "close_button": "Close",
-        "error_message": "Unable to return to Core Vault.",
-        "estimated_label": "Estimated once per day",
-        "max_return_label": "Max return",
-        "operation_days_label": "Operation days",
-        "owner_balance_label": "Owner balance",
-        "return_button": "Return",
-        "success_message": "Return from Core Vault successfully completed.",
-        "title": "Return from Core Vault"
-    },
     "select_wallet_button": {
         "connect_label": "Connect",
         "disconnect_label": "Disconnect",
@@ -429,13 +415,13 @@
         "amount_placeholder_label": "AMOUNT TO TRANSFER",
         "close_button": "Close",
         "error_message": "Unable to transfer to Core Vault.",
-        "estimated_label": "Estimated once per day",
+        "fees_label": "Fees",
         "max_transfer_label": "Max transfer",
-        "operation_days_label": "Operation days",
         "owner_balance_label": "Owner balance",
-        "success_message": "Transfer to Core Vault successfully completed.",
+        "success_message": "Succesfully requested transfer to Core Vault.",
         "title": "Transfer to Core Vault",
-        "transfer_button": "Transfer"
+        "transfer_button": "Transfer",
+        "transfer_fee_label": "Transfer Fee"
     },
     "underlying_top_up_modal": {
         "amount_description_label": "Owner underlying balance is {{balance}} {{token}}.",
@@ -515,7 +501,7 @@
                 "deposit_pool_collateral_label": "Deposit Pool Collateral",
                 "deposit_vault_collateral_label": "Deposit Vault Collateral",
                 "pool_collateral_label": "Pool collateral",
-                "return_from_core_vault_label": "Return from Core Vault",
+                "return_from_core_vault_label": "Withdraw from Core Vault",
                 "self_close_label": "Self-close",
                 "self_mint_label": "Self-Mint",
                 "self_mint_underlying_label": "Self-Mint from Underlying",
@@ -572,6 +558,24 @@
         "success_message": "Collateral successfully withdrawn.",
         "title": "Withdraw collateral pool tokens",
         "withdraw_amount_label": "Withdraw amount"
+    },
+    "withdraw_from_core_vault_modal": {
+        "amount_description_label": "How much underlying {{token}} do you want to withdraw to the Core Vault?",
+        "amount_label": "Amount (lots)",
+        "amount_placeholder_label": "NR. OF LOTS TO WITHDRAW",
+        "close_button": "Close",
+        "core_vault_balance_label": "Core Vault balance",
+        "error_message": "Unable to withdraw from Core Vault.",
+        "estimated_label": "Estimated once per day",
+        "lot_size_label": "1 lot = <icon></icon> {{lotSize}} {{token}}",
+        "lots_label": "{{lots}} lots",
+        "max_return_label": "Max return",
+        "operation_days_label": "Operation days",
+        "owner_balance_label": "Owner balance",
+        "success_message": "Succesfully requested withdrawal from Core Vault.",
+        "title": "Withdraw from Core Vault",
+        "vault_free_lots_label": "Vault free lots",
+        "withdraw_button": "Withdraw"
     },
     "withdraw_vault_collateral_modal": {
         "cancel_button": "Cancel",

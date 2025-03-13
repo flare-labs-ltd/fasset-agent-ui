@@ -4,6 +4,7 @@ import {
     IAmountForSelfMint,
     IAmountForSelfMintFreeUnderlying,
     ICalculateCollateral,
+    ICvFee,
     IFreeVaultBalance,
     IRequestableCVData,
     ISelfMintBalance,
@@ -22,7 +23,8 @@ const AGENT_VAULT_KEY = {
     AMOUNT_FOR_SELF_MINT: 'agentVault.amountForSelfMint',
     AMOUNT_FOR_SELF_MINT_FREE_UNDERLYING: 'agentVault.amountForSelfMintFreeUnderlying',
     TRANSFERABLE_CV_DATA: 'agentVault.transferableCvData',
-    REQUESTABLE_CV_DATA: 'agentVault.requestableCvData'
+    REQUESTABLE_CV_DATA: 'agentVault.requestableCvData',
+    CV_FEE: 'agentVault.cvFee'
 }
 
 export function useDepositCollateral() {
@@ -226,14 +228,25 @@ export function useRequestWithdrawalFromCv() {
         mutationFn: async({
               fAssetSymbol,
               agentVaultAddress,
-              amount
+              lots
         }: {
             fAssetSymbol: string,
             agentVaultAddress: string,
-            amount: number
+            lots: number
         }) => {
-            const response = await apiClient.get(`${resource}/requestWithdrawalFromCV/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
+            const response = await apiClient.get(`${resource}/requestWithdrawalFromCV/${fAssetSymbol}/${agentVaultAddress}/${lots}`);
             return response.data;
         }
+    })
+}
+
+export function useCvFee(fAssetSymbol: string, agentVaultAddress: string, amount: number, enabled: boolean = true) {
+    return useQuery({
+        queryKey: [AGENT_VAULT_KEY.REQUESTABLE_CV_DATA, fAssetSymbol, agentVaultAddress, amount],
+        queryFn: async() => {
+            const response = await apiClient.get(`${resource}/getCVFee/${fAssetSymbol}/${agentVaultAddress}/${amount}`);
+            return response.data.data as ICvFee;
+        },
+        enabled: enabled
     })
 }

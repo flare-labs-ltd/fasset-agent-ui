@@ -15,7 +15,7 @@ import { useForm } from "@mantine/form";
 import { yupResolver } from "mantine-form-yup-resolver";
 import { IconExclamationCircle } from "@tabler/icons-react";
 import { getIcon, toNumber } from "@/utils";
-import { useRequestTransferToCv, useTransferableCvData } from "@/api/agentVault";
+import { useCvFee, useRequestTransferToCv, useTransferableCvData } from "@/api/agentVault";
 import { modals } from "@mantine/modals";
 import { useRouter } from "next/router";
 
@@ -32,11 +32,14 @@ interface IFormValues {
 }
 
 export default function TransferToCoreVaultModal({ opened, onClose, fAssetSymbol, agentVaultAddress, redirect }: ITransferToCoreVaultModal) {
+    const [amount, setAmount] = useState<number>();
     const [errorMessage, setErrorMessage] = useState<string>();
 
     const { t } = useTranslation();
     const transferableCvData = useTransferableCvData(fAssetSymbol, agentVaultAddress, opened);
     const requestTransferToCv = useRequestTransferToCv();
+    const cvFee = useCvFee(fAssetSymbol, agentVaultAddress, amount ?? 0, opened && amount !== undefined);
+    const cvFeeIcon = getIcon(cvFee.data?.symbol ?? '', '16');
     const tokenIcon = getIcon(fAssetSymbol, '16');
     const router = useRouter();
 
@@ -49,7 +52,10 @@ export default function TransferToCoreVaultModal({ opened, onClose, fAssetSymbol
             amount: undefined
         },
         //@ts-ignore
-        validate: yupResolver(schema)
+        validate: yupResolver(schema),
+        onValuesChange: (values) => {
+            setAmount(values.amount);
+        }
     });
 
     const handleOnClose = () => {
@@ -201,25 +207,40 @@ export default function TransferToCoreVaultModal({ opened, onClose, fAssetSymbol
                             </Text>
                         </div>
                     </Grid.Col>
-                    <Grid.Col
-                        span={12}
-                        className="min-[576px]:border-t border-[var(--flr-border)] p-3"
-                    >
+                </Grid>
+                <div className="py-5">
+                    <div>
                         <Text
                             c="var(--flr-gray)"
                             className="uppercase"
                             size="sm"
                         >
-                            {t('transfer_to_core_vault_modal.operation_days_label')}
+                            {t('transfer_to_core_vault_modal.fees_label')}
                         </Text>
+
+                    </div>
+                    <div className="flex justify-between">
                         <Text
-                            c="var(--flr-gray)"
+                            c="var(--flr-black)"
                             size="sm"
                         >
-                            {t('transfer_to_core_vault_modal.estimated_label')}
+                            {t('transfer_to_core_vault_modal.transfer_fee_label')}
                         </Text>
-                    </Grid.Col>
-                </Grid>
+                        {cvFee.data !== undefined
+                            ? <div className="flex items-center">
+                                {cvFeeIcon}
+                                <Text
+                                    c="var(--flr-black)"
+                                    size="sm"
+                                    className="ml-1"
+                                >
+                                    {cvFee.data?.fee} <span className="text-[var(--flr-lighter-black)]">(${cvFee.data?.feeUSD})</span>
+                                </Text>
+                            </div>
+                            : <span>&mdash;</span>
+                        }
+                    </div>
+                </div>
                 <Divider
                     className="my-8"
                     styles={{
