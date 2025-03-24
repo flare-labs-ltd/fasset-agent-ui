@@ -35,14 +35,28 @@ export function useWithdraw() {
             agentVaultAddress,
             amount,
             destinationAddress
-        }:
-          {
-              fAssetSymbol: string,
-              agentVaultAddress: string,
-              amount: number ,
-              destinationAddress: string
-          }) => {
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string,
+            amount: number ,
+            destinationAddress: string
+        }) => {
             const response = await apiClient.get(`${resource}/withdraw/${fAssetSymbol}/${agentVaultAddress}/${amount}/${destinationAddress}`);
+            return response.data;
+        }
+    })
+}
+
+export function useCancelWithdraw() {
+    return useMutation({
+        mutationFn: async({
+            fAssetSymbol,
+            agentVaultAddress
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string
+        }) => {
+            const response = await apiClient.post(`${resource}/withdraw/cancel/${fAssetSymbol}/${agentVaultAddress}`);
             return response.data;
         }
     })

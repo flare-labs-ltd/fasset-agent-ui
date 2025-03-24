@@ -174,7 +174,7 @@ export default function WithdrawFromCoreVaultModal({ opened, onClose, fAssetSymb
                                 className="ml-1"
                                 size="sm"
                             >
-                                {t('withdraw_from_core_vault_modal.lots_label', { lots: requestableCvData.data?.requestableLotsCV })}
+                                {t('withdraw_from_core_vault_modal.lots_label', { lots: requestableCvData.data?.requestableLotsVault })}
                             </Text>
                         </div>
                     </Grid.Col>
@@ -189,17 +189,15 @@ export default function WithdrawFromCoreVaultModal({ opened, onClose, fAssetSymb
                         >
                             {t('withdraw_from_core_vault_modal.core_vault_balance_label')}
                         </Text>
-                        <div className="flex justify-between">
-                            <div className="flex items-center mt-1">
-                                <Text
-                                    c="var(--flr-gray)"
-                                    size="sm"
-                                >
-                                    {t('withdraw_from_core_vault_modal.lots_label', {
-                                        lots: requestableCvData.data?.requestableLotsCV
-                                    })}
-                                </Text>
-                            </div>
+                        <div className="flex justify-between mt-1">
+                            <Text
+                                c="var(--flr-gray)"
+                                size="sm"
+                            >
+                                {t('withdraw_from_core_vault_modal.lots_label', {
+                                    lots: requestableCvData.data?.requestableLotsCV
+                                })}
+                            </Text>
                             <Trans
                                 i18nKey="withdraw_from_core_vault_modal.lot_size_label"
                                 parent={Text}

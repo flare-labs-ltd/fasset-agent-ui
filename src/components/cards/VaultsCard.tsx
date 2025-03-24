@@ -5,7 +5,7 @@ import {
     rem,
     Badge,
     Menu,
-    Text,
+    Text
 } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,11 +19,12 @@ import {
     IconBrandZapier,
     IconLayoutNavbarExpand,
     IconLayoutNavbarCollapse,
-    IconTransform
+    IconTransform,
+    IconSquareX
 } from '@tabler/icons-react';
 import { UseQueryResult } from "@tanstack/react-query";
 import Link from "next/link";
-import {useAgentVaultsInformation, useCollaterals} from "@/api/agent";
+import { useAgentVaultsInformation, useCollaterals } from "@/api/agent";
 import { isMaxCRValue, toNumber, truncateString } from "@/utils";
 import DepositVaultCollateralModal from "@/components/modals/DepositVaultCollateralModal";
 import DepositCollateralLotsModal from "@/components/modals/DepositCollateralLotsModal";
@@ -42,6 +43,9 @@ import UnderlyingTopUpModal from "@/components/modals/UnderlyingTopUpModal";
 import UnderlyingWithdrawalModal from "@/components/modals/UnderlyingWithdrawalModal";
 import TransferToCoreVaultModal from "@/components/modals/TransferToCoreVaultModal";
 import WithdrawFromCoreVaultModal from "@/components/modals/WithdrawFromCoreVaultModal";
+import CancelUnderlyingWithdrawalModal from "@/components/modals/CancelUnderlyingWithdrawalModal";
+import CancelTransferToCoreVaultModal from "@/components/modals/CancelTransferToCoreVaultModal";
+import CancelWithdrawFromCoreVaultModal from "@/components/modals/CancelWithdrawFromCoreVaultModal";
 import CopyIcon from "@/components/icons/CopyIcon";
 import { ICollateralItem, IVault } from "@/types";
 import FAssetTable, { IFAssetColumn } from "@/components/elements/FAssetTable";
@@ -74,6 +78,9 @@ const MODAL_UNDERLYING_TOP_UP = 'underlying_top_up';
 const MODAL_UNDERLYING_WITHDRAWAL = 'underlying_withdrawal';
 const MODAL_TRANSFER_TO_CORE_VAULT = 'transfer_to_core_vault';
 const MODAL_RETURN_FROM_CORE_VAULT = 'return_from_core_vault';
+const MODAL_CANCEL_UNDERLYING_WITHDRAWAL_MODAL = 'cancel_underlying_withdrawal_modal';
+const MODAL_CANCEL_TRANSFER_TO_CORE_VAULT_MODAL = 'cancel_transfer_to_core_vault_modal';
+const MODAL_CANCEL_WITHDRAW_FROM_CORE_VAULT_MODAL = 'cancel_withdraw_from_core_vault_modal';
 
 export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [selectedAgentVault, setSelectedAgentVault] = useState<IVault>();
@@ -94,6 +101,9 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
     const [isUnderlyingWithdrawalModalActive, setIsUnderlyingWithdrawalModalActive] = useState<boolean>(false);
      const [isTransferToCoreVaultModalActive, setIsTransferToCoreVaultModalActive] = useState<boolean>(false);
     const [isWithdrawFromCoreVaultModalActive, setIsReturnFromCoreVaultModalActive] = useState<boolean>(false);
+    const [isCancelUnderlyingWithdrawalModalActive, setIsCancelUnderlyingWithdrawalModalActive] = useState<boolean>(false);
+    const [isCancelTransferToCoreVaultModalActive, setIsCancelTransferToCoreVaultModalActive] = useState<boolean>(false);
+    const [isCancelWithdrawFromCoreVaultModalActive, setIsCancelWithdrawFromCoreVaultModalActive] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -433,116 +443,142 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                             </Menu.Item>
                             <Menu.Divider />
                             <Menu.Label>{t('vaults_card.table.actions_menu.agent_vault_operations_title')}</Menu.Label>
-                            <Menu.Item
-                                leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_DEPOSIT_COLLATERAL_LOTS, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.deposit_collateral_lots_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_DEPOSIT_VAULT_COLLATERAL, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.deposit_vault_collateral_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_DEPOSIT_POOL_COLLATERAL, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_SELF_MINT, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.self_mint_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_SELF_MINT_UNDERLYING, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.self_mint_underlying_label')}
-                            </Menu.Item>
-                            {vault.fasset.toLowerCase().includes('xrp') &&
-                                <>
+                            <div className="flex">
+                                <div className="pr-10">
                                     <Menu.Item
-                                        leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
-                                        onClick={() => onClick(MODAL_TRANSFER_TO_CORE_VAULT, vault)}
+                                        leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_DEPOSIT_COLLATERAL_LOTS, vault)}
                                     >
-                                        {t('vaults_card.table.actions_menu.transfer_to_core_vault_label')}
+                                        {t('vaults_card.table.actions_menu.deposit_collateral_lots_label')}
                                     </Menu.Item>
                                     <Menu.Item
-                                        leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
-                                        onClick={() => onClick(MODAL_RETURN_FROM_CORE_VAULT, vault)}
+                                        leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_DEPOSIT_VAULT_COLLATERAL, vault)}
                                     >
-                                        {t('vaults_card.table.actions_menu.return_from_core_vault_label')}
+                                        {t('vaults_card.table.actions_menu.deposit_vault_collateral_label')}
                                     </Menu.Item>
-                                </>
-                            }
-                            <Menu.Item
-                                leftSection={<IconLayoutNavbarCollapse style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_UNDERLYING_TOP_UP, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.underlying_top_up_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconLayoutNavbarExpand style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_UNDERLYING_WITHDRAWAL, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.underlying_withdrawal_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_DELEGATE_POOL_COLLATERAL, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.delegate_pool_collateral_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconGift style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_CLAIM_REWARDS, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.claim_rewards_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBookDownload style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.withdraw_collateral_pool_tokens_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconBookDownload style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_WITHDRAW_VAULT_COLLATERAL, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.withdraw_vault_collateral_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconDashboard style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_ACTIVATE_VAULT, vault)}
-                                disabled={vault.status}
-                            >
-                                {t('vaults_card.table.actions_menu.activate_vault_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_DEACTIVATE_VAULT, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.deactivate_vault_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_SELF_CLOSE, vault)}
-                            >
-                                {t('vaults_card.table.actions_menu.self_close_label')}
-                            </Menu.Item>
-                            <Menu.Item
-                                leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
-                                onClick={() => onClick(MODAL_CLOSE_VAULT, vault)}
-                                c="var(--mantine-color-red-9)"
-                                bg="rgba(248, 233, 233, 1)"
-
-                            >
-                                {t('vaults_card.table.actions_menu.close_vault_label')}
-                            </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBookUpload style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_DEPOSIT_POOL_COLLATERAL, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.deposit_pool_collateral_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBookDownload style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_WITHDRAW_COLLATERAL_POOL_TOKENS, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.withdraw_collateral_pool_tokens_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBookDownload style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_WITHDRAW_VAULT_COLLATERAL, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.withdraw_vault_collateral_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_SELF_MINT, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.self_mint_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBrandZapier style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_SELF_MINT_UNDERLYING, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.self_mint_underlying_label')}
+                                    </Menu.Item>
+                                    {vault.fasset.toLowerCase().includes('xrp') &&
+                                        <>
+                                            <Menu.Item
+                                                leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
+                                                onClick={() => onClick(MODAL_TRANSFER_TO_CORE_VAULT, vault)}
+                                            >
+                                                {t('vaults_card.table.actions_menu.transfer_to_core_vault_label')}
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                leftSection={<IconSquareX style={{ width: rem(14), height: rem(14) }} />}
+                                                onClick={() => onClick(MODAL_CANCEL_TRANSFER_TO_CORE_VAULT_MODAL, vault)}
+                                            >
+                                                {t('vaults_card.table.actions_menu.cancel_transfer_to_core_vault_label')}
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
+                                                onClick={() => onClick(MODAL_RETURN_FROM_CORE_VAULT, vault)}
+                                            >
+                                                {t('vaults_card.table.actions_menu.return_from_core_vault_label')}
+                                            </Menu.Item>
+                                            <Menu.Item
+                                                leftSection={<IconSquareX style={{ width: rem(14), height: rem(14) }} />}
+                                                onClick={() => onClick(MODAL_CANCEL_WITHDRAW_FROM_CORE_VAULT_MODAL, vault)}
+                                            >
+                                                {t('vaults_card.table.actions_menu.cancel_withdraw_from_core_vault_label')}
+                                            </Menu.Item>
+                                        </>
+                                    }
+                                </div>
+                                <div>
+                                    <Menu.Item
+                                        leftSection={<IconLayoutNavbarCollapse style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_UNDERLYING_TOP_UP, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.underlying_top_up_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconLayoutNavbarExpand style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_UNDERLYING_WITHDRAWAL, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.underlying_withdrawal_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconSquareX style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_CANCEL_UNDERLYING_WITHDRAWAL_MODAL, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.cancel_underlying_withdrawal_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconBook2 style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_DELEGATE_POOL_COLLATERAL, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.delegate_pool_collateral_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconGift style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_CLAIM_REWARDS, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.claim_rewards_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconDashboard style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_ACTIVATE_VAULT, vault)}
+                                        disabled={vault.status}
+                                    >
+                                        {t('vaults_card.table.actions_menu.activate_vault_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_DEACTIVATE_VAULT, vault)}
+                                    >
+                                        {t('vaults_card.table.actions_menu.deactivate_vault_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_SELF_CLOSE, vault)}
+                                        bg="rgba(248, 233, 233, 1)"
+                                        className="pr-10"
+                                    >
+                                        {t('vaults_card.table.actions_menu.self_close_label')}
+                                    </Menu.Item>
+                                    <Menu.Item
+                                        leftSection={<IconDashboardOff style={{ width: rem(14), height: rem(14) }} />}
+                                        onClick={() => onClick(MODAL_CLOSE_VAULT, vault)}
+                                        c="var(--mantine-color-red-9)"
+                                        bg="rgba(248, 233, 233, 1)"
+                                        className="pr-10"
+                                    >
+                                        {t('vaults_card.table.actions_menu.close_vault_label')}
+                                    </Menu.Item>
+                                </div>
+                            </div>
                         </Menu.Dropdown>
                     </Menu>
                 )
@@ -585,7 +621,14 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
             setIsTransferToCoreVaultModalActive(true);
         } else if (modal === MODAL_RETURN_FROM_CORE_VAULT) {
             setIsReturnFromCoreVaultModalActive(true);
+        } else if (modal === MODAL_CANCEL_UNDERLYING_WITHDRAWAL_MODAL) {
+            setIsCancelUnderlyingWithdrawalModalActive(true);
+        } else if (modal === MODAL_CANCEL_TRANSFER_TO_CORE_VAULT_MODAL) {
+            setIsCancelTransferToCoreVaultModalActive(true);
+        } else if (modal === MODAL_CANCEL_WITHDRAW_FROM_CORE_VAULT_MODAL) {
+            setIsCancelWithdrawFromCoreVaultModalActive(true);
         }
+
         setSelectedAgentVault(vault);
     }
 
@@ -660,6 +703,18 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
 
     const onCloseWithdrawFromCoreVaultModal = () => {
         setIsReturnFromCoreVaultModalActive(false);
+    }
+
+    const onCloseCancelUnderlyingWithdrawalModal = () => {
+        setIsCancelUnderlyingWithdrawalModalActive(false);
+    }
+
+    const onCloseCancelTransferToCoreVaultModal = () => {
+        setIsCancelTransferToCoreVaultModalActive(false);
+    }
+
+    const onCloseCancelWithdrawFromCoreVaultModal = () => {
+        setIsCancelWithdrawFromCoreVaultModalActive(false);
     }
 
     return (
@@ -786,6 +841,24 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                         fAssetSymbol={selectedAgentVault.fasset}
                         agentVaultAddress={selectedAgentVault.address}
                         onClose={onCloseWithdrawFromCoreVaultModal}
+                    />
+                    <CancelUnderlyingWithdrawalModal
+                        opened={isCancelUnderlyingWithdrawalModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseCancelUnderlyingWithdrawalModal}
+                    />
+                    <CancelTransferToCoreVaultModal
+                        opened={isCancelTransferToCoreVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseCancelTransferToCoreVaultModal}
+                    />
+                    <CancelWithdrawFromCoreVaultModal
+                        opened={isCancelWithdrawFromCoreVaultModalActive}
+                        fAssetSymbol={selectedAgentVault.fasset}
+                        agentVaultAddress={selectedAgentVault.address}
+                        onClose={onCloseCancelWithdrawFromCoreVaultModal}
                     />
                 </>
             }

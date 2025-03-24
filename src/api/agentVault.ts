@@ -250,3 +250,33 @@ export function useCvFee(fAssetSymbol: string, agentVaultAddress: string, amount
         enabled: enabled
     })
 }
+
+export function useCancelTransferToCoreVault() {
+    return useMutation({
+        mutationFn: async({
+            fAssetSymbol,
+            agentVaultAddress
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string
+        }) => {
+            const response = await apiClient.post(`${resource}/cancelCVTransfer/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data;
+        }
+    })
+}
+
+export function useCancelReturnFromCoreVault() {
+    return useMutation({
+        mutationFn: async({
+            fAssetSymbol,
+            agentVaultAddress
+        }: {
+            fAssetSymbol: string,
+            agentVaultAddress: string
+        }) => {
+            const response = await apiClient.post(`${resource}/cancelCVWithdrawal/${fAssetSymbol}/${agentVaultAddress}`);
+            return response.data;
+        }
+    })
+}

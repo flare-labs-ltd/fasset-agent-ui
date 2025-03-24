@@ -89,6 +89,9 @@
     },
     "agent_vault_operations_card": {
         "activate_vault_button": "Activate Vault (Enter)",
+        "cancel_transfer_to_core_vault_button": "Cancel transfer to Core Vault",
+        "cancel_underlying_withdrawal_button": "Cancel underlying withdrawal",
+        "cancel_withdraw_from_core_vault_button": "Cancel withdraw from Core Vault",
         "claim_rewards_button": "Claim Rewards",
         "close_vault_button": "Close Vault (Exit)",
         "deactivate_vault_button": "Deactivate vault",
@@ -124,6 +127,24 @@
         },
         "tab_alerts_label": "Alerts",
         "tab_notifications_label": "Notifications from Flare"
+    },
+    "cancel_transfer_to_core_vault_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel transfer to core vault?",
+        "success_message": "Successfully canceled transfer to Core Vault.",
+        "title": "Cancel transfer to Core Vault"
+    },
+    "cancel_underlying_withdrawal_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel underlying withdrawal?",
+        "success_message": "Successfully canceled underlying withdrawal.",
+        "title": "Cancel underlying withdrawal"
+    },
+    "cancel_withdraw_from_core_vault_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel withdraw from core vault?",
+        "success_message": "Successfully canceled withdraw from Core Vault.",
+        "title": "Cancel withdraw from Core Vault"
     },
     "claim_rewards_modal": {
         "close_button": "Close",
@@ -420,8 +441,8 @@
         "error_message": "Unable to transfer to Core Vault.",
         "fees_label": "Fees",
         "max_transfer_label": "Max transfer",
-        "owner_balance_label": "Owner balance",
-        "success_message": "Succesfully requested transfer to Core Vault.",
+        "owner_balance_label": "Vault balance",
+        "success_message": "Successfully requested transfer to Core Vault.",
         "title": "Transfer to Core Vault",
         "transfer_button": "Transfer",
         "transfer_fee_label": "Transfer Fee"
@@ -496,6 +517,9 @@
             "actions_menu": {
                 "activate_vault_label": "Activate Vault (Enter)",
                 "agent_vault_operations_title": "Agent Vault Operations",
+                "cancel_transfer_to_core_vault_label": "Cancel transfer to Core Vault",
+                "cancel_underlying_withdrawal_label": "Cancel underlying withdrawal",
+                "cancel_withdraw_from_core_vault_label": "Cancel withdraw from Core Vault",
                 "claim_rewards_label": "Claim Rewards",
                 "close_vault_label": "Close Vault (Exit)",
                 "deactivate_vault_label": "Deactivate Vault",
