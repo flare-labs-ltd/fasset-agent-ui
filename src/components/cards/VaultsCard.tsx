@@ -347,7 +347,7 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                 size="sm"
                             >
                                 {vault.poolAmount}
-                                <span className="mx-1 text-[var(--flr-darker-gray)]">{t('vaults_card.table.flr_label')}</span>
+                                <span className="mx-1 text-[var(--flr-darker-gray)]">{process.env.NATIVE_TOKEN}</span>
                                 ({vault?.poolCollateralUSD} <span className="ml-1 text-[var(--flr-darker-gray)]">$</span>)
                             </Text>
                             <Text
