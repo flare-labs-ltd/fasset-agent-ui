@@ -176,14 +176,6 @@ export default function AgentVaultOperationsCard({ className, agentVault, collat
                     </Button>
                     <Button
                         variant="gradient"
-                        onClick={() => setIsCancelTransferToCoreVaultModalActive(true)}
-                        className="block mb-3"
-                        fw={400}
-                    >
-                        {t('agent_vault_operations_card.cancel_transfer_to_core_vault_button')}
-                    </Button>
-                    <Button
-                        variant="gradient"
                         onClick={() => setIsWithdrawFromCoreVaultModalActive(true)}
                         className="block mb-3"
                         fw={400}

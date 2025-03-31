@@ -496,12 +496,6 @@ export default function VaultsCard({ className, collateral }: IVaultsCard) {
                                                 {t('vaults_card.table.actions_menu.transfer_to_core_vault_label')}
                                             </Menu.Item>
                                             <Menu.Item
-                                                leftSection={<IconSquareX style={{ width: rem(14), height: rem(14) }} />}
-                                                onClick={() => onClick(MODAL_CANCEL_TRANSFER_TO_CORE_VAULT_MODAL, vault)}
-                                            >
-                                                {t('vaults_card.table.actions_menu.cancel_transfer_to_core_vault_label')}
-                                            </Menu.Item>
-                                            <Menu.Item
                                                 leftSection={<IconTransform style={{ width: rem(14), height: rem(14) }} />}
                                                 onClick={() => onClick(MODAL_RETURN_FROM_CORE_VAULT, vault)}
                                             >
