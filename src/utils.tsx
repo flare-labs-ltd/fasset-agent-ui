@@ -97,23 +97,23 @@ export const isMaxCRValue = (value: string | undefined | null) => {
     return false;
 }
 
-export const getIcon = (token: string, size: string) => {
+export const getIcon = (token: string, size: string, className?: string) => {
     if (token.toLowerCase().includes('usdc')) {
-        return <UsdcIcon width={size} height={size} className="flex-shrink-0" />;
+        return <UsdcIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('usdt')) {
-        return <UsdtIcon width={size} height={size} className="flex-shrink-0" />;
+        return <UsdtIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('flr')) {
-        return <CflrIcon width={size} height={size} className="flex-shrink-0" />;
+        return <CflrIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('xrp')) {
-        return <XrpIcon width={size} height={size} className="flex-shrink-0" />;
+        return <XrpIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('eth')) {
-        return <EthIcon width={size} height={size} className="flex-shrink-0" />;
+        return <EthIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('btc')) {
-        return <BtcIcon width={size} height={size} className="flex-shrink-0" />;
+        return <BtcIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('doge')) {
-        return <DogeIcon width={size} height={size} className="flex-shrink-0" />;
+        return <DogeIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     } else if (token.toLowerCase().includes('sgb')) {
-        return <SgbIcon width={size} height={size} className="flex-shrink-0" />;
+        return <SgbIcon width={size} height={size} className={`flex-shrink-0 ${className ?? ''}`} />;
     }
 }
 
@@ -123,4 +123,22 @@ export function formatNumber(value: string | number, fractionDigits: number = 2,
     }
 
     return toNumber(value).toLocaleString(locale, { minimumFractionDigits: fractionDigits, maximumFractionDigits: fractionDigits });
+}
+
+export function formatNumberWithSuffix(value: string | number, fractionDigits: number = 2) {
+    if (value === undefined) return;
+
+    if (typeof value === 'string') {
+        value = toNumber(value);
+    }
+
+    const factor = Math.pow(10, fractionDigits);
+
+    if (value >= 1e6) {
+        return `${(value / 1e6).toFixed(fractionDigits)}m`;
+    } else if (value >= 1e3) {
+        return `${(value / 1e3).toFixed(fractionDigits)}k`;
+    } else {
+        return (Math.floor(value * factor) / factor).toFixed(fractionDigits);
+    }
 }
