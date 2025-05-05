@@ -32,14 +32,54 @@
                 "settings_label": "Settings",
                 "title": "Agent Bot Actions"
             },
-            "agent_offline_label": "Offline",
             "agent_live_label": "Online",
+            "agent_offline_label": "Offline",
             "eth_label": "ETH",
             "flr_label": "FLR",
             "status_label": "Status",
             "usdc_label": "USDC",
             "usdt_label": "USDT",
             "working_address_label": "Working address"
+        }
+    },
+    "agent_configuration": {
+        "back_button": "Back to Dashboard",
+        "confirm_modal": {
+            "cancel_button": "Cancel",
+            "confirm_button": "Confirm",
+            "description_label": "You are about to change your work address in secrets.json. Before continuing, save owner.native.address and owner.native.private_key from your secrets.json if you have any funds that need to be transferred.",
+            "title": "Change working address"
+        },
+        "create_secret": {
+            "back_button": "Back to Agent settings",
+            "card": {
+                "save_button": "Save",
+                "title": "Secrets file .json"
+            },
+            "error_message": "Unable to create new secret file.",
+            "secrets_label": "Secrets",
+            "success_message": "New secret file successfully created.",
+            "title": "Edit secret file"
+        },
+        "dashboard_button": "Go to dashboard",
+        "secret_card": {
+            "create_button": "Create",
+            "drag_file_label": "Drag secret file here or click to select file",
+            "error_message": "Unable to create new secret file.",
+            "file_size_label": "File should not exceed 5mb",
+            "subtitle": "Create new secret file from template or upload it from computer",
+            "success_message": "New secret file successfully created.",
+            "title": "Secret file",
+            "upload_button": "Upload"
+        },
+        "title": "Agent settings",
+        "working_address_card": {
+            "change_button": "Change",
+            "not_whitelisted_text": "To get your Agent (Management address) on whitelist please contact us via email agent.onboarding@flare.network and we will walk you through the process.",
+            "not_whitelisted_title": "Not whitelisted",
+            "subtitle": "Working address can be changed if needed",
+            "success_message": "Working address successfully changed.",
+            "title": "Working address"
         }
     },
     "agent_vault_details": {
@@ -49,6 +89,9 @@
     },
     "agent_vault_operations_card": {
         "activate_vault_button": "Activate Vault (Enter)",
+        "cancel_transfer_to_core_vault_button": "Cancel transfer to Core Vault",
+        "cancel_underlying_withdrawal_button": "Cancel underlying withdrawal",
+        "cancel_withdraw_from_core_vault_button": "Cancel withdraw from Core Vault",
         "claim_rewards_button": "Claim Rewards",
         "close_vault_button": "Close Vault (Exit)",
         "deactivate_vault_button": "Deactivate vault",
@@ -56,10 +99,12 @@
         "deposit_collateral_lots_button": "Deposit Collateral (Lots)",
         "deposit_pool_collateral_button": "Deposit Pool Collateral",
         "deposit_vault_collateral_button": "Deposit Vault Collateral",
+        "return_from_core_vault_button": "Withdraw from Core Vault",
         "self_close_button": "Self-close",
         "self_mint_button": "Self-Mint",
         "self_mint_underlying_button": "Self-Mint from Underlying",
         "title": "Agent Vault Operations",
+        "transfer_to_core_vault_button": "Transfer to Core Vault",
         "underlying_top_up_button": "Underlying Top-Up",
         "underlying_withdrawal_button": "Underlying Withdrawal",
         "withdraw_collateral_pool_tokens_button": "Withdraw collateral pool tokens",
@@ -83,45 +128,23 @@
         "tab_alerts_label": "Alerts",
         "tab_notifications_label": "Notifications from Flare"
     },
-    "agent_configuration": {
-        "back_button": "Back to Dashboard",
-        "dashboard_button": "Go to dashboard",
-        "create_secret": {
-            "back_button": "Back to Agent settings",
-            "card": {
-                "save_button": "Save",
-                "title": "Secrets file .json"
-            },
-            "error_message": "Unable to create new secret file.",
-            "secrets_label": "Secrets",
-            "success_message": "New secret file successfully created.",
-            "title": "Edit secret file"
-        },
-        "confirm_modal": {
-            "cancel_button": "Cancel",
-            "confirm_button": "Confirm",
-            "description_label": "You are about to change your work address in secrets.json. Before continuing, save owner.native.address and owner.native.private_key from your secrets.json if you have any funds that need to be transferred.",
-            "title": "Change working address"
-        },
-        "secret_card": {
-            "create_button": "Create",
-            "drag_file_label": "Drag secret file here or click to select file",
-            "error_message": "Unable to create new secret file.",
-            "file_size_label": "File should not exceed 5mb",
-            "success_message": "New secret file successfully created.",
-            "subtitle": "Create new secret file from template or upload it from computer",
-            "title": "Secret file",
-            "upload_button": "Upload"
-        },
-        "title": "Agent settings",
-        "working_address_card": {
-            "change_button": "Change",
-            "not_whitelisted_title": "Not whitelisted",
-            "not_whitelisted_text": "To get your Agent (Management address) on whitelist please contact us via email agent.onboarding@flare.network and we will walk you through the process.",
-            "success_message": "Working address successfully changed.",
-            "subtitle": "Working address can be changed if needed",
-            "title": "Working address"
-        }
+    "cancel_transfer_to_core_vault_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel transfer to core vault?",
+        "success_message": "Successfully canceled transfer to Core Vault.",
+        "title": "Cancel transfer to Core Vault"
+    },
+    "cancel_underlying_withdrawal_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel underlying withdrawal?",
+        "success_message": "Successfully canceled underlying withdrawal.",
+        "title": "Cancel underlying withdrawal"
+    },
+    "cancel_withdraw_from_core_vault_modal": {
+        "confirm_button": "Confirm",
+        "description_label": "Are you sure you want to cancel withdraw from core vault?",
+        "success_message": "Successfully canceled withdraw from Core Vault.",
+        "title": "Cancel withdraw from Core Vault"
     },
     "claim_rewards_modal": {
         "close_button": "Close",
@@ -166,7 +189,8 @@
         "agent_title": "Agent Bots",
         "alerts_title": "Alerts & Notifications",
         "title": "Overview",
-        "vaults_title": "Vaults"
+        "vaults_title": "Vaults",
+        "xrp_supply_title": "{{token}} Supply"
     },
     "deactivate_vault_modal": {
         "cancel_button": "Cancel",
@@ -198,16 +222,16 @@
     },
     "deposit_collateral_lots_modal": {
         "calculate_button": "Calculate",
-        "deposit_button": "Deposit",
         "close_button": "Close",
+        "deposit_button": "Deposit",
         "error_message": "Unable to deposit collateral.",
         "form": {
             "lots_description_label": "How much lots do you want to add to Vault?",
-            "lots_placeholder_label": "NR. OF LOTS",
             "lots_label": "Lots",
+            "lots_placeholder_label": "NR. OF LOTS",
             "multiplier_description_label": "Multiplier is the number to multiply the amount with, to compensate for price changes, and account for FAssets minted as collateral pool fees. Multiplier should be between 1 and 2.",
-            "multiplier_placeholder_label": "MULTIPLIER",
-            "multiplier_label": "Multiplier"
+            "multiplier_label": "Multiplier",
+            "multiplier_placeholder_label": "MULTIPLIER"
         },
         "need_help_label": "Need help?",
         "success_message": "Succesfully deposited collaterals.",
@@ -263,9 +287,9 @@
         "vault": {
             "address_description_label": "Address description...",
             "address_label": "Address",
+            "btc_min_amount_description_label": "You need to have at least {{amount}} BTC on your owner underlying address (faucet: <0> https://bitcoinfaucet.uo1.net/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "buy_fasset_by_agent_factor_description_label": "FTSO price factor at which the agent pays for burned fassets (in vault tokens) during pool providers' self close exit.",
             "buy_fasset_by_agent_factor_label": "Buy FAsset By Agent Factor",
-            "btc_min_amount_description_label": "You need to have at least {{amount}} BTC on your owner underlying address (faucet: <0> https://bitcoinfaucet.uo1.net/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "doge_min_amount_description_label": "You need to have at least {{amount}} DOGE on your owner underlying address (faucet: <0>https://dogecointf.salmen.website/</0>). \nYour work address needs to have CFLR for gas and funding the agent-vault (faucet:<1>https://faucet.flare.network</1>)",
             "enter_placeholder": "Enter ...",
             "fasset_type_description_label": "Defines which type of FAsset will be minted, only one type per Vault.",
@@ -286,12 +310,14 @@
             "pool_exit_collateral_ratio_label": "Pool Exit Collateral Ratio",
             "pool_fee_share_description_label": "Defines how much Vault owner shares with CPT owners.",
             "pool_fee_share_label": "Pool Fee Share",
+            "pool_token_suffix_description_label": "Defines a token which servers as CPT (Collateral Pool Token).",
+            "pool_token_suffix_label": "Pool Token Suffix",
             "pool_top_up_collateral_ratio_description_label": "Discounted price factor at which providers can enter when topup is active (i.e. the pool CR is below poolTopupCollateralRatio).",
             "pool_top_up_collateral_ratio_label": "Pool Top Up Collateral Ratio",
             "pool_top_up_token_price_factor_description_label": "The factor by which CPTs are bought in case of liquidation.",
             "pool_top_up_token_price_factor_label": "Pool Top Up Token Price Factor",
-            "pool_token_suffix_description_label": "Defines a token which servers as CPT (Collateral Pool Token).",
-            "pool_token_suffix_label": "Pool Token Suffix",
+            "redemption_pool_fee_share_description_label": "Defines how much Vault owner shares Redemption fees with CPT owners.",
+            "redemption_pool_fee_share_label": "Redemption pool fee share",
             "vault_collateral_token_description_label": "Defines which type of collateral will be used, only one type per Vault.",
             "vault_collateral_token_label": "Vault collateral token",
             "vault_collateral_token_placeholder": "Select your currency (USDC, USDT, ...)",
@@ -323,14 +349,22 @@
         "management_address_label": "Management address",
         "underlying_addresses_label": "Underyling addresses"
     },
+    "notifications": {
+        "error_title": "Error",
+        "success_title": "Success"
+    },
     "notifications_card": {
         "no_notifications_label": "No new notifications available",
         "show_all_button": "Show all",
         "title": "Notifications from Flare"
     },
-    "notifications": {
+    "select_wallet_button": {
+        "connect_label": "Connect",
+        "disconnect_label": "Disconnect",
         "error_title": "Error",
-        "success_title": "Success"
+        "install_label": "Install",
+        "open_app_label": "Open app",
+        "try_again_label": "Try again?"
     },
     "self_close_modal": {
         "cancel_button": "Cancel",
@@ -350,6 +384,11 @@
         "calculate_button": "Calculate",
         "close_button": "Close",
         "error_message": "Unable to self-mint",
+        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
+        "lots_description_label": "How much lots do you want to add to Vault?",
+        "lots_label": "Lots",
+        "lots_placeholder_label": "NR. OF LOTS",
+        "owner_balance_label": "Owner balance",
         "self_mint_button": "Self-Mint",
         "success_message": "Successfully completed self-mint.",
         "summary": {
@@ -357,11 +396,6 @@
             "nr_lots_label": "Number of lots",
             "self_mint_summary_label": "Self-mint summary"
         },
-        "lots_description_label": "How much lots do you want to add to Vault?",
-        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
-        "lots_label": "Lots",
-        "lots_placeholder_label": "NR. OF LOTS",
-        "owner_balance_label": "Owner balance",
         "title": "Self-Mint"
     },
     "self_mint_underlying_modal": {
@@ -371,6 +405,10 @@
         "close_button": "Close",
         "error_message": "Unable to self-mint",
         "free_underlying_balance_label": "Free underlying balance",
+        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
+        "lots_description_label": "How much lots do you want to add to Vault?",
+        "lots_label": "Lots",
+        "lots_placeholder_label": "NR. OF LOTS",
         "self_mint_button": "Self-Mint from Underlying",
         "success_message": "Successfully completed self-mint.",
         "summary": {
@@ -378,19 +416,7 @@
             "nr_lots_label": "Number of lots",
             "self_mint_summary_label": "Self-mint summary"
         },
-        "lots_description_label": "How much lots do you want to add to Vault?",
-        "lot_label": "1 lot = <icon></icon> {{amount}} {{fAssetSymbol}}",
-        "lots_label": "Lots",
-        "lots_placeholder_label": "NR. OF LOTS",
         "title": "Self-Mint from Underlying"
-    },
-    "select_wallet_button": {
-        "connect_label": "Connect",
-        "disconnect_label": "Disconnect",
-        "error_title": "Error",
-        "install_label": "Install",
-        "open_app_label": "Open app",
-        "try_again_label": "Try again?"
     },
     "setup": {
         "setup_agent_button": "Connect Wallet",
@@ -399,13 +425,27 @@
     },
     "token": {
         "cflr_label": "CFLR",
-        "flr_label": "FLR",
         "cpt_label": "CPT",
         "f_test_xrp_label": "FTestXRP",
+        "flr_label": "FLR",
         "test_eth_label": "TestETH",
         "test_usdc_label": "TestUSDC",
         "test_usdt_label": "TestUSDT",
         "test_xrp_label": "testXRP"
+    },
+    "transfer_to_core_vault_modal": {
+        "amount_description_label": "How much underlying {{token}} do you want to transfer to the Core Vault?",
+        "amount_label": "Amount ({{token}})",
+        "amount_placeholder_label": "AMOUNT TO TRANSFER",
+        "close_button": "Close",
+        "error_message": "Unable to transfer to Core Vault.",
+        "fees_label": "Fees",
+        "max_transfer_label": "Max transfer",
+        "owner_balance_label": "Vault balance",
+        "success_message": "Successfully requested transfer to Core Vault.",
+        "title": "Transfer to Core Vault",
+        "transfer_button": "Transfer",
+        "transfer_fee_label": "Transfer Fee"
     },
     "underlying_top_up_modal": {
         "amount_description_label": "Owner underlying balance is {{balance}} {{token}}.",
@@ -431,76 +471,17 @@
         "withdraw_button": "Withdraw",
         "withdrawal_description_label": "Withdraw free underlying funds from the vault. Please ensure that Agent Bot is running to complete the withdrawal."
     },
-    "vaults_card": {
-        "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
-        "not_listed_label": "Not listed - live",
-        "public_live_label": "Public - Live",
-        "table": {
-            "actions_label": "Actions",
-            "actions_menu": {
-                "activate_vault_label": "Activate Vault (Enter)",
-                "agent_vault_operations_title": "Agent Vault Operations",
-                "claim_rewards_label": "Claim Rewards",
-                "close_vault_label": "Close Vault (Exit)",
-                "deactivate_vault_label": "Deactivate Vault",
-                "delegate_pool_collateral_label": "Delegate Pool Collateral",
-                "deposit_collateral_lots_label": "Deposit Collateral (Lots)",
-                "deposit_pool_collateral_label": "Deposit Pool Collateral",
-                "deposit_vault_collateral_label": "Deposit Vault Collateral",
-                "pool_collateral_label": "Pool collateral",
-                "self_close_label": "Self-close",
-                "self_mint_label": "Self-Mint",
-                "self_mint_underlying_label": "Self-Mint from Underlying",
-                "underlying_top_up_label": "Underlying Top-Up",
-                "underlying_withdrawal_label": "Underlying withdrawal",
-                "view_vault_label": "View Vault",
-                "vault_actions_label": "Vault actions",
-                "vault_collateral_label": "Vault collateral",
-                "withdraw_collateral_pool_tokens_label": "Withdraw Collateral pool tokens",
-                "withdraw_vault_collateral_label": "Withdraw Vault Collateral"
-            },
-            "agent_label": "Agent",
-            "amount_label": "Amount",
-            "cr_label": "CR",
-            "delegated_label": "Delegated",
-            "handshake_label": "Handshake",
-            "health_label": "Health",
-            "health_status_label": "Health & Status",
-            "health_status_ccb_label": "CCB",
-            "health_status_closing_label": "Closing",
-            "health_status_healthy_label": "Healthy",
-            "health_status_in_full_liquidation_label": "In full liquidation",
-            "health_status_in_liquidation_label": "In Liquidation",
-            "flr_label": "FLR",
-            "free_lots_label": "Available lots",
-            "lots_label": "Lots",
-            "minted_amounts_label": "Minted amounts",
-            "minted_lots_label": "Minted lots",
-            "pool_amount_label": "Pool amount",
-            "pool_collateral_label": "Pool collateral",
-            "pool_fee": "Pool Fee",
-            "pool_label": "Pool",
-            "status_health_label": "Health & Status",
-            "type_label": "Type",
-            "vault_label": "Vault",
-            "vault_address_label": "Vault address",
-            "vault_amount_label": "Vault amount",
-            "tvl_mint_label": "TVL & Mint Count",
-            "status_live_label": "Public - Live",
-            "status_not_listed_label": "Not listed - live",
-            "vault_collateral_label": "Vault collateral"
-        },
-        "no_label": "No",
-        "updating_label": "Updating",
-        "yes_label": "Yes"
-    },
     "validation": {
+        "custom_messages": {
+            "balance_to_low": "Balance is to low"
+        },
         "messages": {
             "alpha": "The {{field}} field may only contain alphabetic characters",
-            "alpha_num": "The {{field}} field may only contain alpha-numeric characters",
             "alpha_dash": "The {{field}} field may contain alpha-numeric characters as well as dashes and underscores",
+            "alpha_num": "The {{field}} field may only contain alpha-numeric characters",
             "alpha_spaces": "The {{field}} field may only contain alphabetic characters as well as spaces",
             "between": "The {{field}} field must be between 0:{{min}} and 1:{{max}}",
+            "birth_day": "The {{field}} field must be a valid date",
             "confirmed": "The {{field}} field confirmation does not match",
             "digits": "The {{field}} field must be numeric and exactly contain 0:{{length}} digits",
             "dimensions": "The {{field}} field must be 0:{width} pixels by 1:{{height}} pixels",
@@ -509,29 +490,90 @@
             "ext": "The {{field}} field is not a valid file",
             "image": "The {{field}} field must be an image",
             "integer": "The {{field}} field must be an integer",
+            "is_equal": "The {{field1}} field must match {{field2}}",
             "length": "The {{field}} field must be 0:{{length}} long",
-            "max_value": "The {{field}} field must be 0:{{max}} or less",
             "max": "The {{field}} field may not be greater than 0:{{length}} characters",
+            "max_value": "The {{field}} field must be 0:{{max}} or less",
             "mimes": "The {{field}} field must have a valid file type",
-            "min_value": "The {{field}} field must be 0:{{min}} or more",
             "min": "The {{field}} field must be at least 0:{{length}} characters",
+            "min_value": "The {{field}} field must be 0:{{min}} or more",
+            "not_equal": "The {{field1}} field can not be the same as {field2}}",
             "numeric": "The {{field}} field may only contain numeric characters",
             "one_of": "The {{field}} field is not a valid value",
-            "regex": "The {{field}} field format is invalid",
-            "required_if": "The {{field}} field is required",
-            "required": "The {{field}} field is required",
-            "size": "The {{field}} field size must be less than 0:{{size}}KB",
-            "is_equal": "The {{field1}} field must match {{field2}}",
-            "not_equal": "The {{field1}} field can not be the same as {field2}}",
             "password_no_match": "Password does not match",
-            "birth_day": "The {{field}} field must be a valid date"
-        },
-        "custom_messages": {
-            "balance_to_low": "Balance is to low"
+            "regex": "The {{field}} field format is invalid",
+            "required": "The {{field}} field is required",
+            "required_if": "The {{field}} field is required",
+            "size": "The {{field}} field size must be less than 0:{{size}}KB"
         }
     },
-    "working_address_card": {
-        "title": "Working address"
+    "vaults_card": {
+        "empty_vaults_label": "Select Agent bot and add your first Vault. Once created, you will see Vault information here.",
+        "no_label": "No",
+        "not_listed_label": "Not listed - live",
+        "public_live_label": "Public - Live",
+        "table": {
+            "actions_label": "Actions",
+            "actions_menu": {
+                "activate_vault_label": "Activate Vault (Enter)",
+                "agent_vault_operations_title": "Agent Vault Operations",
+                "cancel_transfer_to_core_vault_label": "Cancel transfer to Core Vault",
+                "cancel_underlying_withdrawal_label": "Cancel underlying withdrawal",
+                "cancel_withdraw_from_core_vault_label": "Cancel withdraw from Core Vault",
+                "claim_rewards_label": "Claim Rewards",
+                "close_vault_label": "Close Vault (Exit)",
+                "deactivate_vault_label": "Deactivate Vault",
+                "delegate_pool_collateral_label": "Delegate Pool Collateral",
+                "deposit_collateral_lots_label": "Deposit Collateral (Lots)",
+                "deposit_pool_collateral_label": "Deposit Pool Collateral",
+                "deposit_vault_collateral_label": "Deposit Vault Collateral",
+                "pool_collateral_label": "Pool collateral",
+                "return_from_core_vault_label": "Withdraw from Core Vault",
+                "self_close_label": "Self-close",
+                "self_mint_label": "Self-Mint",
+                "self_mint_underlying_label": "Self-Mint from Underlying",
+                "transfer_to_core_vault_label": "Transfer to Core Vault",
+                "underlying_top_up_label": "Underlying Top-Up",
+                "underlying_withdrawal_label": "Underlying withdrawal",
+                "vault_actions_label": "Vault actions",
+                "vault_collateral_label": "Vault collateral",
+                "view_vault_label": "View Vault",
+                "withdraw_collateral_pool_tokens_label": "Withdraw Collateral pool tokens",
+                "withdraw_vault_collateral_label": "Withdraw Vault Collateral"
+            },
+            "agent_label": "Agent",
+            "amount_label": "Amount",
+            "cr_label": "CR",
+            "delegated_label": "Delegated",
+            "flr_label": "FLR",
+            "free_lots_label": "Mint capacity",
+            "handshake_label": "Handshake",
+            "health_label": "Health",
+            "health_status_ccb_label": "CCB",
+            "health_status_closing_label": "Closing",
+            "health_status_healthy_label": "Healthy",
+            "health_status_in_full_liquidation_label": "In full liquidation",
+            "health_status_in_liquidation_label": "In Liquidation",
+            "health_status_label": "Health & Status",
+            "lots_label": "Lots",
+            "minted_amounts_label": "Minted amounts",
+            "minted_lots_label": "Minted lots",
+            "pool_amount_label": "Pool amount",
+            "pool_collateral_label": "Pool collateral",
+            "pool_fee": "Pool Fee",
+            "pool_label": "Pool",
+            "status_health_label": "Health & Status",
+            "status_live_label": "Public - Live",
+            "status_not_listed_label": "Not listed - live",
+            "tvl_mint_label": "TVL & Mint Count",
+            "type_label": "Type",
+            "vault_address_label": "Vault address",
+            "vault_amount_label": "Vault amount",
+            "vault_collateral_label": "Vault collateral",
+            "vault_label": "Vault"
+        },
+        "updating_label": "Updating",
+        "yes_label": "Yes"
     },
     "withdraw_collateral_pool_tokens_modal": {
         "cancel_button": "Cancel",
@@ -544,6 +586,24 @@
         "title": "Withdraw collateral pool tokens",
         "withdraw_amount_label": "Withdraw amount"
     },
+    "withdraw_from_core_vault_modal": {
+        "amount_description_label": "How much underlying {{token}} do you want to withdraw to the Core Vault?",
+        "amount_label": "Amount (lots)",
+        "amount_placeholder_label": "NR. OF LOTS TO WITHDRAW",
+        "close_button": "Close",
+        "core_vault_balance_label": "Core Vault balance",
+        "error_message": "Unable to withdraw from Core Vault.",
+        "estimated_label": "Estimated once per day",
+        "lot_size_label": "1 lot = <icon></icon> {{lotSize}} {{token}}",
+        "lots_label": "{{lots}} lots",
+        "max_return_label": "Max return",
+        "operation_days_label": "Operation days",
+        "owner_balance_label": "Owner balance",
+        "success_message": "Succesfully requested withdrawal from Core Vault.",
+        "title": "Withdraw from Core Vault",
+        "vault_free_lots_label": "Vault free lots",
+        "withdraw_button": "Withdraw"
+    },
     "withdraw_vault_collateral_modal": {
         "cancel_button": "Cancel",
         "close_button": "Close",
@@ -554,5 +614,13 @@
         "success_message": "Vault Collateral successfully withdrawn.",
         "title": "Withdraw vault collateral",
         "withdraw_amount_label": "Withdraw amount"
+    },
+    "working_address_card": {
+        "title": "Working address"
+    },
+    "xrp_supply_card": {
+        "current_redemption_queue_label": "Current redemption queue",
+        "lots_label": "lots",
+        "total_minted_label": "Total minted"
     }
 }

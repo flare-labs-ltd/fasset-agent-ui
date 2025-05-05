@@ -4,7 +4,7 @@ import {
     Badge,
     Anchor,
     rem
-} from '@mantine/core';
+} from "@mantine/core";
 import { useIsWhitelisted, useManagementAddress, useUnderlyingAddresses } from "@/api/agent";
 import { useTranslation, Trans } from "react-i18next";
 import { IconArrowUpRight } from "@tabler/icons-react";

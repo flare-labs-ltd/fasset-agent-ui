@@ -48,7 +48,6 @@ export default function Login() {
             apiClient.defaults.headers.common = { Authorization: `Bearer ${response.data}`};
             setAuthenticated(true);
             await router.push('/');
-           // await router.push('/connect');
         } catch (error: any) {
             form.setFieldError('password', error.response.data.message);
         }

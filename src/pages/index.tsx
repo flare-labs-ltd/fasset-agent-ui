@@ -7,12 +7,15 @@ import AlertsCard from '@/components/cards/AlertsCard';
 import AgentBotsCard from '@/components/cards/AgentBotsCard';
 import ManagementAddressCard from '@/components/cards/ManagementAddressCard';
 import VaultsCard from '@/components/cards/VaultsCard';
+import XrpSupplyCard from "@/components/cards/XrpSupplyCard";
 import { useBalances, useCollaterals } from '@/api/agent';
 
 export default function Dashboard() {
     const { t } = useTranslation();
     const balances = useBalances();
     const collateral = useCollaterals();
+
+    const xrpBalance = balances.data?.find(balance => balance.symbol.toLowerCase().includes('xrp'));
 
     return (
         <Container
@@ -37,6 +40,13 @@ export default function Dashboard() {
                     <AgentBotsCard balances={balances} />
                 </div>
                 <div className="hidden lg:block w-full lg:w-2/5">
+                    <Title
+                        order={1}
+                        className="mb-3"
+                    >
+                        {t('dashboard.xrp_supply_title', { token: xrpBalance?.symbol })}
+                    </Title>
+                    <XrpSupplyCard className="mb-8" />
                     <Title
                         order={1}
                         className="mb-3"

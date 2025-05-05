@@ -139,7 +139,7 @@ export default function SelfMintModal({ opened, onClose, fAssetSymbol, agentVaul
             size={600}
             centered
         >
-            <LoadingOverlay visible={balance.isPending}/>
+            <LoadingOverlay visible={balance.isPending} />
             <form
                 onSubmit={form.onSubmit(form => !isSummaryVisible ? onCalculate(form.lots as number) : onSubmit(form.lots as number))}
             >

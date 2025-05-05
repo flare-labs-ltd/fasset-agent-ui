@@ -43,6 +43,7 @@ interface IFormValues {
     poolTokenSuffix: string | undefined;
     fee: number | undefined;
     poolFeeShare: number | undefined;
+    redemptionPoolFeeShareBIPS: number | undefined;
     mintingVaultCollateralRatio: number | undefined;
     mintingPoolCollateralRatio: number | undefined;
     poolExitCollateralRatio: number | undefined;
@@ -73,20 +74,58 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
     const router = useRouter();
     const { fAssetSymbol, agentVaultAddress } = router.query;
 
-    const schema = yup.object().shape({
-        fAssetType: yup.string().required(t('validation.messages.required', { field: t('forms.vault.fasset_type_label') })),
-        vaultCollateralToken: yup.string().required(t('validation.messages.required', { field: t('forms.vault.vault_collateral_token_label') })),
-        poolTokenSuffix: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_token_suffix_label') })),
-        fee: yup.string().required(t('validation.messages.required', { field: t('forms.vault.minting_fee_label') })),
-        poolFeeShare: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_fee_share_label') })),
-        mintingVaultCollateralRatio: yup.string().required(t('validation.messages.required', { field: t('forms.vault.minting_vault_collateral_ratio_label') })),
-        mintingPoolCollateralRatio: yup.string().required(t('validation.messages.required', { field: t('forms.vault.minting_pool_collateral_ratio_label') })),
-        poolExitCollateralRatio: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_exit_collateral_ratio_label') })),
-        buyFAssetByAgentFactor: yup.string().required(t('validation.messages.required', { field: t('forms.vault.buy_fasset_by_agent_factor_label') })),
-        poolTopUpCollateralRatio: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_collateral_ratio_label') })),
-        poolTopUpTokenPriceFactor: yup.string().required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_token_price_factor_label') })),
-        handshakeType: yup.string().required(t('validation.messages.required', { field: t('forms.vault.handshake_type_label') })),
-    });
+    const getSchema = (vault: IAgentVault | undefined) => {
+        let schema = yup.object().shape({
+            fAssetType: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.fasset_type_label') })),
+            vaultCollateralToken: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.vault_collateral_token_label') })),
+            poolTokenSuffix: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.pool_token_suffix_label') })),
+            fee: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.minting_fee_label') })),
+            poolFeeShare: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.pool_fee_share_label') })),
+            mintingVaultCollateralRatio: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.minting_vault_collateral_ratio_label') })),
+            mintingPoolCollateralRatio: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.minting_pool_collateral_ratio_label') })),
+            poolExitCollateralRatio: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.pool_exit_collateral_ratio_label') })),
+            buyFAssetByAgentFactor: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.buy_fasset_by_agent_factor_label') })),
+            poolTopUpCollateralRatio: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_collateral_ratio_label') })),
+            poolTopUpTokenPriceFactor: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.pool_top_up_token_price_factor_label') })),
+            handshakeType: yup
+                .string()
+                .required(t('validation.messages.required', { field: t('forms.vault.handshake_type_label') })),
+        });
+
+        if (vault) {
+            schema = schema.shape({
+                redemptionPoolFeeShareBIPS: yup
+                    .string()
+                    .required(
+                        t('validation.messages.required', { field: t('forms.vault.redemption_pool_fee_share_label') })
+                    ),
+            });
+        }
+
+        return schema;
+    }
 
     const form = useForm<IFormValues>({
         mode: 'uncontrolled',
@@ -97,6 +136,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             poolTokenSuffix: '',
             fee: undefined,
             poolFeeShare: undefined,
+            redemptionPoolFeeShareBIPS: undefined,
             mintingVaultCollateralRatio: undefined,
             mintingPoolCollateralRatio: undefined,
             poolExitCollateralRatio: undefined,
@@ -106,7 +146,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             handshakeType: undefined
         },
         //@ts-ignore
-        validate: yupResolver(schema),
+        validate: yupResolver(getSchema(vault)),
         onValuesChange: (values, previousValues) => {
             setIsHiddenInputDisabled(values.vaultCollateralToken === null);
             setIsHidden(values.fAssetType === undefined || values.vaultCollateralToken === undefined);
@@ -179,6 +219,7 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
             vaultCollateralToken: vault.vaultCollateralToken,
             fee: Number(vault.feeBIPS) / 100,
             poolFeeShare: Number(vault.poolFeeShareBIPS) / 100,
+            redemptionPoolFeeShareBIPS: Number(vault.redemptionPoolFeeShareBIPS) / 100,
             mintingVaultCollateralRatio: Number(vault.mintingVaultCollateralRatioBIPS) / 10000,
             mintingPoolCollateralRatio: Number(vault.mintingPoolCollateralRatioBIPS) / 10000,
             poolExitCollateralRatio: Number(vault.poolExitCollateralRatioBIPS) / 10000,
@@ -367,6 +408,23 @@ const VaultForm = forwardRef<FormRef, IForm>(({ vault, disabled }: IForm, ref) =
                         className="mt-4"
                         onKeyDownCapture={onKeyDownCapture}
                     />
+                    {vault !== undefined &&
+                        <NumberInput
+                            {...form.getInputProps('redemptionPoolFeeShareBIPS')}
+                            //@ts-ignore
+                            key={form.key('redemptionPoolFeeShareBIPS')}
+                            label={t('forms.vault.redemption_pool_fee_share_label')}
+                            description={t('forms.vault.redemption_pool_fee_share_description_label')}
+                            disabled={isHiddenInputDisabled || disabled}
+                            placeholder={t('forms.vault.enter_placeholder')}
+                            withAsterisk
+                            allowNegative={false}
+                            step={1}
+                            suffix="%"
+                            className="mt-4"
+                            onKeyDownCapture={onKeyDownCapture}
+                        />
+                    }
                     <NumberInput
                         {...form.getInputProps('mintingVaultCollateralRatio')}
                         //@ts-ignore
