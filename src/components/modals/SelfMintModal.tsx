@@ -273,7 +273,7 @@ export default function SelfMintModal({ opened, onClose, fAssetSymbol, agentVaul
                                 size="sm"
                                 className="mt-1"
                             >
-                                {amountForSelfMint.data?.freeLots}
+                                {lots}
                             </Text>
                         </Grid.Col>
                         <Grid.Col
