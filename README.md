@@ -2,7 +2,7 @@
 
 ## Repository Transferred
 
-The development of Fasset protocol was commissioned for and on behalf of the Flare Foundation, accordingly all completed repos for the protocol have been moved to Flare Foundation Github, the protocol's ultimate owner.
+The development of FAsset protocol was commissioned for and on behalf of the Flare Foundation, accordingly all completed repos for the protocol have been moved to [Flare Foundation Github](https://github.com/flare-foundation), the protocol's ultimate owner.
 [New repository](https://github.com/flare-foundation/fasset-agent-ui)
 
 
